@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="Reverse engineered Ajedrez 2015.03.02 04-06-23-375">
+  <ClassDiagramComponents>
+    <Class xPosition="20.0" yPosition="20.0" package="ajedrez" name="Ajedrez" visibility="public">
+      <Constructors/>
+      <Fields/>
+      <Methods>
+        <Method name="main" visibility="public" returnType="void" isStatic="true">
+          <Argument type="String[]" name="args"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class xPosition="320.0" yPosition="20.0" package="ajedrez" name="Alfil" visibility="public">
+      <Constructors>
+        <Constructor name="Alfil" visibility="public">
+          <Argument type="boolean" name="color"/>
+          <Argument type="int" name="fila"/>
+          <Argument type="int" name="columna"/>
+        </Constructor>
+      </Constructors>
+      <Fields/>
+      <Methods>
+        <Method name="movimientoValido" visibility="public" returnType="boolean">
+          <Argument type="Movimiento" name="mov"/>
+        </Method>
+        <Method name="pintarPieza" visibility="public" returnType="void"/>
+        <Method name="moverPieza" visibility="public" returnType="void">
+          <Argument type="Movimiento" name="mov"/>
+          <Argument type="Tablero" name="tablero"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class xPosition="620.0" yPosition="20.0" package="ajedrez" name="Caballo" visibility="public">
+      <Constructors>
+        <Constructor name="Caballo" visibility="public">
+          <Argument type="boolean" name="color"/>
+          <Argument type="int" name="fila"/>
+          <Argument type="int" name="columna"/>
+        </Constructor>
+      </Constructors>
+      <Fields/>
+      <Methods>
+        <Method name="movimientoValido" visibility="public" returnType="boolean">
+          <Argument type="Movimiento" name="mov"/>
+        </Method>
+        <Method name="pintarPieza" visibility="public" returnType="void"/>
+        <Method name="moverPieza" visibility="public" returnType="void">
+          <Argument type="Movimiento" name="mov"/>
+          <Argument type="Tablero" name="tablero"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class xPosition="920.0" yPosition="20.0" package="ajedrez" name="Dama" visibility="public">
+      <Constructors>
+        <Constructor name="Dama" visibility="public">
+          <Argument type="boolean" name="color"/>
+          <Argument type="int" name="fila"/>
+          <Argument type="int" name="columna"/>
+        </Constructor>
+      </Constructors>
+      <Fields/>
+      <Methods>
+        <Method name="movimientoValido" visibility="public" returnType="boolean">
+          <Argument type="Movimiento" name="mov"/>
+        </Method>
+        <Method name="pintarPieza" visibility="public" returnType="void"/>
+        <Method name="moverPieza" visibility="public" returnType="void">
+          <Argument type="Movimiento" name="mov"/>
+          <Argument type="Tablero" name="tablero"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class xPosition="20.0" yPosition="420.0" package="ajedrez" name="Juego" visibility="public">
+      <Constructors/>
+      <Fields/>
+      <Methods>
+        <Method name="inicializar" visibility="public" returnType="void">
+          <Argument type="Pieza[][]" name="tablero"/>
+        </Method>
+        <Method name="pintar" visibility="public" returnType="void">
+          <Argument type="Pieza[][]" name="tablero"/>
+        </Method>
+        <Method name="jugada" visibility="public" returnType="void">
+          <Argument type="String" name="jugada"/>
+          <Argument type="Tablero" name="tablero"/>
+        </Method>
+        <Method name="moverJuego" visibility="public" returnType="void">
+          <Argument type="Movimiento" name="mov"/>
+          <Argument type="Tablero" name="tablero"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class xPosition="320.0" yPosition="420.0" package="ajedrez" name="Movimiento" visibility="public">
+      <Constructors>
+        <Constructor name="Movimiento" visibility="public">
+          <Argument type="Posicion" name="PosInicial"/>
+          <Argument type="Posicion" name="PosFinal"/>
+        </Constructor>
+      </Constructors>
+      <Fields>
+        <Field name="PosInicial" visibility="private" type="Posicion"/>
+        <Field name="PosFinal" visibility="private" type="Posicion"/>
+      </Fields>
+      <Methods>
+        <Method name="getPosInicial" visibility="public" returnType="Posicion"/>
+        <Method name="getPosFinal" visibility="public" returnType="Posicion"/>
+        <Method name="esVertical" visibility="public" returnType="boolean"/>
+        <Method name="esHorizontal" visibility="public" returnType="boolean"/>
+        <Method name="esDiagonal" visibility="public" returnType="boolean"/>
+        <Method name="saltoHorizontal" visibility="public" returnType="boolean"/>
+        <Method name="saltoVertical" visibility="public" returnType="boolean"/>
+        <Method name="movimientoRey" visibility="public" returnType="boolean"/>
+        <Method name="movimientoPeonNegro" visibility="public" returnType="boolean"/>
+        <Method name="movimientoPeonBlanco" visibility="public" returnType="boolean"/>
+        <Method name="comerPeonNegro" visibility="public" returnType="boolean"/>
+        <Method name="comerPeonBlanco" visibility="public" returnType="boolean"/>
+      </Methods>
+    </Class>
+    <Class xPosition="620.0" yPosition="420.0" package="ajedrez" name="Peon" visibility="public">
+      <Constructors>
+        <Constructor name="Peon" visibility="public">
+          <Argument type="boolean" name="color"/>
+          <Argument type="int" name="fila"/>
+          <Argument type="int" name="columna"/>
+        </Constructor>
+      </Constructors>
+      <Fields/>
+      <Methods>
+        <Method name="movimientoValido" visibility="public" returnType="boolean">
+          <Argument type="Movimiento" name="mov"/>
+        </Method>
+        <Method name="comerValido" visibility="public" returnType="boolean">
+          <Argument type="Movimiento" name="mov"/>
+        </Method>
+        <Method name="pintarPieza" visibility="public" returnType="void"/>
+        <Method name="moverPieza" visibility="public" returnType="void">
+          <Argument type="Movimiento" name="mov"/>
+          <Argument type="Tablero" name="tablero"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class xPosition="920.0" yPosition="420.0" package="ajedrez" isAbstract="true" name="Pieza" visibility="public">
+      <Constructors>
+        <Constructor name="Pieza" visibility="public">
+          <Argument type="boolean" name="color"/>
+          <Argument type="int" name="fila"/>
+          <Argument type="int" name="columna"/>
+        </Constructor>
+      </Constructors>
+      <Fields>
+        <Field name="color" visibility="protected" type="boolean"/>
+        <Field name="fila" visibility="protected" type="int"/>
+        <Field name="columna" visibility="protected" type="int"/>
+        <Field name="pos" visibility="protected" type="Posicion"/>
+      </Fields>
+      <Methods>
+        <Method name="getPos" visibility="public" returnType="Posicion"/>
+        <Method name="setFila" visibility="public" returnType="void">
+          <Argument type="int" name="fila"/>
+        </Method>
+        <Method name="setColumna" visibility="public" returnType="void">
+          <Argument type="int" name="columna"/>
+        </Method>
+        <Method name="getColor" visibility="public" returnType="boolean"/>
+        <Method name="movimientoValido" visibility="public" returnType="boolean" isAbstract="true">
+          <Argument type="Movimiento" name="mov"/>
+        </Method>
+        <Method name="pintarPieza" visibility="public" returnType="void" isAbstract="true"/>
+        <Method name="moverPieza" visibility="public" returnType="void">
+          <Argument type="Movimiento" name="mov"/>
+          <Argument type="Tablero" name="tablero"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class xPosition="20.0" yPosition="820.0" package="ajedrez" name="Posicion" visibility="public">
+      <Constructors>
+        <Constructor name="Posicion" visibility="public">
+          <Argument type="int" name="fila"/>
+          <Argument type="int" name="columna"/>
+        </Constructor>
+      </Constructors>
+      <Fields>
+        <Field name="fila" visibility="private" type="int"/>
+        <Field name="columna" visibility="private" type="int"/>
+      </Fields>
+      <Methods>
+        <Method name="getFila" visibility="public" returnType="int"/>
+        <Method name="getColumna" visibility="public" returnType="int"/>
+        <Method name="setFila" visibility="public" returnType="void">
+          <Argument type="int" name="fila"/>
+        </Method>
+        <Method name="setColumna" visibility="public" returnType="void">
+          <Argument type="int" name="columna"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class xPosition="320.0" yPosition="820.0" package="ajedrez" name="Rey" visibility="public">
+      <Constructors>
+        <Constructor name="Rey" visibility="public">
+          <Argument type="boolean" name="color"/>
+          <Argument type="int" name="fila"/>
+          <Argument type="int" name="columna"/>
+        </Constructor>
+      </Constructors>
+      <Fields/>
+      <Methods>
+        <Method name="movimientoValido" visibility="public" returnType="boolean">
+          <Argument type="Movimiento" name="mov"/>
+        </Method>
+        <Method name="pintarPieza" visibility="public" returnType="void"/>
+        <Method name="moverPieza" visibility="public" returnType="void">
+          <Argument type="Movimiento" name="mov"/>
+          <Argument type="Tablero" name="tablero"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class xPosition="620.0" yPosition="820.0" package="ajedrez" name="Tablero" visibility="public">
+      <Constructors/>
+      <Fields>
+        <Field name="tablero" visibility="private" type="Pieza[][]"/>
+        <Field name="turno" visibility="private" type="boolean"/>
+        <Field name="contadorjugadas" visibility="private" type="int"/>
+        <Field name="arraymov" visibility="private" type="Movimiento[]"/>
+        <Field name="contadormovreyblanco" visibility="private" type="int"/>
+        <Field name="contadormovreynegro" visibility="private" type="int"/>
+        <Field name="movtorreblancaA" visibility="private" type="boolean"/>
+        <Field name="movtorreblancaH" visibility="private" type="boolean"/>
+        <Field name="movtorrenegraA" visibility="private" type="boolean"/>
+        <Field name="movtorrenegraH" visibility="private" type="boolean"/>
+      </Fields>
+      <Methods>
+        <Method name="getArraymov" visibility="public" returnType="Movimiento[]"/>
+        <Method name="getTurno" visibility="public" returnType="boolean"/>
+        <Method name="setTurno" visibility="public" returnType="void">
+          <Argument type="boolean" name="turno"/>
+        </Method>
+        <Method name="getTablero" visibility="public" returnType="Pieza[][]"/>
+        <Method name="hayPieza" visibility="public" returnType="boolean">
+          <Argument type="int" name="fila"/>
+          <Argument type="int" name="columna"/>
+        </Method>
+        <Method name="hayPieza" visibility="public" returnType="boolean">
+          <Argument type="Posicion" name="pos"/>
+        </Method>
+        <Method name="hayPiezasEntre" visibility="public" returnType="boolean">
+          <Argument type="Movimiento" name="mov"/>
+        </Method>
+        <Method name="Jaque" visibility="public" returnType="boolean">
+          <Argument type="Movimiento" name="mov"/>
+        </Method>
+        <Method name="Jaque" visibility="public" returnType="boolean">
+          <Argument type="int" name="fila1"/>
+          <Argument type="int" name="columna1"/>
+        </Method>
+        <Method name="comprobarPosibleJaque" visibility="public" returnType="boolean"/>
+        <Method name="comprobarPosibleJaque" visibility="public" returnType="boolean">
+          <Argument type="Movimiento" name="mov"/>
+        </Method>
+        <Method name="piezaClavada" visibility="public" returnType="boolean">
+          <Argument type="Movimiento" name="mov"/>
+        </Method>
+        <Method name="cubrirJaque" visibility="public" returnType="boolean"/>
+        <Method name="cubrirjaquediagonalascendente" visibility="public" returnType="boolean">
+          <Argument type="int" name="i"/>
+          <Argument type="int" name="j"/>
+          <Argument type="int" name="k"/>
+          <Argument type="int" name="columna"/>
+        </Method>
+        <Method name="cubrirjaquediagonaldescendente" visibility="public" returnType="boolean">
+          <Argument type="int" name="i"/>
+          <Argument type="int" name="j"/>
+          <Argument type="int" name="k"/>
+          <Argument type="int" name="columna"/>
+        </Method>
+        <Method name="cubrirjaquehorizontal" visibility="public" returnType="boolean">
+          <Argument type="int" name="i"/>
+          <Argument type="int" name="k"/>
+          <Argument type="int" name="j"/>
+        </Method>
+        <Method name="cubrirjaquevertical" visibility="public" returnType="boolean">
+          <Argument type="int" name="i"/>
+          <Argument type="int" name="k"/>
+          <Argument type="int" name="j"/>
+        </Method>
+        <Method name="enroqueValido" visibility="public" returnType="boolean">
+          <Argument type="Movimiento" name="mov"/>
+        </Method>
+        <Method name="comerAlPaso" visibility="public" returnType="boolean">
+          <Argument type="Movimiento[]" name="arraymov"/>
+        </Method>
+        <Method name="promociondelPeon" visibility="public" returnType="void">
+          <Argument type="Movimiento" name="mov"/>
+          <Argument type="char" name="nuevaPieza"/>
+        </Method>
+        <Method name="ponPieza" visibility="public" returnType="void">
+          <Argument type="Pieza" name="figura"/>
+          <Argument type="int" name="fila"/>
+          <Argument type="int" name="columna"/>
+        </Method>
+        <Method name="ponPieza" visibility="public" returnType="void">
+          <Argument type="Pieza" name="figura"/>
+          <Argument type="Posicion" name="Pos"/>
+        </Method>
+        <Method name="quitaPieza" visibility="public" returnType="void">
+          <Argument type="int" name="fila"/>
+          <Argument type="int" name="columna"/>
+        </Method>
+        <Method name="quitaPieza" visibility="public" returnType="void">
+          <Argument type="Posicion" name="Pos"/>
+        </Method>
+        <Method name="DevuelvePieza" visibility="public" returnType="Pieza">
+          <Argument type="int" name="fila"/>
+          <Argument type="int" name="columna"/>
+        </Method>
+        <Method name="DevuelvePieza" visibility="public" returnType="Pieza">
+          <Argument type="Posicion" name="pos"/>
+        </Method>
+        <Method name="anularMovimiento" visibility="public" returnType="void">
+          <Argument type="Movimiento" name="mov"/>
+        </Method>
+        <Method name="Mover" visibility="public" returnType="int">
+          <Argument type="Movimiento" name="mov"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class xPosition="920.0" yPosition="820.0" package="ajedrez" name="Torre" visibility="public">
+      <Constructors>
+        <Constructor name="Torre" visibility="public">
+          <Argument type="boolean" name="color"/>
+          <Argument type="int" name="fila"/>
+          <Argument type="int" name="columna"/>
+        </Constructor>
+      </Constructors>
+      <Fields/>
+      <Methods>
+        <Method name="movimientoValido" visibility="public" returnType="boolean">
+          <Argument type="Movimiento" name="mov"/>
+        </Method>
+        <Method name="pintarPieza" visibility="public" returnType="void"/>
+        <Method name="moverPieza" visibility="public" returnType="void">
+          <Argument type="Movimiento" name="mov"/>
+          <Argument type="Tablero" name="tablero"/>
+        </Method>
+      </Methods>
+    </Class>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations>
+    <UseRelation source="Peon" target="Tablero" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="Peon" target="Pieza"/>
+    <UseRelation source="Caballo" target="Movimiento" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="PosInicial" source="Movimiento" target="Posicion" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="PosFinal" source="Movimiento" target="Posicion" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Caballo" target="Tablero" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Pieza" target="Movimiento" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Alfil" target="Tablero" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Torre" target="Tablero" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Tablero" target="Posicion" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Dama" target="Tablero" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="Dama" target="Pieza"/>
+    <UseRelation source="Juego" target="Tablero" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="tablero" source="Tablero" target="Pieza" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Juego" target="Pieza" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Rey" target="Movimiento" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Tablero" target="Pieza" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="Alfil" target="Pieza"/>
+    <UseRelation source="Torre" target="Movimiento" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Pieza" target="Tablero" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Movimiento" target="Posicion" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Rey" target="Tablero" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="arraymov" source="Tablero" target="Movimiento" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Dama" target="Movimiento" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Tablero" target="Movimiento" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="Torre" target="Pieza"/>
+    <HasRelation name="pos" source="Pieza" target="Posicion" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Peon" target="Movimiento" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="Rey" target="Pieza"/>
+    <UseRelation source="Alfil" target="Movimiento" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="Caballo" target="Pieza"/>
+    <UseRelation source="Pieza" target="Posicion" sourceCardinality="1..1" targetCardinality="1..1"/>
+  </ClassDiagramRelations>
+</ClassDiagram>
