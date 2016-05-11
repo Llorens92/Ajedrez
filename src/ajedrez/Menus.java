@@ -17,16 +17,17 @@ public class Menus {
     public static int menuPrincipal() {
         int opcion = 0;
         Scanner lc = new Scanner(System.in);
-        while (opcion != 1 && opcion != 2 && opcion != 3) {
+        while (opcion != 1 && opcion != 2 && opcion != 3 && opcion != 4) {
             System.out.println("Escoja entre estas opciones:");
             System.out.println("1- Jugar Partida");
             System.out.println("2- Resolver Problema");
             System.out.println("3- Administrar sistema");
+            System.out.println("4- Salir");
             try {
                 opcion = lc.nextInt();
             } catch (InputMismatchException e) {
                 lc.next();
-                System.out.println("Por favor, introduzca un número entre 1 y 3");
+                System.out.println("Por favor, introduzca un número entre 1 y 4");
                 opcion = 0;
             }
         }

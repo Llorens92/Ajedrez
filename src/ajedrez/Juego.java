@@ -5,16 +5,36 @@
  */
 package ajedrez;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author dam1
  */
 public class Juego {
-    
-    
+
+    ArrayList<Tablero> listapartidas = new ArrayList<>();
+
+    public boolean finPartida(String mensaje, Tablero tablero) {
+        boolean salir = false;
+        if (mensaje.equalsIgnoreCase("guardar")) {
+            guardarPartida(tablero);
+            salir = true;
+        } else if (mensaje.equalsIgnoreCase("fin")) {
+            salir = true;
+        }
+        return salir;
+    }
+
+    public void guardarPartida(Tablero tablero) {
+        listapartidas.add(tablero);
+    }
+
     /**
-     * Método que carga el array de piezas colocando cada una en su posición inicial.
-     * @param tablero Que es un array bidimensional de piezas     
+     * Método que carga el array de piezas colocando cada una en su posición
+     * inicial.
+     *
+     * @param tablero Que es un array bidimensional de piezas
      */
     public void inicializar(Pieza[][] tablero) {
         for (int i = 0; i < 8; i++) {
@@ -85,9 +105,12 @@ public class Juego {
             }
         }
     }
+
     /**
-     * Método que pinta cada pieza según la posición que ocupen en el array bidimensional.
-     * @param tablero Que es un array bidimensional de piezas 
+     * Método que pinta cada pieza según la posición que ocupen en el array
+     * bidimensional.
+     *
+     * @param tablero Que es un array bidimensional de piezas
      */
     public void pintar(Pieza[][] tablero) {
         for (int i = 0; i < 8; i++) {
@@ -102,10 +125,15 @@ public class Juego {
         }
 
     }
+
     /**
-     * Método que carga las jugadas en el tablero convirtiendo convirtiendo el string que recibe en un objeto de la clase Movimiento.
-     * @param jugada    Que debe ser un string de 4 o 5 caracteres con el formato (A-H 1-8 A-H 1-8)
-     * @param tablero   Es un objeto de la clase tablero al que se cargan las jugadas
+     * Método que carga las jugadas en el tablero convirtiendo convirtiendo el
+     * string que recibe en un objeto de la clase Movimiento.
+     *
+     * @param jugada Que debe ser un string de 4 o 5 caracteres con el formato
+     * (A-H 1-8 A-H 1-8)
+     * @param tablero Es un objeto de la clase tablero al que se cargan las
+     * jugadas
      */
     public void jugada(String jugada, Tablero tablero) {
         if (jugada.length() == 4) {
@@ -372,24 +400,27 @@ public class Juego {
             Posicion PosFinal = new Posicion(filaFinal, columnaFinal);
             Movimiento mov = new Movimiento(PosInicial, PosFinal);
             tablero.promociondelPeon(mov, nuevaPieza);
-        } else {
+        } else{
             System.out.println("Movimiento invalido-JUGADA");
         }
     }
+
     /**
-     * Este Método filtra los movimientos recibidos del método jugada en función de ciertos requisitos. Si pasa el filtro el movimiento es enviado a los métodos propios de la clase Pieza y sus hijos.
-     * @param mov Es el objeto de clase Movimiento creado a partir del String que recibe el método jugada.
+     * Este Método filtra los movimientos recibidos del método jugada en función
+     * de ciertos requisitos. Si pasa el filtro el movimiento es enviado a los
+     * métodos propios de la clase Pieza y sus hijos.
+     *
+     * @param mov Es el objeto de clase Movimiento creado a partir del String
+     * que recibe el método jugada.
      * @param tablero Es el mismo objeto de clase Tablero utilizado en jugada.
      */
     public void moverJuego(Movimiento mov, Tablero tablero) {
         if (tablero.hayPieza(mov.getPosInicial()) == true && ((mov.getPosInicial().getFila() == 1 && tablero.DevuelvePieza(mov.getPosInicial()).getClass().getName().compareTo("ajedrez.Peon") == 0 && tablero.DevuelvePieza(mov.getPosInicial()).getColor() == true) || (mov.getPosInicial().getFila() == 6 && tablero.DevuelvePieza(mov.getPosInicial()).getClass().getName().compareTo("ajedrez.Peon") == 0 && tablero.DevuelvePieza(mov.getPosInicial()).getColor() == false))) {
             System.out.println("Para promocionar el peon introduzca una letra mayúscula más indicando la pieza que quiere.");
+        } else if (tablero.hayPieza(mov.getPosInicial()) == true && tablero.getTurno() == tablero.DevuelvePieza(mov.getPosInicial()).getColor() && (tablero.DevuelvePieza(mov.getPosFinal()) == null || (tablero.DevuelvePieza(mov.getPosFinal()) != null && tablero.DevuelvePieza(mov.getPosFinal()).getColor() != tablero.DevuelvePieza(mov.getPosInicial()).getColor())) && tablero.hayPiezasEntre(mov) == false) {
+            tablero.DevuelvePieza(mov.getPosInicial()).moverPieza(mov, tablero);
         } else {
-            if (tablero.hayPieza(mov.getPosInicial()) == true && tablero.getTurno() == tablero.DevuelvePieza(mov.getPosInicial()).getColor() && (tablero.DevuelvePieza(mov.getPosFinal()) == null || (tablero.DevuelvePieza(mov.getPosFinal()) != null && tablero.DevuelvePieza(mov.getPosFinal()).getColor() != tablero.DevuelvePieza(mov.getPosInicial()).getColor())) && tablero.hayPiezasEntre(mov) == false) {
-                tablero.DevuelvePieza(mov.getPosInicial()).moverPieza(mov, tablero);
-            } else {
-                System.out.println("Movimiento invalido-JUEGO");
-            }
+            System.out.println("Movimiento invalido-JUEGO");
         }
     }
 }
