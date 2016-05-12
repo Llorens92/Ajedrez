@@ -35,4 +35,9 @@ public class Rey extends Pieza {
             tablero.Mover(mov);
         } 
     }   
+    
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

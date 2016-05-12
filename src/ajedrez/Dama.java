@@ -40,5 +40,10 @@ public class Dama extends Pieza {
         if (movimientoValido(mov) == true) {
             tablero.Mover(mov);
         }
-    }       
+    }     
+    
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

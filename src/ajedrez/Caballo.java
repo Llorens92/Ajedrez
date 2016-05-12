@@ -41,4 +41,9 @@ public class Caballo extends Pieza {
             tablero.Mover(mov);
         } 
     }    
+    
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

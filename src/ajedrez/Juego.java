@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class Juego {
 
     ArrayList<Tablero> listapartidas = new ArrayList<>();
+    ArrayList<Tablero> listaproblemas = new ArrayList<>();
 
     public boolean finPartida(String mensaje, Tablero tablero) {
         boolean salir = false;
@@ -28,6 +29,74 @@ public class Juego {
 
     public void guardarPartida(Tablero tablero) {
         listapartidas.add(tablero);
+    }
+
+    public int devolverFila(char caracter) {
+        int fila;
+        switch (caracter) {
+            case '1':
+                fila = 7;
+                break;
+            case '2':
+                fila = 6;
+                break;
+            case '3':
+                fila = 5;
+                break;
+            case '4':
+                fila = 4;
+                break;
+            case '5':
+                fila = 3;
+                break;
+            case '6':
+                fila = 2;
+                break;
+            case '7':
+                fila = 1;
+                break;
+            case '8':
+                fila = 0;
+                break;
+            default:
+                fila = 8;
+
+        }
+        return fila;
+    }
+
+    public int devolverColumna(char caracter) {
+        int columna;
+        switch (caracter) {
+            case 'A':
+                columna = 0;
+                break;
+            case 'B':
+                columna = 1;
+                break;
+            case 'C':
+                columna = 2;
+                break;
+            case 'D':
+                columna = 3;
+                break;
+            case 'E':
+                columna = 4;
+                break;
+            case 'F':
+                columna = 5;
+                break;
+            case 'G':
+                columna = 6;
+                break;
+            case 'H':
+                columna = 7;
+                break;
+            default:
+                columna = 8;
+
+        }
+        return columna;
     }
 
     /**
@@ -137,248 +206,16 @@ public class Juego {
      */
     public void jugada(String jugada, Tablero tablero) {
         if (jugada.length() == 4) {
-            int filaInicial, filaFinal, columnaFinal, columnaInicial;
-            switch (jugada.charAt(0)) {
-                case 'A':
-                    columnaInicial = 0;
-                    break;
-                case 'B':
-                    columnaInicial = 1;
-                    break;
-                case 'C':
-                    columnaInicial = 2;
-                    break;
-                case 'D':
-                    columnaInicial = 3;
-                    break;
-                case 'E':
-                    columnaInicial = 4;
-                    break;
-                case 'F':
-                    columnaInicial = 5;
-                    break;
-                case 'G':
-                    columnaInicial = 6;
-                    break;
-                case 'H':
-                    columnaInicial = 7;
-                    break;
-                default:
-                    columnaInicial = 8;
-
-            }
-            switch (jugada.charAt(1)) {
-                case '1':
-                    filaInicial = 7;
-                    break;
-                case '2':
-                    filaInicial = 6;
-                    break;
-                case '3':
-                    filaInicial = 5;
-                    break;
-                case '4':
-                    filaInicial = 4;
-                    break;
-                case '5':
-                    filaInicial = 3;
-                    break;
-                case '6':
-                    filaInicial = 2;
-                    break;
-                case '7':
-                    filaInicial = 1;
-                    break;
-                case '8':
-                    filaInicial = 0;
-                    break;
-                default:
-                    filaInicial = 8;
-            }
-            switch (jugada.charAt(2)) {
-                case 'A':
-                    columnaFinal = 0;
-                    break;
-                case 'B':
-                    columnaFinal = 1;
-                    break;
-                case 'C':
-                    columnaFinal = 2;
-                    break;
-                case 'D':
-                    columnaFinal = 3;
-                    break;
-                case 'E':
-                    columnaFinal = 4;
-                    break;
-                case 'F':
-                    columnaFinal = 5;
-                    break;
-                case 'G':
-                    columnaFinal = 6;
-                    break;
-                case 'H':
-                    columnaFinal = 7;
-                    break;
-                default:
-                    columnaFinal = 8;
-
-            }
-            switch (jugada.charAt(3)) {
-                case '1':
-                    filaFinal = 7;
-                    break;
-                case '2':
-                    filaFinal = 6;
-                    break;
-                case '3':
-                    filaFinal = 5;
-                    break;
-                case '4':
-                    filaFinal = 4;
-                    break;
-                case '5':
-                    filaFinal = 3;
-                    break;
-                case '6':
-                    filaFinal = 2;
-                    break;
-                case '7':
-                    filaFinal = 1;
-                    break;
-                case '8':
-                    filaFinal = 0;
-                    break;
-                default:
-                    filaFinal = 8;
-
-            }
-            if (filaInicial == 8 || columnaInicial == 8 || filaFinal == 8 || columnaFinal == 8) {
+            if (devolverColumna(jugada.charAt(0)) == 8 || devolverFila(jugada.charAt(1)) == 8 || devolverColumna(jugada.charAt(2)) == 8 || devolverFila(jugada.charAt(3)) == 8) {
                 System.out.println("Jugada fuera de rango-> Introduzca una jugada valida (A-H,1-8,A-H,1-8)");
             } else {
-                Posicion PosInicial = new Posicion(filaInicial, columnaInicial);
-                Posicion PosFinal = new Posicion(filaFinal, columnaFinal);
+                Posicion PosInicial = new Posicion(devolverFila(jugada.charAt(1)), devolverColumna(jugada.charAt(0)));
+                Posicion PosFinal = new Posicion(devolverFila(jugada.charAt(3)), devolverColumna(jugada.charAt(2)));
                 Movimiento mov = new Movimiento(PosInicial, PosFinal);
                 moverJuego(mov, tablero);
             }
         } else if (jugada.length() == 5) {
-            int filaInicial, filaFinal, columnaFinal, columnaInicial;
             char nuevaPieza;
-            switch (jugada.charAt(0)) {
-                case 'A':
-                    columnaInicial = 0;
-                    break;
-                case 'B':
-                    columnaInicial = 1;
-                    break;
-                case 'C':
-                    columnaInicial = 2;
-                    break;
-                case 'D':
-                    columnaInicial = 3;
-                    break;
-                case 'E':
-                    columnaInicial = 4;
-                    break;
-                case 'F':
-                    columnaInicial = 5;
-                    break;
-                case 'G':
-                    columnaInicial = 6;
-                    break;
-                case 'H':
-                    columnaInicial = 7;
-                    break;
-                default:
-                    columnaInicial = 0;
-
-            }
-            switch (jugada.charAt(1)) {
-                case '1':
-                    filaInicial = 7;
-                    break;
-                case '2':
-                    filaInicial = 6;
-                    break;
-                case '3':
-                    filaInicial = 5;
-                    break;
-                case '4':
-                    filaInicial = 4;
-                    break;
-                case '5':
-                    filaInicial = 3;
-                    break;
-                case '6':
-                    filaInicial = 2;
-                    break;
-                case '7':
-                    filaInicial = 1;
-                    break;
-                case '8':
-                    filaInicial = 0;
-                    break;
-                default:
-                    filaInicial = 0;
-            }
-            switch (jugada.charAt(2)) {
-                case 'A':
-                    columnaFinal = 0;
-                    break;
-                case 'B':
-                    columnaFinal = 1;
-                    break;
-                case 'C':
-                    columnaFinal = 2;
-                    break;
-                case 'D':
-                    columnaFinal = 3;
-                    break;
-                case 'E':
-                    columnaFinal = 4;
-                    break;
-                case 'F':
-                    columnaFinal = 5;
-                    break;
-                case 'G':
-                    columnaFinal = 6;
-                    break;
-                case 'H':
-                    columnaFinal = 7;
-                    break;
-                default:
-                    columnaFinal = 6;
-
-            }
-            switch (jugada.charAt(3)) {
-                case '1':
-                    filaFinal = 7;
-                    break;
-                case '2':
-                    filaFinal = 6;
-                    break;
-                case '3':
-                    filaFinal = 5;
-                    break;
-                case '4':
-                    filaFinal = 4;
-                    break;
-                case '5':
-                    filaFinal = 3;
-                    break;
-                case '6':
-                    filaFinal = 2;
-                    break;
-                case '7':
-                    filaFinal = 1;
-                    break;
-                case '8':
-                    filaFinal = 0;
-                    break;
-                default:
-                    filaFinal = 5;
-
-            }
             switch (jugada.charAt(4)) {
                 case 'A':
                     nuevaPieza = 'a';
@@ -396,11 +233,11 @@ public class Juego {
                     nuevaPieza = 'n';
 
             }
-            Posicion PosInicial = new Posicion(filaInicial, columnaInicial);
-            Posicion PosFinal = new Posicion(filaFinal, columnaFinal);
+            Posicion PosInicial = new Posicion(devolverFila(jugada.charAt(1)), devolverColumna(jugada.charAt(0)));
+            Posicion PosFinal = new Posicion(devolverFila(jugada.charAt(3)), devolverColumna(jugada.charAt(2)));
             Movimiento mov = new Movimiento(PosInicial, PosFinal);
             tablero.promociondelPeon(mov, nuevaPieza);
-        } else{
+        } else {
             System.out.println("Movimiento invalido-JUGADA");
         }
     }

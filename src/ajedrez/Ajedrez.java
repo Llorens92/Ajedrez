@@ -58,7 +58,7 @@ public class Ajedrez {
                         default:
                     }
                     break;
-                case 3:
+                case 3:                        
                     switch (Menus.menuAdministrar()) {
                         case 1:
                             break;

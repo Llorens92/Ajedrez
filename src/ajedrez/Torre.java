@@ -37,4 +37,7 @@ public class Torre extends Pieza {
             tablero.Mover(mov);
         } 
     }
+    public String toString() {
+        return super.toString();
+    }
 }

@@ -71,4 +71,9 @@ public class Peon extends Pieza {
             System.out.println("El peon no puede mover así");
         }
     }
+    
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }
