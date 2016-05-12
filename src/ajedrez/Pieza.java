@@ -27,7 +27,7 @@ public abstract class Pieza {
      * Objeto de clase Posición que indica la posición en que se encuentra la
      * pieza
      */
-    protected Posicion pos = new Posicion(fila, columna);
+    protected Posicion pos;
 
     /**
      * Constructor que inicializa el color y la posición de la pieza
@@ -41,6 +41,7 @@ public abstract class Pieza {
         this.color = color;
         this.fila = fila;
         this.columna = columna;
+        pos =  new Posicion(fila, columna);
     }
 
     /**

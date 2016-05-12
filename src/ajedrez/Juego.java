@@ -31,7 +31,7 @@ public class Juego {
         listapartidas.add(tablero);
     }
 
-    public int devolverFila(char caracter) {
+    public static int devolverFila(char caracter) {
         int fila;
         switch (caracter) {
             case '1':
@@ -65,7 +65,7 @@ public class Juego {
         return fila;
     }
 
-    public int devolverColumna(char caracter) {
+    public static int devolverColumna(char caracter) {
         int columna;
         switch (caracter) {
             case 'A':
@@ -181,7 +181,7 @@ public class Juego {
      *
      * @param tablero Que es un array bidimensional de piezas
      */
-    public void pintar(Pieza[][] tablero) {
+    public static void pintar(Pieza[][] tablero) {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if (tablero[i][j] != null) {

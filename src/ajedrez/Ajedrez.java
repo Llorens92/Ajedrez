@@ -58,9 +58,16 @@ public class Ajedrez {
                         default:
                     }
                     break;
-                case 3:                        
+                case 3:
                     switch (Menus.menuAdministrar()) {
                         case 1:
+                            Tablero tablero = new Tablero();
+                            Ventana ventana = new Ventana(tablero);
+                            ventana.setBounds(0, 0, 505, 530);
+                            ventana.setVisible(true);
+                            ventana.board.pintartablero(tablero);
+                            Problema.introduciendoDatos(tablero, ventana);
+                            ;
                             break;
                         case 2:
                             break;

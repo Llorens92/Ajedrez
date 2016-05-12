@@ -57,6 +57,10 @@ public class Tablero {
      */
     private boolean movtorrenegraH = false;
 
+    public void colocaPieza(Pieza figura) {
+        tablero[figura.getPos().getFila()][figura.getPos().getColumna()] = figura;
+    }
+
     /**
      * Método que devuelve el array de movimientos que es atributo de esta clase
      *
@@ -193,21 +197,19 @@ public class Tablero {
                     }
                 }
                 //Si cuando aumenta el número de fila desciende el de columna o al revés:
-            } else {
-                //Si la diagonal es de izquierda a derecha y ascendente:                
-                if (mov.getPosFinal().getColumna() > mov.getPosInicial().getColumna()) {
-                    for (int i = mov.getPosInicial().getFila() - 1; i > mov.getPosFinal().getFila(); i--) {
-                        columna++;
-                        if (DevuelvePieza(i, columna) != null) {
-                            hayPiezasEntre = true;
-                        }
+            } else //Si la diagonal es de izquierda a derecha y ascendente:                
+            if (mov.getPosFinal().getColumna() > mov.getPosInicial().getColumna()) {
+                for (int i = mov.getPosInicial().getFila() - 1; i > mov.getPosFinal().getFila(); i--) {
+                    columna++;
+                    if (DevuelvePieza(i, columna) != null) {
+                        hayPiezasEntre = true;
                     }
-                } else {//Si la diagonal es de derecha a izquierda y descendente:                    
-                    for (int i = mov.getPosInicial().getFila() + 1; i < mov.getPosFinal().getFila(); i++) {
-                        columna--;
-                        if (DevuelvePieza(i, columna) != null) {
-                            hayPiezasEntre = true;
-                        }
+                }
+            } else {//Si la diagonal es de derecha a izquierda y descendente:                    
+                for (int i = mov.getPosInicial().getFila() + 1; i < mov.getPosFinal().getFila(); i++) {
+                    columna--;
+                    if (DevuelvePieza(i, columna) != null) {
+                        hayPiezasEntre = true;
                     }
                 }
             }

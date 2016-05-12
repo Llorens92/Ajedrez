@@ -13,10 +13,6 @@ import java.util.Scanner;
  */
 public class Problema {
 
-    public static void crearProblema(Tablero tablero) {
-
-    }
-
     public static Pieza introducirPieza(String nomPieza, String color, int fila, int columna) {
         boolean colour = false;
         Pieza pieza;
@@ -53,11 +49,12 @@ public class Problema {
         return pieza;
     }
 
-    public static void introduciendoDatos() {
+    public static void introduciendoDatos(Tablero tablero, Ventana ventana) {
         Scanner sc = new Scanner(System.in);
         String nomPieza = " ";
-        String color;
-        String posicion;
+        String color = " ";
+        String posicion = " ";
+        boolean salir = false;
         while (!nomPieza.equalsIgnoreCase("fin")) {
             do {
                 System.out.println("Introduzca el nombre de la pieza que quiere añadir al tablero o fin para terminar.\nPor ejemplo: Caballo");
@@ -69,11 +66,19 @@ public class Problema {
                     color = sc.nextLine();
                 } while (!color.equalsIgnoreCase("blanco") && !color.equalsIgnoreCase("blanca") && !color.equalsIgnoreCase("negro") && !color.equalsIgnoreCase("negra"));
                 do {
-                    System.out.println("Introduzca la casilla de la pieza que quiere añadir al tablero.\nPor ejemplo: C5");
-                    posicion = sc.nextLine();
-                } while (posicion.length() != 2);
+                    do {
+                        System.out.println("Introduzca la casilla de la pieza que quiere añadir al tablero.\nPor ejemplo: C5");
+                        posicion = sc.nextLine();
+                    } while (posicion.length() != 2);
+                    if (!(Juego.devolverColumna(posicion.toUpperCase().charAt(0)) == 8) && !(Juego.devolverFila(posicion.toUpperCase().charAt(1)) == 8)) {
+                        salir = true;
+                    }
+                } while (!salir);
+                tablero.colocaPieza(introducirPieza(nomPieza.toUpperCase(), color, Juego.devolverFila(posicion.toUpperCase().charAt(1)), Juego.devolverColumna(posicion.toUpperCase().charAt(0))));
+                ventana.board.pintartablero(tablero);
+                Juego.pintar(tablero.getTablero());
+                ventana.actualizarpantalla();
             }
         }
-        introducirPieza(nomPieza,, 6, 8);
     }
 }
