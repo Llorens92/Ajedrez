@@ -5,11 +5,13 @@
  */
 package ajedrez;
 
+import java.io.Serializable;
+
 /**
  *
  * @author dam1
  */
-public abstract class Pieza {
+public abstract class Pieza implements Serializable{
 
     /**
      * Booleano que indica el color de la pieza (blancas true, negras false)

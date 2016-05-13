@@ -5,11 +5,13 @@
  */
 package ajedrez;
 
+import java.io.Serializable;
+
 /**
  *
  * @author dam1
  */
-public class Tablero {
+public class Tablero implements Serializable{
 
     protected String id;
 

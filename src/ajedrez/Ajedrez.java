@@ -7,8 +7,6 @@ package ajedrez;
 
 import java.io.*;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -25,9 +23,7 @@ public class Ajedrez {
             writer.close();
             writer2.close();
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(Ajedrez.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(Ajedrez.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -35,14 +31,9 @@ public class Ajedrez {
         Juego partida = null;
         try {
             ObjectInputStream reader = new ObjectInputStream(new FileInputStream(new File("partidas.dat")));
-            if (reader.available() != 0) {
-                partida = (Juego) reader.readObject();
-            }
+            partida = (Juego) reader.readObject();
             reader.close();
-        } catch (IOException ex) {
-            Logger.getLogger(Ajedrez.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Ajedrez.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException | IOException ex) {
         }
         return partida;
     }
@@ -51,14 +42,9 @@ public class Ajedrez {
         Problema problema = null;
         try {
             ObjectInputStream reader = new ObjectInputStream(new FileInputStream(new File("problemas.dat")));
-            if (reader.available() != 0) {
-                problema = (Problema) reader.readObject();
-            }
+            problema = (Problema) reader.readObject();
             reader.close();
-        } catch (IOException ex) {
-            Logger.getLogger(Ajedrez.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Ajedrez.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException | IOException ex) {
         }
         return problema;
     }
@@ -72,8 +58,10 @@ public class Ajedrez {
         System.out.println("Para mover introduzca primero su posicion inicial y luego la final, sin separación. \nPor ejemplo: E2E4");
         if (cargarPartidas() != null) {
             partida = cargarPartidas();
+            System.out.println("CARGADO");
         } else {
             partida = new Juego();
+            System.out.println("nuevo");
         }
         if (cargarProblemas() != null) {
             problema = cargarProblemas();
@@ -124,8 +112,7 @@ public class Ajedrez {
                             ventana.setBounds(0, 0, 505, 530);
                             ventana.setVisible(true);
                             ventana.board.pintartablero(tablero);
-                            Problema.introduciendoDatos(tablero, ventana);
-                            ;
+                            Problema.introduciendoDatos(tablero, ventana);                            
                             break;
                         case 2:
                             break;

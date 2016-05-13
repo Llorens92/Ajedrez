@@ -7,6 +7,7 @@ package ajedrez;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 /**
@@ -15,7 +16,7 @@ import java.util.Scanner;
  */
 public class Problema implements Serializable{
 
-    ArrayList<Tablero> listaProblemas = new ArrayList<>();
+    HashMap<Tablero,String[]> listaProblemas = new HashMap<>();
 
     public String fijandoIDProblema() {
         boolean distinto = false;
@@ -26,7 +27,7 @@ public class Problema implements Serializable{
                 distinto = true;
             } else {
                 for (int i = 0; i < listaProblemas.size() && !distinto; i++) {
-                    distinto = !listaProblemas.get(i).getId().equalsIgnoreCase(ID);
+                    distinto = !listaProblemas.keySet().equalsIgnoreCase(ID);
                 }
             }
         } while (!distinto);

@@ -5,11 +5,13 @@
  */
 package ajedrez;
 
+import java.io.Serializable;
+
 /**
  *
  * @author dam1
  */
-public class Movimiento {
+public class Movimiento implements Serializable{
 
     /**
      * Esta es la posición inicial de nuestro movimiento

@@ -5,11 +5,13 @@
  */
 package ajedrez;
 
+import java.io.Serializable;
+
 /**
  *
  * @author dam1
  */
-public class Posicion {
+public class Posicion implements Serializable{
     /**
      * Fila de la posición
      */
