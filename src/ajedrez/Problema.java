@@ -5,13 +5,33 @@
  */
 package ajedrez;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
  *
  * @author dam1
  */
-public class Problema {
+public class Problema implements Serializable{
+
+    ArrayList<Tablero> listaProblemas = new ArrayList<>();
+
+    public String fijandoIDProblema() {
+        boolean distinto = false;
+        String ID = "";
+        do {
+            ID = "problema".concat(String.valueOf((int) (Math.random() * 10))).concat(String.valueOf((int) (Math.random() * 10))).concat(String.valueOf((int) (Math.random() * 10)));
+            if (listaProblemas.isEmpty()) {
+                distinto = true;
+            } else {
+                for (int i = 0; i < listaProblemas.size() && !distinto; i++) {
+                    distinto = !listaProblemas.get(i).getId().equalsIgnoreCase(ID);
+                }
+            }
+        } while (!distinto);
+        return ID;
+    }
 
     public static Pieza introducirPieza(String nomPieza, String color, int fila, int columna) {
         boolean colour = false;

@@ -5,16 +5,36 @@
  */
 package ajedrez;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  *
  * @author dam1
  */
-public class Juego {
+public class Juego implements Serializable{
 
-    ArrayList<Tablero> listapartidas = new ArrayList<>();
-    ArrayList<Tablero> listaproblemas = new ArrayList<>();
+    ArrayList<Tablero> listaPartidas = new ArrayList<>();
+
+    public ArrayList<Tablero> getListapartidas() {
+        return listaPartidas;
+    }
+
+    public String fijandoIDPartida() {
+        boolean distinto = false;
+        String ID = "";
+        do {
+            ID = "partida".concat(String.valueOf((int) (Math.random() * 10))).concat(String.valueOf((int) (Math.random() * 10))).concat(String.valueOf((int) (Math.random() * 10)));
+            if (listaPartidas.isEmpty()) {
+                distinto = true;
+            } else {                
+                for (int i = 0; i < listaPartidas.size() && !distinto; i++) {
+                    distinto = !listaPartidas.get(i).getId().equalsIgnoreCase(ID);
+                }
+            }
+        } while (!distinto);
+        return ID;
+    }
 
     public boolean finPartida(String mensaje, Tablero tablero) {
         boolean salir = false;
@@ -28,7 +48,7 @@ public class Juego {
     }
 
     public void guardarPartida(Tablero tablero) {
-        listapartidas.add(tablero);
+        listaPartidas.add(tablero);
     }
 
     public static int devolverFila(char caracter) {
