@@ -30,10 +30,12 @@ public class Rey extends Pieza {
     }
 
     @Override
-    public void moverPieza(Movimiento mov, Tablero tablero) {
+    public void moverPieza(Movimiento mov, Tablero tablero) throws MovIncorrectoException{
         if (movimientoValido(mov) == true || tablero.enroqueValido(mov) == true) {
             tablero.Mover(mov);
-        } 
+        } else{
+            throw new MovIncorrectoException("El rey no puede mover así");
+        }
     }   
     
     @Override

@@ -6,12 +6,13 @@
 package ajedrez;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  *
  * @author dam1
  */
-public class Tablero implements Serializable{
+public class Tablero implements Serializable {
 
     protected String id;
 
@@ -30,14 +31,9 @@ public class Tablero implements Serializable{
      */
     private boolean turno = true;
     /**
-     * Es un entero que controla el número de jugadas válidas que se producen en
-     * la partida
+     * Es un arraylist de movimientos donde se van introduciendo solo los válidos
      */
-    private int contadorjugadas;
-    /**
-     * Es un array de movimientos donde se van introduciendo solo los válidos
-     */
-    private Movimiento[] arraymov = new Movimiento[200];
+    private ArrayList <Movimiento> arraymov = new ArrayList <>();
     /**
      * Entero que controla el número de veces que se mueve el rey blanco (para
      * el enroque)
@@ -68,18 +64,19 @@ public class Tablero implements Serializable{
     public String getId() {
         return id;
     }
-        
-    
+
     public void colocaPieza(Pieza figura) {
         tablero[figura.getPos().getFila()][figura.getPos().getColumna()] = figura;
     }
 
+
     /**
-     * Método que devuelve el array de movimientos que es atributo de esta clase
+     * Método que devuelve el arraylist de movimientos que es atributo de esta clase
      *
-     * @return Array de movimientos
+     * @return ArrayList de movimientos
      */
-    public Movimiento[] getArraymov() {
+    
+    public ArrayList<Movimiento> getArraymov() {
         return arraymov;
     }
 
@@ -2145,259 +2142,262 @@ public class Tablero implements Serializable{
      */
     public boolean enroqueValido(Movimiento mov) {
         boolean enroqueValido = false; //Comprobamos si alguien intenta hacer el enroque corto con las blancas:
-        if (DevuelvePieza(mov.getPosInicial()) != null && DevuelvePieza(mov.getPosInicial()).getClass().getName().compareTo("ajedrez.Rey") == 0 && DevuelvePieza(mov.getPosInicial()).getColor() == true && mov.getPosInicial().getFila() == 7 && mov.getPosInicial().getColumna() == 4 && mov.getPosFinal().getFila() == 7 && mov.getPosFinal().getColumna() == 6 && Jaque(7, 4) == false && Jaque(7, 5) == false && Jaque(7, 6) == false) {
-            //Llamamos 160 veces al método mover para distinguir entre las veces que lo hemos llamado para mover cualquiera de los reyes o las torres y la que lo llamamos para saber si ya se han movido los susodichos reyes o torres:
-            for (int i = 0; i < 20; i++) {
-                //Hacemos el enroque siempre que el entero que nos devuelve el método mover coincida con el valor que queremos en la última llamada: 
-                if (Mover(mov) == 0 && i == 19) {
-                    enroqueValido = true;
-                    //Borramos la torre correspondiente y la colocamos en su nuevo lugar:
-                    ponPieza(tablero[7][7], 7, 5);
-                    quitaPieza(7, 7);
+        try {
+            if (DevuelvePieza(mov.getPosInicial()) != null && DevuelvePieza(mov.getPosInicial()).getClass().getName().compareTo("ajedrez.Rey") == 0 && DevuelvePieza(mov.getPosInicial()).getColor() == true && mov.getPosInicial().getFila() == 7 && mov.getPosInicial().getColumna() == 4 && mov.getPosFinal().getFila() == 7 && mov.getPosFinal().getColumna() == 6 && Jaque(7, 4) == false && Jaque(7, 5) == false && Jaque(7, 6) == false) {
+                //Llamamos 160 veces al método mover para distinguir entre las veces que lo hemos llamado para mover cualquiera de los reyes o las torres y la que lo llamamos para saber si ya se han movido los susodichos reyes o torres:
+                for (int i = 0; i < 20; i++) {
+                    //Hacemos el enroque siempre que el entero que nos devuelve el método mover coincida con el valor que queremos en la última llamada: 
+                    if (Mover(mov) == 0 && i == 19) {
+                        enroqueValido = true;
+                        //Borramos la torre correspondiente y la colocamos en su nuevo lugar:
+                        ponPieza(tablero[7][7], 7, 5);
+                        quitaPieza(7, 7);
+                    }
+                }
+                for (int i = 0; i < 20; i++) {
+                    if (Mover(mov) == 2 && i == 19) {
+                        enroqueValido = true;
+                        ponPieza(tablero[7][7], 7, 5);
+                        quitaPieza(7, 7);
+                    }
+                }
+                for (int i = 0; i < 20; i++) {
+                    if (Mover(mov) == 3 && i == 19) {
+                        enroqueValido = true;
+                        ponPieza(tablero[7][7], 7, 5);
+                        quitaPieza(7, 7);
+                    }
+                }
+                for (int i = 0; i < 20; i++) {
+                    if (Mover(mov) == 5 && i == 19) {
+                        enroqueValido = true;
+                        ponPieza(tablero[7][7], 7, 5);
+                        quitaPieza(7, 7);
+                    }
+                }
+                for (int i = 0; i < 20; i++) {
+                    if (Mover(mov) == 6 && i == 19) {
+                        enroqueValido = true;
+                        ponPieza(tablero[7][7], 7, 5);
+                        quitaPieza(7, 7);
+                    }
+                }
+                for (int i = 0; i < 20; i++) {
+                    if (Mover(mov) == 7 && i == 19) {
+                        enroqueValido = true;
+                        ponPieza(tablero[7][7], 7, 5);
+                        quitaPieza(7, 7);
+                    }
+                }
+                for (int i = 0; i < 20; i++) {
+                    if (Mover(mov) == 8 && i == 19) {
+                        enroqueValido = true;
+                        ponPieza(tablero[7][7], 7, 5);
+                        quitaPieza(7, 7);
+                    }
+                }
+                for (int i = 0; i < 20; i++) {
+                    if (Mover(mov) == 13 && i == 19) {
+                        enroqueValido = true;
+                        ponPieza(tablero[7][7], 7, 5);
+                        quitaPieza(7, 7);
+                        //Al final de la comprobación borramos el movimiento producido por la llamada al método mover llamado para saber si se podía o no enrocar:
+                    } else if (DevuelvePieza(mov.getPosFinal()) != null && i == 19) {
+                        ponPieza(DevuelvePieza(mov.getPosFinal()), mov.getPosInicial());
+                        quitaPieza(mov.getPosFinal());
+                    }
+                }
+            } //Comprobamos si alguien intenta hacer el enroque largo con las blancas:
+            if (DevuelvePieza(mov.getPosInicial()) != null && DevuelvePieza(mov.getPosInicial()).getClass().getName().compareTo("ajedrez.Rey") == 0 && DevuelvePieza(mov.getPosInicial()).getColor() == true && mov.getPosInicial().getFila() == 7 && mov.getPosInicial().getColumna() == 4 && mov.getPosFinal().getFila() == 7 && mov.getPosFinal().getColumna() == 2 && Jaque(7, 4) == false && Jaque(7, 3) == false && Jaque(7, 2) == false) {
+                //Llamamos 160 veces al método mover para distinguir entre las veces que lo hemos llamado para mover cualquiera de los reyes o las torres y la que lo llamamos para saber si ya se han movido los susodichos reyes o torres:
+                for (int i = 0; i < 20; i++) {
+                    if (Mover(mov) == 0 && i == 19) {
+                        enroqueValido = true;
+                        ponPieza(tablero[7][0], 7, 3);
+                        quitaPieza(7, 0);
+                    }
+                }
+                for (int i = 0; i < 20; i++) {
+                    if (Mover(mov) == 2 && i == 19) {
+                        enroqueValido = true;
+                        ponPieza(tablero[7][0], 7, 3);
+                        quitaPieza(7, 0);
+                    }
+                }
+                for (int i = 0; i < 20; i++) {
+                    if (Mover(mov) == 4 && i == 19) {
+                        enroqueValido = true;
+                        ponPieza(tablero[7][0], 7, 3);
+                        quitaPieza(7, 0);
+                    }
+                }
+                for (int i = 0; i < 20; i++) {
+                    if (Mover(mov) == 5 && i == 19) {
+                        enroqueValido = true;
+                        ponPieza(tablero[7][0], 7, 3);
+                        quitaPieza(7, 0);
+                    }
+                }
+                for (int i = 0; i < 20; i++) {
+                    if (Mover(mov) == 6 && i == 19) {
+                        enroqueValido = true;
+                        ponPieza(tablero[7][0], 7, 3);
+                        quitaPieza(7, 0);
+                    }
+                }
+                for (int i = 0; i < 20; i++) {
+                    if (Mover(mov) == 9 && i == 19) {
+                        enroqueValido = true;
+                        ponPieza(tablero[7][0], 7, 3);
+                        quitaPieza(7, 0);
+                    }
+                }
+                for (int i = 0; i < 20; i++) {
+                    if (Mover(mov) == 10 && i == 19) {
+                        enroqueValido = true;
+                        ponPieza(tablero[7][0], 7, 3);
+                        quitaPieza(7, 0);
+                    }
+                }
+                for (int i = 0; i < 20; i++) {
+                    if (Mover(mov) == 14 && i == 19) {
+                        enroqueValido = true;
+                        ponPieza(tablero[7][0], 7, 3);
+                        quitaPieza(7, 0);
+                        //Al final de la comprobación borramos el movimiento producido por la llamada al método mover llamado para saber si se podía o no enrocar:
+                    } else if (DevuelvePieza(mov.getPosFinal()) != null && i == 19) {
+                        ponPieza(DevuelvePieza(mov.getPosFinal()), mov.getPosInicial());
+                        quitaPieza(mov.getPosFinal());
+                    }
+                }
+            }//Comprobamos si alguien intenta hacer el enroque corto con las negras:
+            if (DevuelvePieza(mov.getPosInicial()) != null && DevuelvePieza(mov.getPosInicial()).getClass().getName().compareTo("ajedrez.Rey") == 0 && DevuelvePieza(mov.getPosInicial()).getColor() == false && mov.getPosInicial().getFila() == 0 && mov.getPosInicial().getColumna() == 4 && mov.getPosFinal().getFila() == 0 && mov.getPosFinal().getColumna() == 6 && Jaque(0, 4) == false && Jaque(0, 5) == false && Jaque(0, 6) == false) {
+                //Llamamos 160 veces al método mover para distinguir entre las veces que lo hemos llamado para mover cualquiera de los reyes o las torres y la que lo llamamos para saber si ya se han movido los susodichos reyes o torres:
+                for (int i = 0; i < 20; i++) {
+                    if (Mover(mov) == 0 && i == 19) {
+                        enroqueValido = true;
+                        ponPieza(tablero[0][7], 0, 5);
+                        quitaPieza(0, 7);
+                    }
+                }
+                for (int i = 0; i < 20; i++) {
+                    if (Mover(mov) == 1 && i == 19) {
+                        enroqueValido = true;
+                        ponPieza(tablero[0][7], 0, 5);
+                        quitaPieza(0, 7);
+                    }
+                }
+                for (int i = 0; i < 20; i++) {
+                    if (Mover(mov) == 3 && i == 19) {
+                        enroqueValido = true;
+                        ponPieza(tablero[0][7], 0, 5);
+                        quitaPieza(0, 7);
+                    }
+                }
+                for (int i = 0; i < 20; i++) {
+                    if (Mover(mov) == 4 && i == 19) {
+                        enroqueValido = true;
+                        ponPieza(tablero[0][7], 0, 5);
+                        quitaPieza(0, 7);
+                    }
+                }
+                for (int i = 0; i < 20; i++) {
+                    if (Mover(mov) == 5 && i == 19) {
+                        enroqueValido = true;
+                        ponPieza(tablero[0][7], 0, 5);
+                        quitaPieza(0, 7);
+                    }
+                }
+                for (int i = 0; i < 20; i++) {
+                    if (Mover(mov) == 7 && i == 19) {
+                        enroqueValido = true;
+                        ponPieza(tablero[0][7], 0, 5);
+                        quitaPieza(0, 7);
+                    }
+                }
+                for (int i = 0; i < 20; i++) {
+                    if (Mover(mov) == 10 && i == 19) {
+                        enroqueValido = true;
+                        ponPieza(tablero[0][7], 0, 5);
+                        quitaPieza(0, 7);
+                    }
+                }
+                for (int i = 0; i < 20; i++) {
+                    if (Mover(mov) == 11 && i == 19) {
+                        enroqueValido = true;
+                        ponPieza(tablero[0][7], 0, 5);
+                        quitaPieza(0, 7);
+                        //Al final de la comprobación borramos el movimiento producido por la llamada al método mover llamado para saber si se podía o no enrocar:
+                    } else if (DevuelvePieza(mov.getPosFinal()) != null && i == 19) {
+                        ponPieza(DevuelvePieza(mov.getPosFinal()), mov.getPosInicial());
+                        quitaPieza(mov.getPosFinal());
+                    }
+                }
+            }//Comprobamos si alguien intenta hacer el enroque largo con las negras:
+            if (DevuelvePieza(mov.getPosInicial()) != null && DevuelvePieza(mov.getPosInicial()).getClass().getName().compareTo("ajedrez.Rey") == 0 && DevuelvePieza(mov.getPosInicial()).getColor() == false && mov.getPosInicial().getFila() == 0 && mov.getPosInicial().getColumna() == 4 && mov.getPosFinal().getFila() == 0 && mov.getPosFinal().getColumna() == 2 && Jaque(0, 4) == false && Jaque(0, 3) == false && Jaque(0, 2) == false) {
+                //Llamamos 160 veces al método mover para distinguir entre las veces que lo hemos llamado para mover cualquiera de los reyes o las torres y la que lo llamamos para saber si ya se han movido los susodichos reyes o torres:
+                for (int i = 0; i < 20; i++) {
+                    if (Mover(mov) == 0 && i == 19) {
+                        enroqueValido = true;
+                        ponPieza(tablero[0][0], 0, 3);
+                        quitaPieza(0, 0);
+                    }
+                }
+                for (int i = 0; i < 20; i++) {
+                    if (Mover(mov) == 1 && i == 19) {
+                        enroqueValido = true;
+                        ponPieza(tablero[0][0], 0, 3);
+                        quitaPieza(0, 0);
+                    }
+                }
+                for (int i = 0; i < 20; i++) {
+                    if (Mover(mov) == 3 && i == 19) {
+                        enroqueValido = true;
+                        ponPieza(tablero[0][0], 0, 3);
+                        quitaPieza(0, 0);
+                    }
+                }
+                for (int i = 0; i < 20; i++) {
+                    if (Mover(mov) == 4 && i == 19) {
+                        enroqueValido = true;
+                        ponPieza(tablero[0][0], 0, 3);
+                        quitaPieza(0, 0);
+                    }
+                }
+                for (int i = 0; i < 20; i++) {
+                    if (Mover(mov) == 6 && i == 19) {
+                        enroqueValido = true;
+                        ponPieza(tablero[0][0], 0, 3);
+                        quitaPieza(0, 0);
+                    }
+                }
+                for (int i = 0; i < 20; i++) {
+                    if (Mover(mov) == 8 && i == 19) {
+                        enroqueValido = true;
+                        ponPieza(tablero[0][0], 0, 3);
+                        quitaPieza(0, 0);
+                    }
+                }
+                for (int i = 0; i < 20; i++) {
+                    if (Mover(mov) == 9 && i == 19) {
+                        enroqueValido = true;
+                        ponPieza(tablero[0][0], 0, 3);
+                        quitaPieza(0, 0);
+                    }
+                }
+                for (int i = 0; i < 20; i++) {
+                    if (Mover(mov) == 12 && i == 19) {
+                        enroqueValido = true;
+                        ponPieza(tablero[0][0], 0, 3);
+                        quitaPieza(0, 0);
+                        //Al final de la comprobación borramos el movimiento producido por la llamada al método mover llamado para saber si se podía o no enrocar:
+                    } else if (DevuelvePieza(mov.getPosFinal()) != null && i == 19) {
+                        ponPieza(DevuelvePieza(mov.getPosFinal()), mov.getPosInicial());
+                        quitaPieza(mov.getPosFinal());
+                    }
                 }
             }
-            for (int i = 0; i < 20; i++) {
-                if (Mover(mov) == 2 && i == 19) {
-                    enroqueValido = true;
-                    ponPieza(tablero[7][7], 7, 5);
-                    quitaPieza(7, 7);
-                }
-            }
-            for (int i = 0; i < 20; i++) {
-                if (Mover(mov) == 3 && i == 19) {
-                    enroqueValido = true;
-                    ponPieza(tablero[7][7], 7, 5);
-                    quitaPieza(7, 7);
-                }
-            }
-            for (int i = 0; i < 20; i++) {
-                if (Mover(mov) == 5 && i == 19) {
-                    enroqueValido = true;
-                    ponPieza(tablero[7][7], 7, 5);
-                    quitaPieza(7, 7);
-                }
-            }
-            for (int i = 0; i < 20; i++) {
-                if (Mover(mov) == 6 && i == 19) {
-                    enroqueValido = true;
-                    ponPieza(tablero[7][7], 7, 5);
-                    quitaPieza(7, 7);
-                }
-            }
-            for (int i = 0; i < 20; i++) {
-                if (Mover(mov) == 7 && i == 19) {
-                    enroqueValido = true;
-                    ponPieza(tablero[7][7], 7, 5);
-                    quitaPieza(7, 7);
-                }
-            }
-            for (int i = 0; i < 20; i++) {
-                if (Mover(mov) == 8 && i == 19) {
-                    enroqueValido = true;
-                    ponPieza(tablero[7][7], 7, 5);
-                    quitaPieza(7, 7);
-                }
-            }
-            for (int i = 0; i < 20; i++) {
-                if (Mover(mov) == 13 && i == 19) {
-                    enroqueValido = true;
-                    ponPieza(tablero[7][7], 7, 5);
-                    quitaPieza(7, 7);
-                    //Al final de la comprobación borramos el movimiento producido por la llamada al método mover llamado para saber si se podía o no enrocar:
-                } else if (DevuelvePieza(mov.getPosFinal()) != null && i == 19) {
-                    ponPieza(DevuelvePieza(mov.getPosFinal()), mov.getPosInicial());
-                    quitaPieza(mov.getPosFinal());
-                }
-            }
-        } //Comprobamos si alguien intenta hacer el enroque largo con las blancas:
-        if (DevuelvePieza(mov.getPosInicial()) != null && DevuelvePieza(mov.getPosInicial()).getClass().getName().compareTo("ajedrez.Rey") == 0 && DevuelvePieza(mov.getPosInicial()).getColor() == true && mov.getPosInicial().getFila() == 7 && mov.getPosInicial().getColumna() == 4 && mov.getPosFinal().getFila() == 7 && mov.getPosFinal().getColumna() == 2 && Jaque(7, 4) == false && Jaque(7, 3) == false && Jaque(7, 2) == false) {
-            //Llamamos 160 veces al método mover para distinguir entre las veces que lo hemos llamado para mover cualquiera de los reyes o las torres y la que lo llamamos para saber si ya se han movido los susodichos reyes o torres:
-            for (int i = 0; i < 20; i++) {
-                if (Mover(mov) == 0 && i == 19) {
-                    enroqueValido = true;
-                    ponPieza(tablero[7][0], 7, 3);
-                    quitaPieza(7, 0);
-                }
-            }
-            for (int i = 0; i < 20; i++) {
-                if (Mover(mov) == 2 && i == 19) {
-                    enroqueValido = true;
-                    ponPieza(tablero[7][0], 7, 3);
-                    quitaPieza(7, 0);
-                }
-            }
-            for (int i = 0; i < 20; i++) {
-                if (Mover(mov) == 4 && i == 19) {
-                    enroqueValido = true;
-                    ponPieza(tablero[7][0], 7, 3);
-                    quitaPieza(7, 0);
-                }
-            }
-            for (int i = 0; i < 20; i++) {
-                if (Mover(mov) == 5 && i == 19) {
-                    enroqueValido = true;
-                    ponPieza(tablero[7][0], 7, 3);
-                    quitaPieza(7, 0);
-                }
-            }
-            for (int i = 0; i < 20; i++) {
-                if (Mover(mov) == 6 && i == 19) {
-                    enroqueValido = true;
-                    ponPieza(tablero[7][0], 7, 3);
-                    quitaPieza(7, 0);
-                }
-            }
-            for (int i = 0; i < 20; i++) {
-                if (Mover(mov) == 9 && i == 19) {
-                    enroqueValido = true;
-                    ponPieza(tablero[7][0], 7, 3);
-                    quitaPieza(7, 0);
-                }
-            }
-            for (int i = 0; i < 20; i++) {
-                if (Mover(mov) == 10 && i == 19) {
-                    enroqueValido = true;
-                    ponPieza(tablero[7][0], 7, 3);
-                    quitaPieza(7, 0);
-                }
-            }
-            for (int i = 0; i < 20; i++) {
-                if (Mover(mov) == 14 && i == 19) {
-                    enroqueValido = true;
-                    ponPieza(tablero[7][0], 7, 3);
-                    quitaPieza(7, 0);
-                    //Al final de la comprobación borramos el movimiento producido por la llamada al método mover llamado para saber si se podía o no enrocar:
-                } else if (DevuelvePieza(mov.getPosFinal()) != null && i == 19) {
-                    ponPieza(DevuelvePieza(mov.getPosFinal()), mov.getPosInicial());
-                    quitaPieza(mov.getPosFinal());
-                }
-            }
-        }//Comprobamos si alguien intenta hacer el enroque corto con las negras:
-        if (DevuelvePieza(mov.getPosInicial()) != null && DevuelvePieza(mov.getPosInicial()).getClass().getName().compareTo("ajedrez.Rey") == 0 && DevuelvePieza(mov.getPosInicial()).getColor() == false && mov.getPosInicial().getFila() == 0 && mov.getPosInicial().getColumna() == 4 && mov.getPosFinal().getFila() == 0 && mov.getPosFinal().getColumna() == 6 && Jaque(0, 4) == false && Jaque(0, 5) == false && Jaque(0, 6) == false) {
-            //Llamamos 160 veces al método mover para distinguir entre las veces que lo hemos llamado para mover cualquiera de los reyes o las torres y la que lo llamamos para saber si ya se han movido los susodichos reyes o torres:
-            for (int i = 0; i < 20; i++) {
-                if (Mover(mov) == 0 && i == 19) {
-                    enroqueValido = true;
-                    ponPieza(tablero[0][7], 0, 5);
-                    quitaPieza(0, 7);
-                }
-            }
-            for (int i = 0; i < 20; i++) {
-                if (Mover(mov) == 1 && i == 19) {
-                    enroqueValido = true;
-                    ponPieza(tablero[0][7], 0, 5);
-                    quitaPieza(0, 7);
-                }
-            }
-            for (int i = 0; i < 20; i++) {
-                if (Mover(mov) == 3 && i == 19) {
-                    enroqueValido = true;
-                    ponPieza(tablero[0][7], 0, 5);
-                    quitaPieza(0, 7);
-                }
-            }
-            for (int i = 0; i < 20; i++) {
-                if (Mover(mov) == 4 && i == 19) {
-                    enroqueValido = true;
-                    ponPieza(tablero[0][7], 0, 5);
-                    quitaPieza(0, 7);
-                }
-            }
-            for (int i = 0; i < 20; i++) {
-                if (Mover(mov) == 5 && i == 19) {
-                    enroqueValido = true;
-                    ponPieza(tablero[0][7], 0, 5);
-                    quitaPieza(0, 7);
-                }
-            }
-            for (int i = 0; i < 20; i++) {
-                if (Mover(mov) == 7 && i == 19) {
-                    enroqueValido = true;
-                    ponPieza(tablero[0][7], 0, 5);
-                    quitaPieza(0, 7);
-                }
-            }
-            for (int i = 0; i < 20; i++) {
-                if (Mover(mov) == 10 && i == 19) {
-                    enroqueValido = true;
-                    ponPieza(tablero[0][7], 0, 5);
-                    quitaPieza(0, 7);
-                }
-            }
-            for (int i = 0; i < 20; i++) {
-                if (Mover(mov) == 11 && i == 19) {
-                    enroqueValido = true;
-                    ponPieza(tablero[0][7], 0, 5);
-                    quitaPieza(0, 7);
-                    //Al final de la comprobación borramos el movimiento producido por la llamada al método mover llamado para saber si se podía o no enrocar:
-                } else if (DevuelvePieza(mov.getPosFinal()) != null && i == 19) {
-                    ponPieza(DevuelvePieza(mov.getPosFinal()), mov.getPosInicial());
-                    quitaPieza(mov.getPosFinal());
-                }
-            }
-        }//Comprobamos si alguien intenta hacer el enroque largo con las negras:
-        if (DevuelvePieza(mov.getPosInicial()) != null && DevuelvePieza(mov.getPosInicial()).getClass().getName().compareTo("ajedrez.Rey") == 0 && DevuelvePieza(mov.getPosInicial()).getColor() == false && mov.getPosInicial().getFila() == 0 && mov.getPosInicial().getColumna() == 4 && mov.getPosFinal().getFila() == 0 && mov.getPosFinal().getColumna() == 2 && Jaque(0, 4) == false && Jaque(0, 3) == false && Jaque(0, 2) == false) {
-            //Llamamos 160 veces al método mover para distinguir entre las veces que lo hemos llamado para mover cualquiera de los reyes o las torres y la que lo llamamos para saber si ya se han movido los susodichos reyes o torres:
-            for (int i = 0; i < 20; i++) {
-                if (Mover(mov) == 0 && i == 19) {
-                    enroqueValido = true;
-                    ponPieza(tablero[0][0], 0, 3);
-                    quitaPieza(0, 0);
-                }
-            }
-            for (int i = 0; i < 20; i++) {
-                if (Mover(mov) == 1 && i == 19) {
-                    enroqueValido = true;
-                    ponPieza(tablero[0][0], 0, 3);
-                    quitaPieza(0, 0);
-                }
-            }
-            for (int i = 0; i < 20; i++) {
-                if (Mover(mov) == 3 && i == 19) {
-                    enroqueValido = true;
-                    ponPieza(tablero[0][0], 0, 3);
-                    quitaPieza(0, 0);
-                }
-            }
-            for (int i = 0; i < 20; i++) {
-                if (Mover(mov) == 4 && i == 19) {
-                    enroqueValido = true;
-                    ponPieza(tablero[0][0], 0, 3);
-                    quitaPieza(0, 0);
-                }
-            }
-            for (int i = 0; i < 20; i++) {
-                if (Mover(mov) == 6 && i == 19) {
-                    enroqueValido = true;
-                    ponPieza(tablero[0][0], 0, 3);
-                    quitaPieza(0, 0);
-                }
-            }
-            for (int i = 0; i < 20; i++) {
-                if (Mover(mov) == 8 && i == 19) {
-                    enroqueValido = true;
-                    ponPieza(tablero[0][0], 0, 3);
-                    quitaPieza(0, 0);
-                }
-            }
-            for (int i = 0; i < 20; i++) {
-                if (Mover(mov) == 9 && i == 19) {
-                    enroqueValido = true;
-                    ponPieza(tablero[0][0], 0, 3);
-                    quitaPieza(0, 0);
-                }
-            }
-            for (int i = 0; i < 20; i++) {
-                if (Mover(mov) == 12 && i == 19) {
-                    enroqueValido = true;
-                    ponPieza(tablero[0][0], 0, 3);
-                    quitaPieza(0, 0);
-                    //Al final de la comprobación borramos el movimiento producido por la llamada al método mover llamado para saber si se podía o no enrocar:
-                } else if (DevuelvePieza(mov.getPosFinal()) != null && i == 19) {
-                    ponPieza(DevuelvePieza(mov.getPosFinal()), mov.getPosInicial());
-                    quitaPieza(mov.getPosFinal());
-                }
-            }
+        } catch (MovIncorrectoException ex) {
         }
         return enroqueValido;
     }
@@ -2409,86 +2409,86 @@ public class Tablero implements Serializable{
      * @param arraymov Array de movimientos atributo de esta clase
      * @return Un booleano según si se puede o no
      */
-    public boolean comerAlPaso(Movimiento[] arraymov) {
+    public boolean comerAlPaso(ArrayList <Movimiento> arraymov) {
         boolean comerAlPaso = false;//Comprobamos si el movimiento coincide con uno de comer al paso:        
-        if (arraymov[arraymov.length - 1].getPosInicial().getFila() == 4 && arraymov[arraymov.length - 1].getPosInicial().getColumna() == 1 && arraymov[arraymov.length - 1].getPosFinal().getFila() == 5 && arraymov[arraymov.length - 1].getPosFinal().getColumna() == 0) {
+        if (arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 1 && arraymov.get(arraymov.size()-1).getPosFinal().getFila() == 5 && arraymov.get(arraymov.size()-1).getPosFinal().getColumna() == 0) {
             //Comprobamos si el movimiento anterior al que se quiere realizar coincide con  el del peon que debe haber movido para que el movimiento anteriormente mencionado sea valido:
-            if (DevuelvePieza(arraymov[arraymov.length - 3].getPosFinal()) != null && DevuelvePieza(arraymov[arraymov.length - 3].getPosFinal()).getColor() == true && arraymov[arraymov.length - 3].getPosInicial().getFila() == 6 && arraymov[arraymov.length - 3].getPosInicial().getColumna() == 0 && arraymov[arraymov.length - 3].getPosFinal().getFila() == 4) {
+            if (DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()).getColor() == true && arraymov.get(arraymov.size()-2).getPosInicial().getFila() == 6 && arraymov.get(arraymov.size()-2).getPosInicial().getColumna() == 0 && arraymov.get(arraymov.size()-2).getPosFinal().getFila() == 4) {
                 comerAlPaso = true;
             }
         }
-        if (((arraymov[arraymov.length - 1].getPosInicial().getFila() == 4 && arraymov[arraymov.length - 1].getPosInicial().getColumna() == 0) || (arraymov[arraymov.length - 1].getPosInicial().getFila() == 4 && arraymov[arraymov.length - 1].getPosInicial().getColumna() == 2)) && arraymov[arraymov.length - 1].getPosFinal().getFila() == 5 && arraymov[arraymov.length - 1].getPosFinal().getColumna() == 1) {
-            if (DevuelvePieza(arraymov[arraymov.length - 3].getPosFinal()) != null && DevuelvePieza(arraymov[arraymov.length - 3].getPosFinal()).getColor() == true && arraymov[arraymov.length - 3].getPosInicial().getFila() == 6 && arraymov[arraymov.length - 3].getPosInicial().getColumna() == 1 && arraymov[arraymov.length - 3].getPosFinal().getFila() == 4) {
+        if (((arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 0) || (arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 2)) && arraymov.get(arraymov.size()-1).getPosFinal().getFila() == 5 && arraymov.get(arraymov.size()-1).getPosFinal().getColumna() == 1) {
+            if (DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()).getColor() == true && arraymov.get(arraymov.size()-2).getPosInicial().getFila() == 6 && arraymov.get(arraymov.size()-2).getPosInicial().getColumna() == 1 && arraymov.get(arraymov.size()-2).getPosFinal().getFila() == 4) {
                 comerAlPaso = true;
             }
         }
-        if (((arraymov[arraymov.length - 1].getPosInicial().getFila() == 4 && arraymov[arraymov.length - 1].getPosInicial().getColumna() == 1) || (arraymov[arraymov.length - 1].getPosInicial().getFila() == 4 && arraymov[arraymov.length - 1].getPosInicial().getColumna() == 3)) && arraymov[arraymov.length - 1].getPosFinal().getFila() == 5 && arraymov[arraymov.length - 1].getPosFinal().getColumna() == 2) {
-            if (DevuelvePieza(arraymov[arraymov.length - 3].getPosFinal()) != null && DevuelvePieza(arraymov[arraymov.length - 3].getPosFinal()).getColor() == true && arraymov[arraymov.length - 3].getPosInicial().getFila() == 6 && arraymov[arraymov.length - 3].getPosInicial().getColumna() == 2 && arraymov[arraymov.length - 3].getPosFinal().getFila() == 4) {
+        if (((arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 1) || (arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 3)) && arraymov.get(arraymov.size()-1).getPosFinal().getFila() == 5 && arraymov.get(arraymov.size()-1).getPosFinal().getColumna() == 2) {
+            if (DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()).getColor() == true && arraymov.get(arraymov.size()-2).getPosInicial().getFila() == 6 && arraymov.get(arraymov.size()-2).getPosInicial().getColumna() == 2 && arraymov.get(arraymov.size()-2).getPosFinal().getFila() == 4) {
                 comerAlPaso = true;
             }
         }
-        if (((arraymov[arraymov.length - 1].getPosInicial().getFila() == 4 && arraymov[arraymov.length - 1].getPosInicial().getColumna() == 2) || (arraymov[arraymov.length - 1].getPosInicial().getFila() == 4 && arraymov[arraymov.length - 1].getPosInicial().getColumna() == 4)) && arraymov[arraymov.length - 1].getPosFinal().getFila() == 5 && arraymov[arraymov.length - 1].getPosFinal().getColumna() == 3) {
-            if (DevuelvePieza(arraymov[arraymov.length - 3].getPosFinal()) != null && DevuelvePieza(arraymov[arraymov.length - 3].getPosFinal()).getColor() == true && arraymov[arraymov.length - 3].getPosInicial().getFila() == 6 && arraymov[arraymov.length - 3].getPosInicial().getColumna() == 3 && arraymov[arraymov.length - 3].getPosFinal().getFila() == 4) {
+        if (((arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 2) || (arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 4)) && arraymov.get(arraymov.size()-1).getPosFinal().getFila() == 5 && arraymov.get(arraymov.size()-1).getPosFinal().getColumna() == 3) {
+            if (DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()).getColor() == true && arraymov.get(arraymov.size()-2).getPosInicial().getFila() == 6 && arraymov.get(arraymov.size()-2).getPosInicial().getColumna() == 3 && arraymov.get(arraymov.size()-2).getPosFinal().getFila() == 4) {
                 comerAlPaso = true;
             }
         }
-        if (((arraymov[arraymov.length - 1].getPosInicial().getFila() == 4 && arraymov[arraymov.length - 1].getPosInicial().getColumna() == 3) || (arraymov[arraymov.length - 1].getPosInicial().getFila() == 4 && arraymov[arraymov.length - 1].getPosInicial().getColumna() == 5)) && arraymov[arraymov.length - 1].getPosFinal().getFila() == 5 && arraymov[arraymov.length - 1].getPosFinal().getColumna() == 4) {
-            if (DevuelvePieza(arraymov[arraymov.length - 3].getPosFinal()) != null && DevuelvePieza(arraymov[arraymov.length - 3].getPosFinal()).getColor() == true && arraymov[arraymov.length - 3].getPosInicial().getFila() == 6 && arraymov[arraymov.length - 3].getPosInicial().getColumna() == 4 && arraymov[arraymov.length - 3].getPosFinal().getFila() == 4) {
+        if (((arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 3) || (arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 5)) && arraymov.get(arraymov.size()-1).getPosFinal().getFila() == 5 && arraymov.get(arraymov.size()-1).getPosFinal().getColumna() == 4) {
+            if (DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()).getColor() == true && arraymov.get(arraymov.size()-2).getPosInicial().getFila() == 6 && arraymov.get(arraymov.size()-2).getPosInicial().getColumna() == 4 && arraymov.get(arraymov.size()-2).getPosFinal().getFila() == 4) {
                 comerAlPaso = true;
             }
         }
-        if (((arraymov[arraymov.length - 1].getPosInicial().getFila() == 4 && arraymov[arraymov.length - 1].getPosInicial().getColumna() == 4) || (arraymov[arraymov.length - 1].getPosInicial().getFila() == 4 && arraymov[arraymov.length - 1].getPosInicial().getColumna() == 6)) && arraymov[arraymov.length - 1].getPosFinal().getFila() == 5 && arraymov[arraymov.length - 1].getPosFinal().getColumna() == 5) {
-            if (DevuelvePieza(arraymov[arraymov.length - 3].getPosFinal()) != null && DevuelvePieza(arraymov[arraymov.length - 3].getPosFinal()).getColor() == true && arraymov[arraymov.length - 3].getPosInicial().getFila() == 6 && arraymov[arraymov.length - 3].getPosInicial().getColumna() == 5 && arraymov[arraymov.length - 3].getPosFinal().getFila() == 4) {
+        if (((arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 4) || (arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 6)) && arraymov.get(arraymov.size()-1).getPosFinal().getFila() == 5 && arraymov.get(arraymov.size()-1).getPosFinal().getColumna() == 5) {
+            if (DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()).getColor() == true && arraymov.get(arraymov.size()-2).getPosInicial().getFila() == 6 && arraymov.get(arraymov.size()-2).getPosInicial().getColumna() == 5 && arraymov.get(arraymov.size()-2).getPosFinal().getFila() == 4) {
                 comerAlPaso = true;
             }
         }
-        if (((arraymov[arraymov.length - 1].getPosInicial().getFila() == 4 && arraymov[arraymov.length - 1].getPosInicial().getColumna() == 5) || (arraymov[arraymov.length - 1].getPosInicial().getFila() == 4 && arraymov[arraymov.length - 1].getPosInicial().getColumna() == 7)) && arraymov[arraymov.length - 1].getPosFinal().getFila() == 5 && arraymov[arraymov.length - 1].getPosFinal().getColumna() == 6) {
-            if (DevuelvePieza(arraymov[arraymov.length - 3].getPosFinal()) != null && DevuelvePieza(arraymov[arraymov.length - 3].getPosFinal()).getColor() == true && arraymov[arraymov.length - 3].getPosInicial().getFila() == 6 && arraymov[arraymov.length - 3].getPosInicial().getColumna() == 6 && arraymov[arraymov.length - 3].getPosFinal().getFila() == 4) {
+        if (((arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 5) || (arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 7)) && arraymov.get(arraymov.size()-1).getPosFinal().getFila() == 5 && arraymov.get(arraymov.size()-1).getPosFinal().getColumna() == 6) {
+            if (DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()).getColor() == true && arraymov.get(arraymov.size()-2).getPosInicial().getFila() == 6 && arraymov.get(arraymov.size()-2).getPosInicial().getColumna() == 6 && arraymov.get(arraymov.size()-2).getPosFinal().getFila() == 4) {
                 comerAlPaso = true;
             }
         }
-        if (arraymov[arraymov.length - 1].getPosInicial().getFila() == 4 && arraymov[arraymov.length - 1].getPosInicial().getColumna() == 6 && arraymov[arraymov.length - 1].getPosFinal().getFila() == 5 && arraymov[arraymov.length - 1].getPosFinal().getColumna() == 7) {
-            if (DevuelvePieza(arraymov[arraymov.length - 3].getPosFinal()) != null && DevuelvePieza(arraymov[arraymov.length - 3].getPosFinal()).getColor() == true && arraymov[arraymov.length - 3].getPosInicial().getFila() == 6 && arraymov[arraymov.length - 3].getPosInicial().getColumna() == 7 && arraymov[arraymov.length - 3].getPosFinal().getFila() == 4) {
+        if (arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 6 && arraymov.get(arraymov.size()-1).getPosFinal().getFila() == 5 && arraymov.get(arraymov.size()-1).getPosFinal().getColumna() == 7) {
+            if (DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()).getColor() == true && arraymov.get(arraymov.size()-2).getPosInicial().getFila() == 6 && arraymov.get(arraymov.size()-2).getPosInicial().getColumna() == 7 && arraymov.get(arraymov.size()-2).getPosFinal().getFila() == 4) {
                 comerAlPaso = true;
             }
         }
-        if (arraymov[arraymov.length - 1].getPosInicial().getFila() == 3 && arraymov[arraymov.length - 1].getPosInicial().getColumna() == 1 && arraymov[arraymov.length - 1].getPosFinal().getFila() == 2 && arraymov[arraymov.length - 1].getPosFinal().getColumna() == 0) {
-            if (DevuelvePieza(arraymov[arraymov.length - 3].getPosFinal()) != null && DevuelvePieza(arraymov[arraymov.length - 3].getPosFinal()).getColor() == false && arraymov[arraymov.length - 3].getPosInicial().getFila() == 1 && arraymov[arraymov.length - 3].getPosInicial().getColumna() == 0 && arraymov[arraymov.length - 3].getPosFinal().getFila() == 3) {
+        if (arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 1 && arraymov.get(arraymov.size()-1).getPosFinal().getFila() == 2 && arraymov.get(arraymov.size()-1).getPosFinal().getColumna() == 0) {
+            if (DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()).getColor() == false && arraymov.get(arraymov.size()-2).getPosInicial().getFila() == 1 && arraymov.get(arraymov.size()-2).getPosInicial().getColumna() == 0 && arraymov.get(arraymov.size()-2).getPosFinal().getFila() == 3) {
                 comerAlPaso = true;
             }
         }
-        if (((arraymov[arraymov.length - 1].getPosInicial().getFila() == 3 && arraymov[arraymov.length - 1].getPosInicial().getColumna() == 0) || (arraymov[arraymov.length - 1].getPosInicial().getFila() == 3 && arraymov[arraymov.length - 1].getPosInicial().getColumna() == 2)) && arraymov[arraymov.length - 1].getPosFinal().getFila() == 2 && arraymov[arraymov.length - 1].getPosFinal().getColumna() == 1) {
-            if (DevuelvePieza(arraymov[arraymov.length - 3].getPosFinal()) != null && DevuelvePieza(arraymov[arraymov.length - 3].getPosFinal()).getColor() == false && arraymov[arraymov.length - 3].getPosInicial().getFila() == 1 && arraymov[arraymov.length - 3].getPosInicial().getColumna() == 1 && arraymov[arraymov.length - 3].getPosFinal().getFila() == 3) {
+        if (((arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 0) || (arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 2)) && arraymov.get(arraymov.size()-1).getPosFinal().getFila() == 2 && arraymov.get(arraymov.size()-1).getPosFinal().getColumna() == 1) {
+            if (DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()).getColor() == false && arraymov.get(arraymov.size()-2).getPosInicial().getFila() == 1 && arraymov.get(arraymov.size()-2).getPosInicial().getColumna() == 1 && arraymov.get(arraymov.size()-2).getPosFinal().getFila() == 3) {
                 comerAlPaso = true;
             }
         }
-        if (((arraymov[arraymov.length - 1].getPosInicial().getFila() == 3 && arraymov[arraymov.length - 1].getPosInicial().getColumna() == 1) || (arraymov[arraymov.length - 1].getPosInicial().getFila() == 3 && arraymov[arraymov.length - 1].getPosInicial().getColumna() == 3)) && arraymov[arraymov.length - 1].getPosFinal().getFila() == 2 && arraymov[arraymov.length - 1].getPosFinal().getColumna() == 2) {
-            if (DevuelvePieza(arraymov[arraymov.length - 3].getPosFinal()) != null && DevuelvePieza(arraymov[arraymov.length - 3].getPosFinal()).getColor() == false && arraymov[arraymov.length - 3].getPosInicial().getFila() == 1 && arraymov[arraymov.length - 3].getPosInicial().getColumna() == 2 && arraymov[arraymov.length - 3].getPosFinal().getFila() == 3) {
+        if (((arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 1) || (arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 3)) && arraymov.get(arraymov.size()-1).getPosFinal().getFila() == 2 && arraymov.get(arraymov.size()-1).getPosFinal().getColumna() == 2) {
+            if (DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()).getColor() == false && arraymov.get(arraymov.size()-2).getPosInicial().getFila() == 1 && arraymov.get(arraymov.size()-2).getPosInicial().getColumna() == 2 && arraymov.get(arraymov.size()-2).getPosFinal().getFila() == 3) {
                 comerAlPaso = true;
             }
         }
-        if (((arraymov[arraymov.length - 1].getPosInicial().getFila() == 3 && arraymov[arraymov.length - 1].getPosInicial().getColumna() == 2) || (arraymov[arraymov.length - 1].getPosInicial().getFila() == 3 && arraymov[arraymov.length - 1].getPosInicial().getColumna() == 4)) && arraymov[arraymov.length - 1].getPosFinal().getFila() == 2 && arraymov[arraymov.length - 1].getPosFinal().getColumna() == 3) {
-            if (DevuelvePieza(arraymov[arraymov.length - 3].getPosFinal()) != null && DevuelvePieza(arraymov[arraymov.length - 3].getPosFinal()).getColor() == false && arraymov[arraymov.length - 3].getPosInicial().getFila() == 1 && arraymov[arraymov.length - 3].getPosInicial().getColumna() == 3 && arraymov[arraymov.length - 3].getPosFinal().getFila() == 3) {
+        if (((arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 2) || (arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 4)) && arraymov.get(arraymov.size()-1).getPosFinal().getFila() == 2 && arraymov.get(arraymov.size()-1).getPosFinal().getColumna() == 3) {
+            if (DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()).getColor() == false && arraymov.get(arraymov.size()-2).getPosInicial().getFila() == 1 && arraymov.get(arraymov.size()-2).getPosInicial().getColumna() == 3 && arraymov.get(arraymov.size()-2).getPosFinal().getFila() == 3) {
                 comerAlPaso = true;
             }
         }
-        if (((arraymov[arraymov.length - 1].getPosInicial().getFila() == 3 && arraymov[arraymov.length - 1].getPosInicial().getColumna() == 3) || (arraymov[arraymov.length - 1].getPosInicial().getFila() == 3 && arraymov[arraymov.length - 1].getPosInicial().getColumna() == 5)) && arraymov[arraymov.length - 1].getPosFinal().getFila() == 2 && arraymov[arraymov.length - 1].getPosFinal().getColumna() == 4) {
-            if (DevuelvePieza(arraymov[arraymov.length - 3].getPosFinal()) != null && DevuelvePieza(arraymov[arraymov.length - 3].getPosFinal()).getColor() == false && arraymov[arraymov.length - 3].getPosInicial().getFila() == 1 && arraymov[arraymov.length - 3].getPosInicial().getColumna() == 4 && arraymov[arraymov.length - 3].getPosFinal().getFila() == 3) {
+        if (((arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 3) || (arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 5)) && arraymov.get(arraymov.size()-1).getPosFinal().getFila() == 2 && arraymov.get(arraymov.size()-1).getPosFinal().getColumna() == 4) {
+            if (DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()).getColor() == false && arraymov.get(arraymov.size()-2).getPosInicial().getFila() == 1 && arraymov.get(arraymov.size()-2).getPosInicial().getColumna() == 4 && arraymov.get(arraymov.size()-2).getPosFinal().getFila() == 3) {
                 comerAlPaso = true;
             }
         }
-        if (((arraymov[arraymov.length - 1].getPosInicial().getFila() == 3 && arraymov[arraymov.length - 1].getPosInicial().getColumna() == 4) || (arraymov[arraymov.length - 1].getPosInicial().getFila() == 3 && arraymov[arraymov.length - 1].getPosInicial().getColumna() == 6)) && arraymov[arraymov.length - 1].getPosFinal().getFila() == 2 && arraymov[arraymov.length - 1].getPosFinal().getColumna() == 5) {
-            if (DevuelvePieza(arraymov[arraymov.length - 3].getPosFinal()) != null && DevuelvePieza(arraymov[arraymov.length - 3].getPosFinal()).getColor() == false && arraymov[arraymov.length - 3].getPosInicial().getFila() == 1 && arraymov[arraymov.length - 3].getPosInicial().getColumna() == 5 && arraymov[arraymov.length - 3].getPosFinal().getFila() == 3) {
+        if (((arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 4) || (arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 6)) && arraymov.get(arraymov.size()-1).getPosFinal().getFila() == 2 && arraymov.get(arraymov.size()-1).getPosFinal().getColumna() == 5) {
+            if (DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()).getColor() == false && arraymov.get(arraymov.size()-2).getPosInicial().getFila() == 1 && arraymov.get(arraymov.size()-2).getPosInicial().getColumna() == 5 && arraymov.get(arraymov.size()-2).getPosFinal().getFila() == 3) {
                 comerAlPaso = true;
             }
         }
-        if (((arraymov[arraymov.length - 1].getPosInicial().getFila() == 3 && arraymov[arraymov.length - 1].getPosInicial().getColumna() == 5) || (arraymov[arraymov.length - 1].getPosInicial().getFila() == 3 && arraymov[arraymov.length - 1].getPosInicial().getColumna() == 7)) && arraymov[arraymov.length - 1].getPosFinal().getFila() == 2 && arraymov[arraymov.length - 1].getPosFinal().getColumna() == 6) {
-            if (DevuelvePieza(arraymov[arraymov.length - 3].getPosFinal()) != null && DevuelvePieza(arraymov[arraymov.length - 3].getPosFinal()).getColor() == false && arraymov[arraymov.length - 3].getPosInicial().getFila() == 1 && arraymov[arraymov.length - 3].getPosInicial().getColumna() == 6 && arraymov[arraymov.length - 3].getPosFinal().getFila() == 3) {
+        if (((arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 5) || (arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 7)) && arraymov.get(arraymov.size()-1).getPosFinal().getFila() == 2 && arraymov.get(arraymov.size()-1).getPosFinal().getColumna() == 6) {
+            if (DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()).getColor() == false && arraymov.get(arraymov.size()-2).getPosInicial().getFila() == 1 && arraymov.get(arraymov.size()-2).getPosInicial().getColumna() == 6 && arraymov.get(arraymov.size()-2).getPosFinal().getFila() == 3) {
                 comerAlPaso = true;
             }
         }
-        if (arraymov[arraymov.length - 1].getPosInicial().getFila() == 3 && arraymov[arraymov.length - 1].getPosInicial().getColumna() == 6 && arraymov[arraymov.length - 1].getPosFinal().getFila() == 2 && arraymov[arraymov.length - 1].getPosFinal().getColumna() == 7) {
-            if (DevuelvePieza(arraymov[arraymov.length - 3].getPosFinal()) != null && DevuelvePieza(arraymov[arraymov.length - 3].getPosFinal()).getColor() == false && arraymov[arraymov.length - 3].getPosInicial().getFila() == 1 && arraymov[arraymov.length - 3].getPosInicial().getColumna() == 7 && arraymov[arraymov.length - 3].getPosFinal().getFila() == 3) {
+        if (arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 6 && arraymov.get(arraymov.size()-1).getPosFinal().getFila() == 2 && arraymov.get(arraymov.size()-1).getPosFinal().getColumna() == 7) {
+            if (DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()).getColor() == false && arraymov.get(arraymov.size()-2).getPosInicial().getFila() == 1 && arraymov.get(arraymov.size()-2).getPosInicial().getColumna() == 7 && arraymov.get(arraymov.size()-2).getPosFinal().getFila() == 3) {
                 comerAlPaso = true;
             }
         }
@@ -2505,59 +2505,60 @@ public class Tablero implements Serializable{
      * no.
      * @param nuevaPieza Caracter que indica cual es la pieza en que se va a
      * transformar el peon.
+     * @throws MovIncorrectoException
      */
-    public void promociondelPeon(Movimiento mov, char nuevaPieza) {
+    public void promociondelPeon(Movimiento mov, char nuevaPieza) throws MovIncorrectoException {
         //Comprobamos que la pieza es un peon:
         if (DevuelvePieza(mov.getPosInicial()).getClass().getName().compareTo("ajedrez.Peon") == 0) {
             //Comprobamos que el peon cumple las condiciones para promocionar según su color:
             if (mov.getPosInicial().getFila() == 1 && ((mov.movimientoPeonBlanco() == true && hayPieza(mov.getPosFinal()) == false) || (mov.comerPeonBlanco() == true && hayPieza(mov.getPosFinal()) == true && DevuelvePieza(mov.getPosFinal()).getColor() != turno))) {
                 switch (nuevaPieza) {
-                    case 'a':
+                    case 'A':
                         tablero[mov.getPosFinal().getFila()][mov.getPosFinal().getColumna()] = new Alfil(true, mov.getPosFinal().getFila(), mov.getPosFinal().getColumna());
                         quitaPieza(mov.getPosInicial());
                         break;
-                    case 'c':
+                    case 'C':
                         tablero[mov.getPosFinal().getFila()][mov.getPosFinal().getColumna()] = new Caballo(true, mov.getPosFinal().getFila(), mov.getPosFinal().getColumna());
                         quitaPieza(mov.getPosInicial());
                         break;
-                    case 'd':
+                    case 'D':
                         tablero[mov.getPosFinal().getFila()][mov.getPosFinal().getColumna()] = new Dama(true, mov.getPosFinal().getFila(), mov.getPosFinal().getColumna());
                         quitaPieza(mov.getPosInicial());
                         break;
-                    case 't':
+                    case 'T':
                         tablero[mov.getPosFinal().getFila()][mov.getPosFinal().getColumna()] = new Torre(true, mov.getPosFinal().getFila(), mov.getPosFinal().getColumna());
                         quitaPieza(mov.getPosInicial());
                         break;
                     default:
-                        System.out.println("Caracter no valido");
+                        throw new MovIncorrectoException("Caracter no valido");
                 }
                 //Comprobamos que el peon cumple las condiciones para promocionar según su color:
             } else if (mov.getPosInicial().getFila() == 6 && ((mov.movimientoPeonNegro() == true && hayPieza(mov.getPosFinal()) == false) || (mov.comerPeonNegro() == true && hayPieza(mov.getPosFinal()) == true && DevuelvePieza(mov.getPosFinal()).getColor() != turno))) {
                 switch (nuevaPieza) {
-                    case 'a':
+                    case 'A':
                         tablero[mov.getPosFinal().getFila()][mov.getPosFinal().getColumna()] = new Alfil(false, mov.getPosFinal().getFila(), mov.getPosFinal().getColumna());
                         quitaPieza(mov.getPosInicial());
                         break;
-                    case 'c':
+                    case 'C':
                         tablero[mov.getPosFinal().getFila()][mov.getPosFinal().getColumna()] = new Caballo(false, mov.getPosFinal().getFila(), mov.getPosFinal().getColumna());
                         quitaPieza(mov.getPosInicial());
                         break;
-                    case 'd':
+                    case 'D':
                         tablero[mov.getPosFinal().getFila()][mov.getPosFinal().getColumna()] = new Dama(false, mov.getPosFinal().getFila(), mov.getPosFinal().getColumna());
                         quitaPieza(mov.getPosInicial());
                         break;
-                    case 't':
+                    case 'T':
                         tablero[mov.getPosFinal().getFila()][mov.getPosFinal().getColumna()] = new Torre(false, mov.getPosFinal().getFila(), mov.getPosFinal().getColumna());
                         quitaPieza(mov.getPosInicial());
                         break;
                     default:
-                        System.out.println("Caracter no valido");
+                        throw new MovIncorrectoException("Caracter no valido");
                 }
             } else {
-                System.out.println("El peon no ha llegado a la penúltima fila");
+                throw new MovIncorrectoException("El peon no ha llegado a la penúltima fila");
             }
         } else {
-            System.out.println("La pieza no es un peon");
+            throw new MovIncorrectoException("La pieza no es un peon");
         }
     }
 
@@ -2638,17 +2639,8 @@ public class Tablero implements Serializable{
     public void anularMovimiento(Movimiento mov) {
         ponPieza(DevuelvePieza(mov.getPosFinal()), mov.getPosInicial());
         quitaPieza(mov.getPosFinal());
-        for (int i = arraymov.length - 2; i > arraymov.length - contadorjugadas; i--) {
-            arraymov[i] = arraymov[i - 1];
-
-        }
-        arraymov[arraymov.length - 1] = arraymov[arraymov.length - 2];
-        contadorjugadas--;
-        if (turno == false) {
-            turno = true;
-        } else {
-            turno = false;
-        }
+        arraymov.remove(arraymov.size()-1);
+        turno = turno == false;
 
     }
 
@@ -2662,8 +2654,9 @@ public class Tablero implements Serializable{
      * @return Entero que indica las combinaciones de enroques que se pueden
      * realizar en función de las combinaciones de movimientos de reyes y torres
      * que se hayan producido
+     * @throws MovIncorrectoException
      */
-    public int Mover(Movimiento mov) {
+    public int Mover(Movimiento mov) throws MovIncorrectoException {
         int enroquesValidos = 0;
         boolean movreyblanco = false;
         boolean movreynegro = false;
@@ -2671,13 +2664,7 @@ public class Tablero implements Serializable{
             if (DevuelvePieza(mov.getPosInicial()) != null) {
                 ponPieza(DevuelvePieza(mov.getPosInicial()), mov.getPosFinal());
                 quitaPieza(mov.getPosInicial());
-                arraymov[arraymov.length - 1] = mov;
-                contadorjugadas++;
-                for (int i = arraymov.length - contadorjugadas; i < arraymov.length; i++) {
-                    if (i > arraymov.length - contadorjugadas) {
-                        arraymov[i - 1] = arraymov[i];
-                    }
-                }
+                arraymov.add(mov);
             }
             if (DevuelvePieza(mov.getPosFinal()) != null && DevuelvePieza(mov.getPosFinal()).getClass().getName().compareTo("ajedrez.Rey") == 0 && DevuelvePieza(mov.getPosFinal()).getColor() == true) {
                 contadormovreyblanco++;
@@ -2709,22 +2696,18 @@ public class Tablero implements Serializable{
             if (DevuelvePieza(mov.getPosFinal()) != null && DevuelvePieza(mov.getPosFinal()).getClass().getName().compareTo("ajedrez.Torre") == 0 && DevuelvePieza(mov.getPosFinal()).getColor() == false && mov.getPosInicial().getFila() == 0 && mov.getPosInicial().getColumna() == 7) {
                 movtorrenegraH = true;
             }
-            if (turno == false) {
-                turno = true;
-            } else {
-                turno = false;
-            }
+            turno = turno == false;
         } else if (comprobarPosibleJaque() == true && Jaque(mov) == true && cubrirJaque() == false) {
-            System.out.println("Jaque Mate");
+            throw new MovIncorrectoException("Jaque Mate");
         }
         if (piezaClavada(mov) == true) {
-            System.out.println("La pieza esta clavada");
+            throw new MovIncorrectoException("La pieza esta clavada");
         }
         if (Jaque(mov) == true) {
-            System.out.println("Jaque");
+            throw new MovIncorrectoException("Jaque");
         }
         if (comprobarPosibleJaque(mov) == true) {
-            System.out.println("La casilla de destino está siendo atacada");
+            throw new MovIncorrectoException("La casilla de destino está siendo atacada");
         }
 
         //Asignamos un valor al entero que devuelve el método en función de las posibles combinaciones de enroques que se puedan dar:

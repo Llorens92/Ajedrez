@@ -10,7 +10,7 @@ package ajedrez;
  * @author dam1
  */
 public class Alfil extends Pieza {
-   
+
     public Alfil(boolean color, int fila, int columna) {
         super(color, fila, columna);
     }
@@ -20,8 +20,6 @@ public class Alfil extends Pieza {
         boolean movimientoValido = false;
         if (mov.esDiagonal() == true) {
             movimientoValido = true;
-        } else {
-            System.out.println("El alfil no puede mover así");
         }
         return movimientoValido;
     }
@@ -36,12 +34,14 @@ public class Alfil extends Pieza {
     }
 
     @Override
-    public void moverPieza(Movimiento mov, Tablero tablero) {
+    public void moverPieza(Movimiento mov, Tablero tablero) throws MovIncorrectoException {
         if (movimientoValido(mov) == true) {
             tablero.Mover(mov);
+        } else {
+            throw new MovIncorrectoException("El alfil no puede mover así");
         }
     }
-    
+
     @Override
     public String toString() {
         return super.toString();

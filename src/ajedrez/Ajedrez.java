@@ -86,7 +86,7 @@ public class Ajedrez {
                                 if (!partida.finPartida(jugada, tablero)) {
                                     partida.jugada(jugada.toUpperCase(), tablero);
                                     ventana.board.pintartablero(tablero);
-                                    ventana.actualizarpantalla();
+                                    ventana.actualizarpantalla();                                    
                                 } else {
                                     j = -1;
                                     System.out.println("Espero que hayan disfrutado de la partida.");
@@ -112,7 +112,9 @@ public class Ajedrez {
                             ventana.setBounds(0, 0, 505, 530);
                             ventana.setVisible(true);
                             ventana.board.pintartablero(tablero);
-                            Problema.introduciendoDatos(tablero, ventana);                            
+                            Problema.introduciendoDatos(tablero, ventana); 
+                            Problema.quienComienzaJugando(tablero);
+                            Problema.introduciendoJugadas(tablero, ventana);
                             break;
                         case 2:
                             break;

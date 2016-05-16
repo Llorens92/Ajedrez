@@ -12,7 +12,7 @@ import java.util.ArrayList;
  *
  * @author dam1
  */
-public class Juego implements Serializable{
+public class Juego implements Serializable {
 
     ArrayList<Tablero> listaPartidas = new ArrayList<>();
 
@@ -27,7 +27,7 @@ public class Juego implements Serializable{
             ID = "partida".concat(String.valueOf((int) (Math.random() * 10))).concat(String.valueOf((int) (Math.random() * 10))).concat(String.valueOf((int) (Math.random() * 10)));
             if (listaPartidas.isEmpty()) {
                 distinto = true;
-            } else {                
+            } else {
                 for (int i = 0; i < listaPartidas.size() && !distinto; i++) {
                     distinto = !listaPartidas.get(i).getId().equalsIgnoreCase(ID);
                 }
@@ -49,6 +49,28 @@ public class Juego implements Serializable{
 
     public void guardarPartida(Tablero tablero) {
         listaPartidas.add(tablero);
+    }
+
+    public static char devolverPromocion(char caracter) {
+        char nuevaPieza;
+        switch (caracter) {
+            case 'A':
+                nuevaPieza = 'a';
+                break;
+            case 'C':
+                nuevaPieza = 'c';
+                break;
+            case 'D':
+                nuevaPieza = 'd';
+                break;
+            case 'T':
+                nuevaPieza = 't';
+                break;
+            default:
+                nuevaPieza = 'n';
+
+        }
+        return nuevaPieza;
     }
 
     public static int devolverFila(char caracter) {
@@ -232,31 +254,21 @@ public class Juego implements Serializable{
                 Posicion PosInicial = new Posicion(devolverFila(jugada.charAt(1)), devolverColumna(jugada.charAt(0)));
                 Posicion PosFinal = new Posicion(devolverFila(jugada.charAt(3)), devolverColumna(jugada.charAt(2)));
                 Movimiento mov = new Movimiento(PosInicial, PosFinal);
-                moverJuego(mov, tablero);
+                try {
+                    moverJuego(mov, tablero);
+                } catch (MovIncorrectoException ex) {
+                    System.out.println(ex.getMessage());
+                }
             }
         } else if (jugada.length() == 5) {
-            char nuevaPieza;
-            switch (jugada.charAt(4)) {
-                case 'A':
-                    nuevaPieza = 'a';
-                    break;
-                case 'C':
-                    nuevaPieza = 'c';
-                    break;
-                case 'D':
-                    nuevaPieza = 'd';
-                    break;
-                case 'T':
-                    nuevaPieza = 't';
-                    break;
-                default:
-                    nuevaPieza = 'n';
-
-            }
             Posicion PosInicial = new Posicion(devolverFila(jugada.charAt(1)), devolverColumna(jugada.charAt(0)));
             Posicion PosFinal = new Posicion(devolverFila(jugada.charAt(3)), devolverColumna(jugada.charAt(2)));
             Movimiento mov = new Movimiento(PosInicial, PosFinal);
-            tablero.promociondelPeon(mov, nuevaPieza);
+            try {
+            tablero.promociondelPeon(mov, devolverPromocion(jugada.charAt(4)));
+            } catch (MovIncorrectoException ex) {
+                System.out.println(ex.getMessage());
+            }            
         } else {
             System.out.println("Movimiento invalido-JUGADA");
         }
@@ -270,14 +282,15 @@ public class Juego implements Serializable{
      * @param mov Es el objeto de clase Movimiento creado a partir del String
      * que recibe el método jugada.
      * @param tablero Es el mismo objeto de clase Tablero utilizado en jugada.
+     * @throws MovIncorrectoException
      */
-    public void moverJuego(Movimiento mov, Tablero tablero) {
+    public void moverJuego(Movimiento mov, Tablero tablero) throws MovIncorrectoException {
         if (tablero.hayPieza(mov.getPosInicial()) == true && ((mov.getPosInicial().getFila() == 1 && tablero.DevuelvePieza(mov.getPosInicial()).getClass().getName().compareTo("ajedrez.Peon") == 0 && tablero.DevuelvePieza(mov.getPosInicial()).getColor() == true) || (mov.getPosInicial().getFila() == 6 && tablero.DevuelvePieza(mov.getPosInicial()).getClass().getName().compareTo("ajedrez.Peon") == 0 && tablero.DevuelvePieza(mov.getPosInicial()).getColor() == false))) {
-            System.out.println("Para promocionar el peon introduzca una letra mayúscula más indicando la pieza que quiere.");
+            throw new MovIncorrectoException("Para promocionar el peon introduzca una letra mayúscula más indicando la pieza que quiere.");
         } else if (tablero.hayPieza(mov.getPosInicial()) == true && tablero.getTurno() == tablero.DevuelvePieza(mov.getPosInicial()).getColor() && (tablero.DevuelvePieza(mov.getPosFinal()) == null || (tablero.DevuelvePieza(mov.getPosFinal()) != null && tablero.DevuelvePieza(mov.getPosFinal()).getColor() != tablero.DevuelvePieza(mov.getPosInicial()).getColor())) && tablero.hayPiezasEntre(mov) == false) {
             tablero.DevuelvePieza(mov.getPosInicial()).moverPieza(mov, tablero);
         } else {
-            System.out.println("Movimiento invalido-JUEGO");
+            throw new MovIncorrectoException("Movimiento invalido-JUEGO");
         }
     }
 }

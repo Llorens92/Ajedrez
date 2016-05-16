@@ -20,8 +20,6 @@ public class Caballo extends Pieza {
         boolean movimientoValido = false;
         if (mov.saltoHorizontal() == true || mov.saltoVertical() == true) {
             movimientoValido = true;
-        } else {
-            System.out.println("El caballo no puede mover así");
         }
         return movimientoValido;
     }
@@ -36,10 +34,12 @@ public class Caballo extends Pieza {
     }
 
     @Override
-    public void moverPieza(Movimiento mov, Tablero tablero) {
+    public void moverPieza(Movimiento mov, Tablero tablero) throws MovIncorrectoException{
         if (movimientoValido(mov) == true) {
             tablero.Mover(mov);
-        } 
+        }  else {
+            throw new MovIncorrectoException("El caballo no puede mover así");
+        }
     }    
     
     @Override

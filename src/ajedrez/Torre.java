@@ -16,8 +16,6 @@ public class Torre extends Pieza {
         boolean movimientoValido = false;
         if (mov.esHorizontal() == true || mov.esVertical() == true) {
             movimientoValido = true;
-        } else {
-            System.out.println("La torre no puede mover así");
         }
         return movimientoValido;
     }
@@ -32,10 +30,12 @@ public class Torre extends Pieza {
     }
 
     @Override
-    public void moverPieza(Movimiento mov, Tablero tablero) {
+    public void moverPieza(Movimiento mov, Tablero tablero) throws MovIncorrectoException{
         if (movimientoValido(mov) == true) {
             tablero.Mover(mov);
-        } 
+        }  else {
+            throw new MovIncorrectoException("La torre no puede mover así");
+        }        
     }
     public String toString() {
         return super.toString();

@@ -50,7 +50,7 @@ public class Peon extends Pieza {
     }
     
     @Override
-    public void moverPieza(Movimiento mov, Tablero tablero) {
+    public void moverPieza(Movimiento mov, Tablero tablero) throws MovIncorrectoException{
         if (movimientoValido(mov) == true && tablero.hayPieza(mov.getPosFinal()) == false) {
             tablero.Mover(mov);
         } else if (comerValido(mov) == true && tablero.hayPieza(mov.getPosFinal()) == true) {
@@ -64,11 +64,11 @@ public class Peon extends Pieza {
                     tablero.quitaPieza(mov.getPosFinal().getFila() + 1, mov.getPosFinal().getColumna());
                 }
             } else { 
-                System.out.println("El peon no puede mover así");
                 tablero.anularMovimiento(mov);
+                throw new MovIncorrectoException("El peon no puede mover así");                
             }
         } else {
-            System.out.println("El peon no puede mover así");
+            throw new MovIncorrectoException("El peon no puede mover así");
         }
     }
     

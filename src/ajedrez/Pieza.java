@@ -101,8 +101,9 @@ public abstract class Pieza implements Serializable{
      *
      * @param mov Movimiento a realizar
      * @param tablero Objeto de tipo tablero que llama a mover de tablero
+     * @throws MovIncorrectoException 
      */
-    public abstract void moverPieza(Movimiento mov, Tablero tablero);
+    public abstract void moverPieza(Movimiento mov, Tablero tablero) throws MovIncorrectoException;
 
     @Override
     public String toString() {

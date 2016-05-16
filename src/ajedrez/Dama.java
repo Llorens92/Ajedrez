@@ -20,8 +20,6 @@ public class Dama extends Pieza {
         boolean movimientoValido = false;
         if (mov.esHorizontal() == true || mov.esVertical() == true || mov.esDiagonal() == true) {
             movimientoValido = true;
-        } else {
-            System.out.println("La Dama no puede mover así");
         }
         return movimientoValido;
     }
@@ -36,9 +34,11 @@ public class Dama extends Pieza {
     }
 
     @Override
-    public void moverPieza(Movimiento mov, Tablero tablero) {
+    public void moverPieza(Movimiento mov, Tablero tablero) throws MovIncorrectoException{
         if (movimientoValido(mov) == true) {
             tablero.Mover(mov);
+        } else {
+            throw new MovIncorrectoException("La Dama no puede mover así");
         }
     }     
     
