@@ -253,7 +253,7 @@ public class Juego implements Serializable {
             } else {
                 Posicion PosInicial = new Posicion(devolverFila(jugada.charAt(1)), devolverColumna(jugada.charAt(0)));
                 Posicion PosFinal = new Posicion(devolverFila(jugada.charAt(3)), devolverColumna(jugada.charAt(2)));
-                Movimiento mov = new Movimiento(PosInicial, PosFinal);
+                Movimiento mov = new Movimiento(0,PosInicial, PosFinal);
                 try {
                     moverJuego(mov, tablero);
                 } catch (MovIncorrectoException ex) {
@@ -263,7 +263,7 @@ public class Juego implements Serializable {
         } else if (jugada.length() == 5) {
             Posicion PosInicial = new Posicion(devolverFila(jugada.charAt(1)), devolverColumna(jugada.charAt(0)));
             Posicion PosFinal = new Posicion(devolverFila(jugada.charAt(3)), devolverColumna(jugada.charAt(2)));
-            Movimiento mov = new Movimiento(PosInicial, PosFinal);
+            Movimiento mov = new Movimiento(0,PosInicial, PosFinal);
             try {
             tablero.promociondelPeon(mov, devolverPromocion(jugada.charAt(4)));
             } catch (MovIncorrectoException ex) {

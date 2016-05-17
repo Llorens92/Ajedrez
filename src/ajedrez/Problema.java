@@ -208,6 +208,6 @@ public class Problema implements Serializable {
     public static Movimiento stringToMovimiento(String s) {
         Posicion posInicial = new Posicion(Juego.devolverFila(s.charAt(1)), Juego.devolverColumna(s.charAt(0)));
         Posicion posFinal = new Posicion(Juego.devolverFila(s.charAt(3)), Juego.devolverColumna(s.charAt(2)));
-        return new Movimiento(posInicial, posFinal);
+        return new Movimiento(0, posInicial, posFinal);
     }
 }

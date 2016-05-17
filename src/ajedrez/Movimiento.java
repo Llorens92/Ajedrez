@@ -11,7 +11,13 @@ import java.io.Serializable;
  *
  * @author dam1
  */
-public class Movimiento implements Serializable{
+public class Movimiento implements Serializable {
+
+    /**
+     * Número de movimiento dentro del problema o partida, valdrá 0 hasta que entre
+     * en el map de movimientos
+     */
+    private int numMovimiento;
 
     /**
      * Esta es la posición inicial de nuestro movimiento
@@ -26,16 +32,36 @@ public class Movimiento implements Serializable{
      * Este Método construye los objetos de clase Movimiento en función de unos
      * parámetros de entrada que deben cumplir ciertos requisitos
      *
+     * @param numMovimiento Número del movimiento a construir
      * @param PosInicial Posición inicial del movimiento a construir
      * @param PosFinal Posición final del movimiento a construir
      */
-    public Movimiento(Posicion PosInicial, Posicion PosFinal) {
+    public Movimiento(int numMovimiento, Posicion PosInicial, Posicion PosFinal) {
         if (PosInicial.getColumna() > -1 && PosInicial.getColumna() < 8 && PosFinal.getColumna() > -1 && PosFinal.getColumna() < 8 && PosInicial.getFila() > -1 && PosInicial.getFila() < 8 && PosFinal.getFila() > -1 && PosFinal.getFila() < 8) {
+            this.numMovimiento = numMovimiento;
             this.PosInicial = PosInicial;
             this.PosFinal = PosFinal;
         } else {
             System.out.println("Movimiento invalido-MOVIMIENTO");
         }
+    }
+
+    /**
+     * Método que te devuelve el número de movimiento
+     *
+     * @return Número del movimiento
+     */
+    public int getNumMovimiento() {
+        return numMovimiento;
+    }
+
+    /**
+     * Método que modifica el número de movimiento
+     *
+     * @param numMovimiento Nuevo número de movimiento
+     */
+    public void setNumMovimiento(int numMovimiento) {
+        this.numMovimiento = numMovimiento;
     }
 
     /**
@@ -122,8 +148,10 @@ public class Movimiento implements Serializable{
         }
         return saltocaballo;
     }
+
     /**
-     * Método que te dice si el movimiento es el propio de un rey 
+     * Método que te dice si el movimiento es el propio de un rey
+     *
      * @return Booleano en función de si lo es o no
      */
     public boolean movimientoRey() {
@@ -133,8 +161,10 @@ public class Movimiento implements Serializable{
         }
         return movimientoRey;
     }
+
     /**
-     * Método que te dice si el movimiento es el propio de un peon negro 
+     * Método que te dice si el movimiento es el propio de un peon negro
+     *
      * @return Booleano en función de si lo es o no
      */
     public boolean movimientoPeonNegro() {
@@ -146,10 +176,12 @@ public class Movimiento implements Serializable{
         }
         return movimientoPeon;
     }
+
     /**
-     * Método que te dice si el movimiento es el propio de un peon blanco 
+     * Método que te dice si el movimiento es el propio de un peon blanco
+     *
      * @return Booleano en función de si lo es o no
-    */
+     */
     public boolean movimientoPeonBlanco() {
         boolean movimientoPeon = false;
         if (PosFinal.getFila() == 4 && PosInicial.getFila() == 6 && PosFinal.getColumna() == PosInicial.getColumna()) {
@@ -159,10 +191,13 @@ public class Movimiento implements Serializable{
         }
         return movimientoPeon;
     }
-     /**
-     * Método que te dice si el movimiento es el propio de un peon negro que come 
+
+    /**
+     * Método que te dice si el movimiento es el propio de un peon negro que
+     * come
+     *
      * @return Booleano en función de si lo es o no
-    */
+     */
     public boolean comerPeonNegro() {
         boolean comerPeonNegro = false;
         if ((PosFinal.getFila() == PosInicial.getFila() + 1 && PosFinal.getColumna() == PosInicial.getColumna() + 1) || (PosFinal.getFila() == PosInicial.getFila() + 1 && PosFinal.getColumna() == PosInicial.getColumna() - 1)) {
@@ -170,10 +205,13 @@ public class Movimiento implements Serializable{
         }
         return comerPeonNegro;
     }
-     /**
-     * Método que te dice si el movimiento es el propio de un peon blanco que come
+
+    /**
+     * Método que te dice si el movimiento es el propio de un peon blanco que
+     * come
+     *
      * @return Booleano en función de si lo es o no
-    */
+     */
     public boolean comerPeonBlanco() {
         boolean comerPeonBlanco = false;
         if ((PosFinal.getFila() == PosInicial.getFila() - 1 && PosFinal.getColumna() == PosInicial.getColumna() + 1) || (PosFinal.getFila() == PosInicial.getFila() - 1 && PosFinal.getColumna() == PosInicial.getColumna() - 1)) {

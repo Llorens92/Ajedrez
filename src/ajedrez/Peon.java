@@ -56,15 +56,16 @@ public class Peon extends Pieza {
         } else if (comerValido(mov) == true && tablero.hayPieza(mov.getPosFinal()) == true) {
             tablero.Mover(mov);
         } else if (comerValido(mov) == true && tablero.hayPieza(mov.getPosFinal()) == false) {
+            tablero.colocaPieza(new Peon(false,mov.getPosFinal().getFila(),mov.getPosFinal().getColumna()));
             tablero.Mover(mov);
-            if (tablero.comerAlPaso(tablero.getArraymov()) == true) {
+            if (tablero.comerAlPaso() == true) {
                 if (tablero.DevuelvePieza(mov.getPosFinal()).getColor() == false) {
                     tablero.quitaPieza(mov.getPosFinal().getFila() - 1, mov.getPosFinal().getColumna());
                 } else {
                     tablero.quitaPieza(mov.getPosFinal().getFila() + 1, mov.getPosFinal().getColumna());
                 }
             } else { 
-                tablero.anularMovimiento(mov);
+                tablero.anularUltimoMovimiento();
                 throw new MovIncorrectoException("El peon no puede mover así");                
             }
         } else {

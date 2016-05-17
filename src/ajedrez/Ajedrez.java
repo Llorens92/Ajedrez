@@ -82,11 +82,16 @@ public class Ajedrez {
                             for (int j = 1; j > 0; j++) {
                                 System.out.println("Introduzca una jugada valida (A-H,1-8,A-H,1-8)");
                                 System.out.println("Para guardar y salir escriba Guardar. Si desea rendirse escriba Fin durante su turno.");
+                                System.out.println("Si desea anular el último movimiento escriba anular.");
                                 String jugada = lc.nextLine();
-                                if (!partida.finPartida(jugada, tablero)) {
+                                if (jugada.equalsIgnoreCase("anular")) {
+                                    tablero.anularUltimoMovimiento();
+                                    ventana.board.pintartablero(tablero);
+                                    ventana.actualizarpantalla();
+                                } else if (!partida.finPartida(jugada, tablero)) {
                                     partida.jugada(jugada.toUpperCase(), tablero);
                                     ventana.board.pintartablero(tablero);
-                                    ventana.actualizarpantalla();                                    
+                                    ventana.actualizarpantalla();
                                 } else {
                                     j = -1;
                                     System.out.println("Espero que hayan disfrutado de la partida.");
@@ -112,7 +117,7 @@ public class Ajedrez {
                             ventana.setBounds(0, 0, 505, 530);
                             ventana.setVisible(true);
                             ventana.board.pintartablero(tablero);
-                            Problema.introduciendoDatos(tablero, ventana); 
+                            Problema.introduciendoDatos(tablero, ventana);
                             Problema.quienComienzaJugando(tablero);
                             Problema.introduciendoJugadas(tablero, ventana);
                             break;

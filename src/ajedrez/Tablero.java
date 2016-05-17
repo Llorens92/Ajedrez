@@ -7,6 +7,7 @@ package ajedrez;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
  *
@@ -26,14 +27,20 @@ public class Tablero implements Serializable {
     private Pieza[][] tablero = new Pieza[8][8];
 
     /**
+     * Entero que controla el número de jugada en que estamos
+     */
+    private int contadorjugadas = 0;
+
+    /**
      * Booleano que indica a quien le toca a mover. Se iniciliaza a true
      * (blancas)
      */
     private boolean turno = true;
     /**
-     * Es un arraylist de movimientos donde se van introduciendo solo los válidos
+     * Es un hasMap de movimientos y piezas donde se van introduciendo solo los
+     * válidos y las piezas que son comidas
      */
-    private ArrayList <Movimiento> arraymov = new ArrayList <>();
+    private LinkedHashMap<Movimiento, Pieza> hashmov = new LinkedHashMap<>();
     /**
      * Entero que controla el número de veces que se mueve el rey blanco (para
      * el enroque)
@@ -69,15 +76,14 @@ public class Tablero implements Serializable {
         tablero[figura.getPos().getFila()][figura.getPos().getColumna()] = figura;
     }
 
-
     /**
-     * Método que devuelve el arraylist de movimientos que es atributo de esta clase
+     * Método que devuelve el hashMap de movimientos que es atributo de esta
+     * clase
      *
-     * @return ArrayList de movimientos
+     * @return HashMap de movimientos y piezas
      */
-    
-    public ArrayList<Movimiento> getArraymov() {
-        return arraymov;
+    public LinkedHashMap<Movimiento, Pieza> getArraymov() {
+        return hashmov;
     }
 
     /**
@@ -208,8 +214,7 @@ public class Tablero implements Serializable {
                 }
                 //Si cuando aumenta el número de fila desciende el de columna o al revés:
             } else //Si la diagonal es de izquierda a derecha y ascendente:                
-            {
-                if (mov.getPosFinal().getColumna() > mov.getPosInicial().getColumna()) {
+             if (mov.getPosFinal().getColumna() > mov.getPosInicial().getColumna()) {
                     for (int i = mov.getPosInicial().getFila() - 1; i > mov.getPosFinal().getFila(); i--) {
                         columna++;
                         if (DevuelvePieza(i, columna) != null) {
@@ -224,7 +229,6 @@ public class Tablero implements Serializable {
                         }
                     }
                 }
-            }
         }
         return hayPiezasEntre;
     }
@@ -251,7 +255,7 @@ public class Tablero implements Serializable {
                         //Inicializamos la posicion inicial de un movimiento "imaginario" para comprobar si hay piezas entre la pieza que puede hacer jaque y el rey:
                         Posicion posInicial = new Posicion(i, j);
                         Posicion posFinal = new Posicion(i, j);
-                        Movimiento movimag = new Movimiento(posInicial, posFinal);
+                        Movimiento movimag = new Movimiento(0, posInicial, posFinal);
                         //Recorremos la vertical de arriba a abajo desde la posicion en la que está el rey hasta encontrar una pieza que haga jaque:
                         for (int k = i; k < 8 && jaque == false; k++) {
                             if (tablero[k][j] != null && (tablero[k][j].getClass().getName().compareTo("ajedrez.Torre") == 0 || tablero[k][j].getClass().getName().compareTo("ajedrez.Dama") == 0) && tablero[k][j].getColor() != turno) {
@@ -463,7 +467,7 @@ public class Tablero implements Serializable {
         //Inicializamos la posicion inicial de un movimiento "imaginario" para comprobar si hay piezas entre la pieza que puede hacer jaque o atacar esa casilla y el rey (o la casilla supuestamente atacada):
         Posicion posInicial = new Posicion(i, j);
         Posicion posFinal = new Posicion(i, j);
-        Movimiento movimag = new Movimiento(posInicial, posFinal);
+        Movimiento movimag = new Movimiento(0, posInicial, posFinal);
         //Recorremos la vertical de arriba a abajo desde la posicion en la que está el rey hasta encontrar una pieza que haga jaque o ataque esa casilla:        
         for (int k = i; k < 8 && jaque == false; k++) {
             if (tablero[k][j] != null && (tablero[k][j].getClass().getName().compareTo("ajedrez.Torre") == 0 || tablero[k][j].getClass().getName().compareTo("ajedrez.Dama") == 0) && tablero[k][j].getColor() != turno) {
@@ -1049,7 +1053,7 @@ public class Tablero implements Serializable {
             //Inicializamos la posicion inicial de un movimiento "imaginario" para comprobar si hay piezas entre la pieza que puede estar clavando y la nuestra:
             Posicion posInicial = new Posicion(i, j);
             Posicion posFinal = new Posicion(i, j);
-            Movimiento movimag = new Movimiento(posInicial, posFinal);
+            Movimiento movimag = new Movimiento(0, posInicial, posFinal);
             //Recorremos la vertical de arriba a abajo desde la posicion en la que está la pieza que supuestamente está clavada hasta encontrar una pieza que la ataque:
             for (int k = i; k < 8 && ataque == false; k++) {
                 if (tablero[k][j] != null && (tablero[k][j].getClass().getName().compareTo("ajedrez.Torre") == 0 || tablero[k][j].getClass().getName().compareTo("ajedrez.Dama") == 0) && tablero[k][j].getColor() != turno) {
@@ -1294,7 +1298,7 @@ public class Tablero implements Serializable {
                     if (Jaque(i, j) == true) {
                         Posicion posInicial = new Posicion(i, j);
                         Posicion posFinal = new Posicion(i, j);
-                        Movimiento movimag = new Movimiento(posInicial, posFinal);
+                        Movimiento movimag = new Movimiento(0, posInicial, posFinal);
                         //Comprobamos la vertical de arriba a abajo:
                         for (int k = i; k < 8; k++) {
                             if (tablero[k][j] != null && (tablero[k][j].getClass().getName().compareTo("ajedrez.Torre") == 0 || tablero[k][j].getClass().getName().compareTo("ajedrez.Dama") == 0) && tablero[k][j].getColor() != turno) {
@@ -1429,13 +1433,13 @@ public class Tablero implements Serializable {
             fila--;
             Posicion posInicial = new Posicion(fila, l);
             Posicion posFinal = new Posicion(fila, l);
-            Movimiento movimag = new Movimiento(posInicial, posFinal);
+            Movimiento movimag = new Movimiento(0, posInicial, posFinal);
             //Comprobamos las posiciones desde las que podría cubrir un peon:
             if (fila > 1 && (tablero[fila - 1][l] != null && tablero[fila - 1][l].getClass().getName().compareTo("ajedrez.Peon") == 0 && tablero[fila - 1][l].getColor() == false && turno == false)) {
                 cubrirjaquediagonalascendente = true;
                 Posicion posInicial2 = new Posicion(fila - 1, l);
                 Posicion posFinal2 = new Posicion(fila, l);
-                Movimiento movimag2 = new Movimiento(posInicial2, posFinal2);
+                Movimiento movimag2 = new Movimiento(0, posInicial2, posFinal2);
                 if (piezaClavada(movimag2) == true) {
                     cubrirjaquediagonalascendente = false;
                 }
@@ -1444,7 +1448,7 @@ public class Tablero implements Serializable {
                 cubrirjaquediagonalascendente = true;
                 Posicion posInicial2 = new Posicion(fila - 2, l);
                 Posicion posFinal2 = new Posicion(fila, l);
-                Movimiento movimag2 = new Movimiento(posInicial2, posFinal2);
+                Movimiento movimag2 = new Movimiento(0, posInicial2, posFinal2);
                 if (piezaClavada(movimag2) == true) {
                     cubrirjaquediagonalascendente = false;
                 }
@@ -1453,7 +1457,7 @@ public class Tablero implements Serializable {
                 cubrirjaquediagonalascendente = true;
                 Posicion posInicial2 = new Posicion(fila + 1, l);
                 Posicion posFinal2 = new Posicion(fila, l);
-                Movimiento movimag2 = new Movimiento(posInicial2, posFinal2);
+                Movimiento movimag2 = new Movimiento(0, posInicial2, posFinal2);
                 if (piezaClavada(movimag2) == true) {
                     cubrirjaquediagonalascendente = false;
                 }
@@ -1462,7 +1466,7 @@ public class Tablero implements Serializable {
                 cubrirjaquediagonalascendente = true;
                 Posicion posInicial2 = new Posicion(fila + 2, l);
                 Posicion posFinal2 = new Posicion(fila, l);
-                Movimiento movimag2 = new Movimiento(posInicial2, posFinal2);
+                Movimiento movimag2 = new Movimiento(0, posInicial2, posFinal2);
                 if (piezaClavada(movimag2) == true) {
                     cubrirjaquediagonalascendente = false;
                 }
@@ -1620,13 +1624,13 @@ public class Tablero implements Serializable {
             fila++;
             Posicion posInicial = new Posicion(fila, l);
             Posicion posFinal = new Posicion(fila, l);
-            Movimiento movimag = new Movimiento(posInicial, posFinal);
+            Movimiento movimag = new Movimiento(0, posInicial, posFinal);
             //Comprobamos las posiciones desde las que podría cubrir un peon:
             if (fila > 1 && (tablero[fila - 1][l] != null && tablero[fila - 1][l].getClass().getName().compareTo("ajedrez.Peon") == 0 && tablero[fila - 1][l].getColor() == false && turno == false)) {
                 cubrirjaquediagonaldescendente = true;
                 Posicion posInicial2 = new Posicion(fila - 1, l);
                 Posicion posFinal2 = new Posicion(fila, l);
-                Movimiento movimag2 = new Movimiento(posInicial2, posFinal2);
+                Movimiento movimag2 = new Movimiento(0, posInicial2, posFinal2);
                 if (piezaClavada(movimag2) == true) {
                     cubrirjaquediagonaldescendente = false;
                 }
@@ -1635,7 +1639,7 @@ public class Tablero implements Serializable {
                 cubrirjaquediagonaldescendente = true;
                 Posicion posInicial2 = new Posicion(fila - 2, l);
                 Posicion posFinal2 = new Posicion(fila, l);
-                Movimiento movimag2 = new Movimiento(posInicial2, posFinal2);
+                Movimiento movimag2 = new Movimiento(0, posInicial2, posFinal2);
                 if (piezaClavada(movimag2) == true) {
                     cubrirjaquediagonaldescendente = false;
                 }
@@ -1644,7 +1648,7 @@ public class Tablero implements Serializable {
                 cubrirjaquediagonaldescendente = true;
                 Posicion posInicial2 = new Posicion(fila + 1, l);
                 Posicion posFinal2 = new Posicion(fila, l);
-                Movimiento movimag2 = new Movimiento(posInicial2, posFinal2);
+                Movimiento movimag2 = new Movimiento(0, posInicial2, posFinal2);
                 if (piezaClavada(movimag2) == true) {
                     cubrirjaquediagonaldescendente = false;
                 }
@@ -1653,7 +1657,7 @@ public class Tablero implements Serializable {
                 cubrirjaquediagonaldescendente = true;
                 Posicion posInicial2 = new Posicion(fila + 2, l);
                 Posicion posFinal2 = new Posicion(fila, l);
-                Movimiento movimag2 = new Movimiento(posInicial2, posFinal2);
+                Movimiento movimag2 = new Movimiento(0, posInicial2, posFinal2);
                 if (piezaClavada(movimag2) == true) {
                     cubrirjaquediagonaldescendente = false;
                 }
@@ -1806,13 +1810,13 @@ public class Tablero implements Serializable {
         for (int l = j + 1; l <= k; l++) {
             Posicion posInicial = new Posicion(i, l);
             Posicion posFinal = new Posicion(i, l);
-            Movimiento movimag = new Movimiento(posInicial, posFinal);
+            Movimiento movimag = new Movimiento(0, posInicial, posFinal);
             //Comprobamos las posiciones desde las que podría cubrir un peon:
             if (i > 1 && (tablero[i - 1][l] != null && tablero[i - 1][l].getClass().getName().compareTo("ajedrez.Peon") == 0 && tablero[i - 1][l].getColor() == false && turno == false)) {
                 cubrirjaquehorizontal = true;
                 Posicion posInicial2 = new Posicion(i - 1, l);
                 Posicion posFinal2 = new Posicion(i, l);
-                Movimiento movimag2 = new Movimiento(posInicial2, posFinal2);
+                Movimiento movimag2 = new Movimiento(0, posInicial2, posFinal2);
                 if (piezaClavada(movimag2) == true) {
                     cubrirjaquehorizontal = false;
                 }
@@ -1821,7 +1825,7 @@ public class Tablero implements Serializable {
                 cubrirjaquehorizontal = true;
                 Posicion posInicial2 = new Posicion(i - 2, l);
                 Posicion posFinal2 = new Posicion(i, l);
-                Movimiento movimag2 = new Movimiento(posInicial2, posFinal2);
+                Movimiento movimag2 = new Movimiento(0, posInicial2, posFinal2);
                 if (piezaClavada(movimag2) == true) {
                     cubrirjaquehorizontal = false;
                 }
@@ -1830,7 +1834,7 @@ public class Tablero implements Serializable {
                 cubrirjaquehorizontal = true;
                 Posicion posInicial2 = new Posicion(i + 1, l);
                 Posicion posFinal2 = new Posicion(i, l);
-                Movimiento movimag2 = new Movimiento(posInicial2, posFinal2);
+                Movimiento movimag2 = new Movimiento(0, posInicial2, posFinal2);
                 if (piezaClavada(movimag2) == true) {
                     cubrirjaquehorizontal = false;
                 }
@@ -1839,7 +1843,7 @@ public class Tablero implements Serializable {
                 cubrirjaquehorizontal = true;
                 Posicion posInicial2 = new Posicion(i + 2, l);
                 Posicion posFinal2 = new Posicion(i, l);
-                Movimiento movimag2 = new Movimiento(posInicial2, posFinal2);
+                Movimiento movimag2 = new Movimiento(0, posInicial2, posFinal2);
                 if (piezaClavada(movimag2) == true) {
                     cubrirjaquehorizontal = false;
                 }
@@ -1997,7 +2001,7 @@ public class Tablero implements Serializable {
         for (int l = i + 1; l <= k; l++) {
             Posicion posInicial = new Posicion(l, j);
             Posicion posFinal = new Posicion(l, j);
-            Movimiento movimag = new Movimiento(posInicial, posFinal);
+            Movimiento movimag = new Movimiento(0, posInicial, posFinal);
             //Comprobamos la horizontal de izquierda a derecha:
             for (int n = j + 1; n < 8 && cubrirjaquevertical == false; n++) {
                 if (tablero[l][n] != null && (tablero[l][n].getClass().getName().compareTo("ajedrez.Torre") == 0 || tablero[l][n].getClass().getName().compareTo("ajedrez.Dama") == 0) && tablero[l][n].getColor() == turno) {
@@ -2406,89 +2410,89 @@ public class Tablero implements Serializable {
      * Este Método te dice si puedes comer al paso o no en función de los dos
      * últimos movimientos cargados en el array.
      *
-     * @param arraymov Array de movimientos atributo de esta clase
      * @return Un booleano según si se puede o no
      */
-    public boolean comerAlPaso(ArrayList <Movimiento> arraymov) {
-        boolean comerAlPaso = false;//Comprobamos si el movimiento coincide con uno de comer al paso:        
-        if (arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 1 && arraymov.get(arraymov.size()-1).getPosFinal().getFila() == 5 && arraymov.get(arraymov.size()-1).getPosFinal().getColumna() == 0) {
+    public boolean comerAlPaso() {
+        boolean comerAlPaso = false;//Comprobamos si el movimiento coincide con uno de comer al paso:    
+        ArrayList<Movimiento> arraymov = new ArrayList<>(hashmov.keySet());
+        if (arraymov.get(arraymov.size() - 1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size() - 1).getPosInicial().getColumna() == 1 && arraymov.get(arraymov.size() - 1).getPosFinal().getFila() == 5 && arraymov.get(arraymov.size() - 1).getPosFinal().getColumna() == 0) {
             //Comprobamos si el movimiento anterior al que se quiere realizar coincide con  el del peon que debe haber movido para que el movimiento anteriormente mencionado sea valido:
-            if (DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()).getColor() == true && arraymov.get(arraymov.size()-2).getPosInicial().getFila() == 6 && arraymov.get(arraymov.size()-2).getPosInicial().getColumna() == 0 && arraymov.get(arraymov.size()-2).getPosFinal().getFila() == 4) {
+            if (DevuelvePieza(arraymov.get(arraymov.size() - 2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size() - 2).getPosFinal()).getColor() == true && arraymov.get(arraymov.size() - 2).getPosInicial().getFila() == 6 && arraymov.get(arraymov.size() - 2).getPosInicial().getColumna() == 0 && arraymov.get(arraymov.size() - 2).getPosFinal().getFila() == 4) {
                 comerAlPaso = true;
             }
         }
-        if (((arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 0) || (arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 2)) && arraymov.get(arraymov.size()-1).getPosFinal().getFila() == 5 && arraymov.get(arraymov.size()-1).getPosFinal().getColumna() == 1) {
-            if (DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()).getColor() == true && arraymov.get(arraymov.size()-2).getPosInicial().getFila() == 6 && arraymov.get(arraymov.size()-2).getPosInicial().getColumna() == 1 && arraymov.get(arraymov.size()-2).getPosFinal().getFila() == 4) {
+        if (((arraymov.get(arraymov.size() - 1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size() - 1).getPosInicial().getColumna() == 0) || (arraymov.get(arraymov.size() - 1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size() - 1).getPosInicial().getColumna() == 2)) && arraymov.get(arraymov.size() - 1).getPosFinal().getFila() == 5 && arraymov.get(arraymov.size() - 1).getPosFinal().getColumna() == 1) {
+            if (DevuelvePieza(arraymov.get(arraymov.size() - 2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size() - 2).getPosFinal()).getColor() == true && arraymov.get(arraymov.size() - 2).getPosInicial().getFila() == 6 && arraymov.get(arraymov.size() - 2).getPosInicial().getColumna() == 1 && arraymov.get(arraymov.size() - 2).getPosFinal().getFila() == 4) {
                 comerAlPaso = true;
             }
         }
-        if (((arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 1) || (arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 3)) && arraymov.get(arraymov.size()-1).getPosFinal().getFila() == 5 && arraymov.get(arraymov.size()-1).getPosFinal().getColumna() == 2) {
-            if (DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()).getColor() == true && arraymov.get(arraymov.size()-2).getPosInicial().getFila() == 6 && arraymov.get(arraymov.size()-2).getPosInicial().getColumna() == 2 && arraymov.get(arraymov.size()-2).getPosFinal().getFila() == 4) {
+        if (((arraymov.get(arraymov.size() - 1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size() - 1).getPosInicial().getColumna() == 1) || (arraymov.get(arraymov.size() - 1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size() - 1).getPosInicial().getColumna() == 3)) && arraymov.get(arraymov.size() - 1).getPosFinal().getFila() == 5 && arraymov.get(arraymov.size() - 1).getPosFinal().getColumna() == 2) {
+            if (DevuelvePieza(arraymov.get(arraymov.size() - 2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size() - 2).getPosFinal()).getColor() == true && arraymov.get(arraymov.size() - 2).getPosInicial().getFila() == 6 && arraymov.get(arraymov.size() - 2).getPosInicial().getColumna() == 2 && arraymov.get(arraymov.size() - 2).getPosFinal().getFila() == 4) {
                 comerAlPaso = true;
             }
         }
-        if (((arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 2) || (arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 4)) && arraymov.get(arraymov.size()-1).getPosFinal().getFila() == 5 && arraymov.get(arraymov.size()-1).getPosFinal().getColumna() == 3) {
-            if (DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()).getColor() == true && arraymov.get(arraymov.size()-2).getPosInicial().getFila() == 6 && arraymov.get(arraymov.size()-2).getPosInicial().getColumna() == 3 && arraymov.get(arraymov.size()-2).getPosFinal().getFila() == 4) {
+        if (((arraymov.get(arraymov.size() - 1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size() - 1).getPosInicial().getColumna() == 2) || (arraymov.get(arraymov.size() - 1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size() - 1).getPosInicial().getColumna() == 4)) && arraymov.get(arraymov.size() - 1).getPosFinal().getFila() == 5 && arraymov.get(arraymov.size() - 1).getPosFinal().getColumna() == 3) {
+            if (DevuelvePieza(arraymov.get(arraymov.size() - 2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size() - 2).getPosFinal()).getColor() == true && arraymov.get(arraymov.size() - 2).getPosInicial().getFila() == 6 && arraymov.get(arraymov.size() - 2).getPosInicial().getColumna() == 3 && arraymov.get(arraymov.size() - 2).getPosFinal().getFila() == 4) {
                 comerAlPaso = true;
             }
         }
-        if (((arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 3) || (arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 5)) && arraymov.get(arraymov.size()-1).getPosFinal().getFila() == 5 && arraymov.get(arraymov.size()-1).getPosFinal().getColumna() == 4) {
-            if (DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()).getColor() == true && arraymov.get(arraymov.size()-2).getPosInicial().getFila() == 6 && arraymov.get(arraymov.size()-2).getPosInicial().getColumna() == 4 && arraymov.get(arraymov.size()-2).getPosFinal().getFila() == 4) {
+        if (((arraymov.get(arraymov.size() - 1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size() - 1).getPosInicial().getColumna() == 3) || (arraymov.get(arraymov.size() - 1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size() - 1).getPosInicial().getColumna() == 5)) && arraymov.get(arraymov.size() - 1).getPosFinal().getFila() == 5 && arraymov.get(arraymov.size() - 1).getPosFinal().getColumna() == 4) {
+            if (DevuelvePieza(arraymov.get(arraymov.size() - 2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size() - 2).getPosFinal()).getColor() == true && arraymov.get(arraymov.size() - 2).getPosInicial().getFila() == 6 && arraymov.get(arraymov.size() - 2).getPosInicial().getColumna() == 4 && arraymov.get(arraymov.size() - 2).getPosFinal().getFila() == 4) {
                 comerAlPaso = true;
             }
         }
-        if (((arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 4) || (arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 6)) && arraymov.get(arraymov.size()-1).getPosFinal().getFila() == 5 && arraymov.get(arraymov.size()-1).getPosFinal().getColumna() == 5) {
-            if (DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()).getColor() == true && arraymov.get(arraymov.size()-2).getPosInicial().getFila() == 6 && arraymov.get(arraymov.size()-2).getPosInicial().getColumna() == 5 && arraymov.get(arraymov.size()-2).getPosFinal().getFila() == 4) {
+        if (((arraymov.get(arraymov.size() - 1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size() - 1).getPosInicial().getColumna() == 4) || (arraymov.get(arraymov.size() - 1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size() - 1).getPosInicial().getColumna() == 6)) && arraymov.get(arraymov.size() - 1).getPosFinal().getFila() == 5 && arraymov.get(arraymov.size() - 1).getPosFinal().getColumna() == 5) {
+            if (DevuelvePieza(arraymov.get(arraymov.size() - 2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size() - 2).getPosFinal()).getColor() == true && arraymov.get(arraymov.size() - 2).getPosInicial().getFila() == 6 && arraymov.get(arraymov.size() - 2).getPosInicial().getColumna() == 5 && arraymov.get(arraymov.size() - 2).getPosFinal().getFila() == 4) {
                 comerAlPaso = true;
             }
         }
-        if (((arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 5) || (arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 7)) && arraymov.get(arraymov.size()-1).getPosFinal().getFila() == 5 && arraymov.get(arraymov.size()-1).getPosFinal().getColumna() == 6) {
-            if (DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()).getColor() == true && arraymov.get(arraymov.size()-2).getPosInicial().getFila() == 6 && arraymov.get(arraymov.size()-2).getPosInicial().getColumna() == 6 && arraymov.get(arraymov.size()-2).getPosFinal().getFila() == 4) {
+        if (((arraymov.get(arraymov.size() - 1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size() - 1).getPosInicial().getColumna() == 5) || (arraymov.get(arraymov.size() - 1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size() - 1).getPosInicial().getColumna() == 7)) && arraymov.get(arraymov.size() - 1).getPosFinal().getFila() == 5 && arraymov.get(arraymov.size() - 1).getPosFinal().getColumna() == 6) {
+            if (DevuelvePieza(arraymov.get(arraymov.size() - 2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size() - 2).getPosFinal()).getColor() == true && arraymov.get(arraymov.size() - 2).getPosInicial().getFila() == 6 && arraymov.get(arraymov.size() - 2).getPosInicial().getColumna() == 6 && arraymov.get(arraymov.size() - 2).getPosFinal().getFila() == 4) {
                 comerAlPaso = true;
             }
         }
-        if (arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 6 && arraymov.get(arraymov.size()-1).getPosFinal().getFila() == 5 && arraymov.get(arraymov.size()-1).getPosFinal().getColumna() == 7) {
-            if (DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()).getColor() == true && arraymov.get(arraymov.size()-2).getPosInicial().getFila() == 6 && arraymov.get(arraymov.size()-2).getPosInicial().getColumna() == 7 && arraymov.get(arraymov.size()-2).getPosFinal().getFila() == 4) {
+        if (arraymov.get(arraymov.size() - 1).getPosInicial().getFila() == 4 && arraymov.get(arraymov.size() - 1).getPosInicial().getColumna() == 6 && arraymov.get(arraymov.size() - 1).getPosFinal().getFila() == 5 && arraymov.get(arraymov.size() - 1).getPosFinal().getColumna() == 7) {
+            if (DevuelvePieza(arraymov.get(arraymov.size() - 2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size() - 2).getPosFinal()).getColor() == true && arraymov.get(arraymov.size() - 2).getPosInicial().getFila() == 6 && arraymov.get(arraymov.size() - 2).getPosInicial().getColumna() == 7 && arraymov.get(arraymov.size() - 2).getPosFinal().getFila() == 4) {
                 comerAlPaso = true;
             }
         }
-        if (arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 1 && arraymov.get(arraymov.size()-1).getPosFinal().getFila() == 2 && arraymov.get(arraymov.size()-1).getPosFinal().getColumna() == 0) {
-            if (DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()).getColor() == false && arraymov.get(arraymov.size()-2).getPosInicial().getFila() == 1 && arraymov.get(arraymov.size()-2).getPosInicial().getColumna() == 0 && arraymov.get(arraymov.size()-2).getPosFinal().getFila() == 3) {
+        if (arraymov.get(arraymov.size() - 1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size() - 1).getPosInicial().getColumna() == 1 && arraymov.get(arraymov.size() - 1).getPosFinal().getFila() == 2 && arraymov.get(arraymov.size() - 1).getPosFinal().getColumna() == 0) {
+            if (DevuelvePieza(arraymov.get(arraymov.size() - 2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size() - 2).getPosFinal()).getColor() == false && arraymov.get(arraymov.size() - 2).getPosInicial().getFila() == 1 && arraymov.get(arraymov.size() - 2).getPosInicial().getColumna() == 0 && arraymov.get(arraymov.size() - 2).getPosFinal().getFila() == 3) {
                 comerAlPaso = true;
             }
         }
-        if (((arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 0) || (arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 2)) && arraymov.get(arraymov.size()-1).getPosFinal().getFila() == 2 && arraymov.get(arraymov.size()-1).getPosFinal().getColumna() == 1) {
-            if (DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()).getColor() == false && arraymov.get(arraymov.size()-2).getPosInicial().getFila() == 1 && arraymov.get(arraymov.size()-2).getPosInicial().getColumna() == 1 && arraymov.get(arraymov.size()-2).getPosFinal().getFila() == 3) {
+        if (((arraymov.get(arraymov.size() - 1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size() - 1).getPosInicial().getColumna() == 0) || (arraymov.get(arraymov.size() - 1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size() - 1).getPosInicial().getColumna() == 2)) && arraymov.get(arraymov.size() - 1).getPosFinal().getFila() == 2 && arraymov.get(arraymov.size() - 1).getPosFinal().getColumna() == 1) {
+            if (DevuelvePieza(arraymov.get(arraymov.size() - 2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size() - 2).getPosFinal()).getColor() == false && arraymov.get(arraymov.size() - 2).getPosInicial().getFila() == 1 && arraymov.get(arraymov.size() - 2).getPosInicial().getColumna() == 1 && arraymov.get(arraymov.size() - 2).getPosFinal().getFila() == 3) {
                 comerAlPaso = true;
             }
         }
-        if (((arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 1) || (arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 3)) && arraymov.get(arraymov.size()-1).getPosFinal().getFila() == 2 && arraymov.get(arraymov.size()-1).getPosFinal().getColumna() == 2) {
-            if (DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()).getColor() == false && arraymov.get(arraymov.size()-2).getPosInicial().getFila() == 1 && arraymov.get(arraymov.size()-2).getPosInicial().getColumna() == 2 && arraymov.get(arraymov.size()-2).getPosFinal().getFila() == 3) {
+        if (((arraymov.get(arraymov.size() - 1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size() - 1).getPosInicial().getColumna() == 1) || (arraymov.get(arraymov.size() - 1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size() - 1).getPosInicial().getColumna() == 3)) && arraymov.get(arraymov.size() - 1).getPosFinal().getFila() == 2 && arraymov.get(arraymov.size() - 1).getPosFinal().getColumna() == 2) {
+            if (DevuelvePieza(arraymov.get(arraymov.size() - 2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size() - 2).getPosFinal()).getColor() == false && arraymov.get(arraymov.size() - 2).getPosInicial().getFila() == 1 && arraymov.get(arraymov.size() - 2).getPosInicial().getColumna() == 2 && arraymov.get(arraymov.size() - 2).getPosFinal().getFila() == 3) {
                 comerAlPaso = true;
             }
         }
-        if (((arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 2) || (arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 4)) && arraymov.get(arraymov.size()-1).getPosFinal().getFila() == 2 && arraymov.get(arraymov.size()-1).getPosFinal().getColumna() == 3) {
-            if (DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()).getColor() == false && arraymov.get(arraymov.size()-2).getPosInicial().getFila() == 1 && arraymov.get(arraymov.size()-2).getPosInicial().getColumna() == 3 && arraymov.get(arraymov.size()-2).getPosFinal().getFila() == 3) {
+        if (((arraymov.get(arraymov.size() - 1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size() - 1).getPosInicial().getColumna() == 2) || (arraymov.get(arraymov.size() - 1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size() - 1).getPosInicial().getColumna() == 4)) && arraymov.get(arraymov.size() - 1).getPosFinal().getFila() == 2 && arraymov.get(arraymov.size() - 1).getPosFinal().getColumna() == 3) {
+            if (DevuelvePieza(arraymov.get(arraymov.size() - 2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size() - 2).getPosFinal()).getColor() == false && arraymov.get(arraymov.size() - 2).getPosInicial().getFila() == 1 && arraymov.get(arraymov.size() - 2).getPosInicial().getColumna() == 3 && arraymov.get(arraymov.size() - 2).getPosFinal().getFila() == 3) {
                 comerAlPaso = true;
             }
         }
-        if (((arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 3) || (arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 5)) && arraymov.get(arraymov.size()-1).getPosFinal().getFila() == 2 && arraymov.get(arraymov.size()-1).getPosFinal().getColumna() == 4) {
-            if (DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()).getColor() == false && arraymov.get(arraymov.size()-2).getPosInicial().getFila() == 1 && arraymov.get(arraymov.size()-2).getPosInicial().getColumna() == 4 && arraymov.get(arraymov.size()-2).getPosFinal().getFila() == 3) {
+        if (((arraymov.get(arraymov.size() - 1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size() - 1).getPosInicial().getColumna() == 3) || (arraymov.get(arraymov.size() - 1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size() - 1).getPosInicial().getColumna() == 5)) && arraymov.get(arraymov.size() - 1).getPosFinal().getFila() == 2 && arraymov.get(arraymov.size() - 1).getPosFinal().getColumna() == 4) {
+            if (DevuelvePieza(arraymov.get(arraymov.size() - 2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size() - 2).getPosFinal()).getColor() == false && arraymov.get(arraymov.size() - 2).getPosInicial().getFila() == 1 && arraymov.get(arraymov.size() - 2).getPosInicial().getColumna() == 4 && arraymov.get(arraymov.size() - 2).getPosFinal().getFila() == 3) {
                 comerAlPaso = true;
             }
         }
-        if (((arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 4) || (arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 6)) && arraymov.get(arraymov.size()-1).getPosFinal().getFila() == 2 && arraymov.get(arraymov.size()-1).getPosFinal().getColumna() == 5) {
-            if (DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()).getColor() == false && arraymov.get(arraymov.size()-2).getPosInicial().getFila() == 1 && arraymov.get(arraymov.size()-2).getPosInicial().getColumna() == 5 && arraymov.get(arraymov.size()-2).getPosFinal().getFila() == 3) {
+        if (((arraymov.get(arraymov.size() - 1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size() - 1).getPosInicial().getColumna() == 4) || (arraymov.get(arraymov.size() - 1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size() - 1).getPosInicial().getColumna() == 6)) && arraymov.get(arraymov.size() - 1).getPosFinal().getFila() == 2 && arraymov.get(arraymov.size() - 1).getPosFinal().getColumna() == 5) {
+            if (DevuelvePieza(arraymov.get(arraymov.size() - 2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size() - 2).getPosFinal()).getColor() == false && arraymov.get(arraymov.size() - 2).getPosInicial().getFila() == 1 && arraymov.get(arraymov.size() - 2).getPosInicial().getColumna() == 5 && arraymov.get(arraymov.size() - 2).getPosFinal().getFila() == 3) {
                 comerAlPaso = true;
             }
         }
-        if (((arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 5) || (arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 7)) && arraymov.get(arraymov.size()-1).getPosFinal().getFila() == 2 && arraymov.get(arraymov.size()-1).getPosFinal().getColumna() == 6) {
-            if (DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()).getColor() == false && arraymov.get(arraymov.size()-2).getPosInicial().getFila() == 1 && arraymov.get(arraymov.size()-2).getPosInicial().getColumna() == 6 && arraymov.get(arraymov.size()-2).getPosFinal().getFila() == 3) {
+        if (((arraymov.get(arraymov.size() - 1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size() - 1).getPosInicial().getColumna() == 5) || (arraymov.get(arraymov.size() - 1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size() - 1).getPosInicial().getColumna() == 7)) && arraymov.get(arraymov.size() - 1).getPosFinal().getFila() == 2 && arraymov.get(arraymov.size() - 1).getPosFinal().getColumna() == 6) {
+            if (DevuelvePieza(arraymov.get(arraymov.size() - 2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size() - 2).getPosFinal()).getColor() == false && arraymov.get(arraymov.size() - 2).getPosInicial().getFila() == 1 && arraymov.get(arraymov.size() - 2).getPosInicial().getColumna() == 6 && arraymov.get(arraymov.size() - 2).getPosFinal().getFila() == 3) {
                 comerAlPaso = true;
             }
         }
-        if (arraymov.get(arraymov.size()-1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size()-1).getPosInicial().getColumna() == 6 && arraymov.get(arraymov.size()-1).getPosFinal().getFila() == 2 && arraymov.get(arraymov.size()-1).getPosFinal().getColumna() == 7) {
-            if (DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size()-2).getPosFinal()).getColor() == false && arraymov.get(arraymov.size()-2).getPosInicial().getFila() == 1 && arraymov.get(arraymov.size()-2).getPosInicial().getColumna() == 7 && arraymov.get(arraymov.size()-2).getPosFinal().getFila() == 3) {
+        if (arraymov.get(arraymov.size() - 1).getPosInicial().getFila() == 3 && arraymov.get(arraymov.size() - 1).getPosInicial().getColumna() == 6 && arraymov.get(arraymov.size() - 1).getPosFinal().getFila() == 2 && arraymov.get(arraymov.size() - 1).getPosFinal().getColumna() == 7) {
+            if (DevuelvePieza(arraymov.get(arraymov.size() - 2).getPosFinal()) != null && DevuelvePieza(arraymov.get(arraymov.size() - 2).getPosFinal()).getColor() == false && arraymov.get(arraymov.size() - 2).getPosInicial().getFila() == 1 && arraymov.get(arraymov.size() - 2).getPosInicial().getColumna() == 7 && arraymov.get(arraymov.size() - 2).getPosFinal().getFila() == 3) {
                 comerAlPaso = true;
             }
         }
@@ -2514,18 +2518,22 @@ public class Tablero implements Serializable {
             if (mov.getPosInicial().getFila() == 1 && ((mov.movimientoPeonBlanco() == true && hayPieza(mov.getPosFinal()) == false) || (mov.comerPeonBlanco() == true && hayPieza(mov.getPosFinal()) == true && DevuelvePieza(mov.getPosFinal()).getColor() != turno))) {
                 switch (nuevaPieza) {
                     case 'A':
+                        introducirMovenelMap(mov);
                         tablero[mov.getPosFinal().getFila()][mov.getPosFinal().getColumna()] = new Alfil(true, mov.getPosFinal().getFila(), mov.getPosFinal().getColumna());
                         quitaPieza(mov.getPosInicial());
                         break;
                     case 'C':
+                        introducirMovenelMap(mov);
                         tablero[mov.getPosFinal().getFila()][mov.getPosFinal().getColumna()] = new Caballo(true, mov.getPosFinal().getFila(), mov.getPosFinal().getColumna());
                         quitaPieza(mov.getPosInicial());
                         break;
                     case 'D':
+                        introducirMovenelMap(mov);
                         tablero[mov.getPosFinal().getFila()][mov.getPosFinal().getColumna()] = new Dama(true, mov.getPosFinal().getFila(), mov.getPosFinal().getColumna());
                         quitaPieza(mov.getPosInicial());
                         break;
                     case 'T':
+                        introducirMovenelMap(mov);
                         tablero[mov.getPosFinal().getFila()][mov.getPosFinal().getColumna()] = new Torre(true, mov.getPosFinal().getFila(), mov.getPosFinal().getColumna());
                         quitaPieza(mov.getPosInicial());
                         break;
@@ -2536,18 +2544,22 @@ public class Tablero implements Serializable {
             } else if (mov.getPosInicial().getFila() == 6 && ((mov.movimientoPeonNegro() == true && hayPieza(mov.getPosFinal()) == false) || (mov.comerPeonNegro() == true && hayPieza(mov.getPosFinal()) == true && DevuelvePieza(mov.getPosFinal()).getColor() != turno))) {
                 switch (nuevaPieza) {
                     case 'A':
+                        introducirMovenelMap(mov);
                         tablero[mov.getPosFinal().getFila()][mov.getPosFinal().getColumna()] = new Alfil(false, mov.getPosFinal().getFila(), mov.getPosFinal().getColumna());
                         quitaPieza(mov.getPosInicial());
                         break;
                     case 'C':
+                        introducirMovenelMap(mov);
                         tablero[mov.getPosFinal().getFila()][mov.getPosFinal().getColumna()] = new Caballo(false, mov.getPosFinal().getFila(), mov.getPosFinal().getColumna());
                         quitaPieza(mov.getPosInicial());
                         break;
                     case 'D':
+                        introducirMovenelMap(mov);
                         tablero[mov.getPosFinal().getFila()][mov.getPosFinal().getColumna()] = new Dama(false, mov.getPosFinal().getFila(), mov.getPosFinal().getColumna());
                         quitaPieza(mov.getPosInicial());
                         break;
                     case 'T':
+                        introducirMovenelMap(mov);
                         tablero[mov.getPosFinal().getFila()][mov.getPosFinal().getColumna()] = new Torre(false, mov.getPosFinal().getFila(), mov.getPosFinal().getColumna());
                         quitaPieza(mov.getPosInicial());
                         break;
@@ -2630,24 +2642,38 @@ public class Tablero implements Serializable {
     }
 
     /**
-     * Este Método recibe un movimiento y lo anula , es decir, devuelve la pieza
-     * a su posición inicial, borra el movimiento del array y rectifica el
-     * turno.
+     * Este Método anula el último movimiento válido, es decir, devuelve la pieza
+     * a su posición inicial, borra el movimiento del map y rectifica el turno.
      *
-     * @param mov Movimiento a modificar
      */
-    public void anularMovimiento(Movimiento mov) {
-        ponPieza(DevuelvePieza(mov.getPosFinal()), mov.getPosInicial());
-        quitaPieza(mov.getPosFinal());
-        arraymov.remove(arraymov.size()-1);
+    public void anularUltimoMovimiento() {
+        ArrayList<Movimiento> arraymov = new ArrayList<>(hashmov.keySet());
+        if (hashmov.get(arraymov.get(arraymov.size() - 1)) != null) {
+            ponPieza(DevuelvePieza(arraymov.get(arraymov.size() - 1).getPosFinal()), arraymov.get(arraymov.size() - 1).getPosInicial());
+            ponPieza(hashmov.get(arraymov.get(arraymov.size() - 1)), arraymov.get(arraymov.size() - 1).getPosFinal());
+        } else {
+            ponPieza(DevuelvePieza(arraymov.get(arraymov.size() - 1).getPosFinal()), arraymov.get(arraymov.size() - 1).getPosInicial());
+            quitaPieza(arraymov.get(arraymov.size() - 1).getPosFinal());
+        }
+        hashmov.remove(arraymov.get(arraymov.size() - 1));
         turno = turno == false;
+        contadorjugadas--;
+    }
 
+    public void introducirMovenelMap(Movimiento mov) {
+        contadorjugadas++;
+        mov.setNumMovimiento(contadorjugadas);
+        if (DevuelvePieza(mov.getPosFinal()) != null) {
+            hashmov.put(mov, DevuelvePieza(mov.getPosFinal()));
+        } else {
+            hashmov.put(mov, null);
+        }
     }
 
     /**
      * Este Metódo es el que finalmente realiza los movimientos validos que han
      * superado los filtros anteriores y los que tiene el propio método. Además
-     * los carga en el array de movimientos validos. Como añadido el método
+     * los carga en el map de movimientos validos. Como añadido el método
      * devuelve un entero utilizado para validar el enroque.
      *
      * @param mov Movimiento a efectuar
@@ -2662,9 +2688,9 @@ public class Tablero implements Serializable {
         boolean movreynegro = false;
         if (Jaque(mov) == false && comprobarPosibleJaque(mov) == false && piezaClavada(mov) == false) {
             if (DevuelvePieza(mov.getPosInicial()) != null) {
+                introducirMovenelMap(mov);
                 ponPieza(DevuelvePieza(mov.getPosInicial()), mov.getPosFinal());
                 quitaPieza(mov.getPosInicial());
-                arraymov.add(mov);
             }
             if (DevuelvePieza(mov.getPosFinal()) != null && DevuelvePieza(mov.getPosFinal()).getClass().getName().compareTo("ajedrez.Rey") == 0 && DevuelvePieza(mov.getPosFinal()).getColor() == true) {
                 contadormovreyblanco++;
