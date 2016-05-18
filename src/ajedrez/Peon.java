@@ -10,11 +10,11 @@ package ajedrez;
  * @author dam1
  */
 public class Peon extends Pieza {
-    
+
     public Peon(boolean color, int fila, int columna) {
         super(color, fila, columna);
     }
-    
+
     @Override
     public boolean movimientoValido(Movimiento mov) {
         boolean movimientoValido = false;
@@ -25,10 +25,13 @@ public class Peon extends Pieza {
         }
         return movimientoValido;
     }
+
     /**
-     * Método que comprueba que el movimiento coincida con el de un peon que come.
+     * Método que comprueba que el movimiento coincida con el de un peon que
+     * come.
+     *
      * @param mov Movimiento a validar
-     * @return 
+     * @return
      */
     public boolean comerValido(Movimiento mov) {
         boolean comerValido = false;
@@ -39,7 +42,7 @@ public class Peon extends Pieza {
         }
         return comerValido;
     }
-    
+
     @Override
     public void pintarPieza() {
         if (color == true) {
@@ -48,31 +51,30 @@ public class Peon extends Pieza {
             System.out.print("[pn]");
         }
     }
-    
+
     @Override
-    public void moverPieza(Movimiento mov, Tablero tablero) throws MovIncorrectoException{
+    public void moverPieza(Movimiento mov, Tablero tablero) throws MovIncorrectoException {
         if (movimientoValido(mov) == true && tablero.hayPieza(mov.getPosFinal()) == false) {
             tablero.Mover(mov);
         } else if (comerValido(mov) == true && tablero.hayPieza(mov.getPosFinal()) == true) {
             tablero.Mover(mov);
-        } else if (comerValido(mov) == true && tablero.hayPieza(mov.getPosFinal()) == false) {
-            tablero.colocaPieza(new Peon(false,mov.getPosFinal().getFila(),mov.getPosFinal().getColumna()));
+        } else if (comerValido(mov) == true && tablero.hayPieza(mov.getPosFinal()) == false) {            
             tablero.Mover(mov);
-            if (tablero.comerAlPaso() == true) {
+            if (tablero.comerAlPaso(mov) == true) {
                 if (tablero.DevuelvePieza(mov.getPosFinal()).getColor() == false) {
                     tablero.quitaPieza(mov.getPosFinal().getFila() - 1, mov.getPosFinal().getColumna());
                 } else {
                     tablero.quitaPieza(mov.getPosFinal().getFila() + 1, mov.getPosFinal().getColumna());
                 }
-            } else { 
+            } else {
                 tablero.anularUltimoMovimiento();
-                throw new MovIncorrectoException("El peon no puede mover así");                
+                throw new MovIncorrectoException("El peon no puede mover así");
             }
         } else {
             throw new MovIncorrectoException("El peon no puede mover así");
         }
     }
-    
+
     @Override
     public String toString() {
         return super.toString();

@@ -55,16 +55,16 @@ public class Juego implements Serializable {
         char nuevaPieza;
         switch (caracter) {
             case 'A':
-                nuevaPieza = 'a';
+                nuevaPieza = 'A';
                 break;
             case 'C':
-                nuevaPieza = 'c';
+                nuevaPieza = 'C';
                 break;
             case 'D':
-                nuevaPieza = 'd';
+                nuevaPieza = 'D';
                 break;
             case 'T':
-                nuevaPieza = 't';
+                nuevaPieza = 'T';
                 break;
             default:
                 nuevaPieza = 'n';
