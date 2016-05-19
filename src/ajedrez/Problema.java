@@ -19,8 +19,19 @@ import java.util.Set;
  */
 public class Problema implements Serializable {
 
-    HashMap<Tablero, ArrayList<ArrayList<String>>> listaProblemas = new HashMap<>();
+    protected HashMap<Tablero, ArrayList<ArrayList<String>>> listaProblemas = new HashMap<>();
+    protected ArrayList <String> IDsResueltos = new ArrayList<>();
 
+    public HashMap<Tablero, ArrayList<ArrayList<String>>> getListaProblemas() {
+        return listaProblemas;
+    }
+
+    public ArrayList<String> getIDsResueltos() {
+        return IDsResueltos;
+    }
+    
+    
+    
     public String fijandoIDProblema() {
         boolean distinto = false;
         String ID = "";
@@ -39,7 +50,7 @@ public class Problema implements Serializable {
         return ID;
     }
 
-    public static Pieza introducirPieza(String nomPieza, String color, int fila, int columna) {
+    public Pieza introducirPieza(String nomPieza, String color, int fila, int columna) {
         boolean colour = false;
         Pieza pieza;
         if (color.equalsIgnoreCase("blanco") || color.equalsIgnoreCase("blanca")) {
@@ -75,7 +86,7 @@ public class Problema implements Serializable {
         return pieza;
     }
 
-    public static void introduciendoDatos(Tablero tablero, Ventana ventana) {
+    public void introduciendoDatos(Tablero tablero, Ventana ventana) {
         Scanner sc = new Scanner(System.in);
         String nomPieza = " ";
         String color = " ";
@@ -108,7 +119,7 @@ public class Problema implements Serializable {
         }
     }
 
-    public static void quienComienzaJugando(Tablero tablero) {
+    public void quienComienzaJugando(Tablero tablero) {
         Scanner sc = new Scanner(System.in);
         String color;
         do {
@@ -120,7 +131,7 @@ public class Problema implements Serializable {
         }
     }
 
-    public static int introduciendoNumVariantes() {
+    public int introduciendoNumVariantes() {
         Scanner sc = new Scanner(System.in);
         int numVariantes = 0;
         while (numVariantes < 1) {
@@ -136,7 +147,7 @@ public class Problema implements Serializable {
         return numVariantes;
     }
 
-    public static int introduciendoNumMovimientos() {
+    public int introduciendoNumMovimientos() {
         Scanner sc = new Scanner(System.in);
         int numMovimientos = 0;
         while (numMovimientos < 1) {
@@ -152,14 +163,17 @@ public class Problema implements Serializable {
         return numMovimientos;
     }
 
-    public static void introduciendoJugadas(Tablero tablero, Ventana ventana) {
-        String movimiento = " ";
-        boolean salir = false, repetirMov;
+    public void introduciendoJugadas(Tablero tablero, Ventana ventana) {
+        Tablero definitivo = tablero;
+        String movimiento = " ", anular = " ";
+        boolean salir, repetirMov;
         Scanner sc = new Scanner(System.in);
         ArrayList< ArrayList<String>> listaSoluciones = new ArrayList<>();
-        ArrayList<String> aux = new ArrayList<>();
-        for (int i = 0; i < introduciendoNumVariantes(); i++) {
-            for (int j = 0; j < introduciendoNumMovimientos(); j++) {
+        int numVariantes = introduciendoNumVariantes();
+        for (int i = 0; i < numVariantes; i++) {
+            ArrayList<String> aux = new ArrayList<>();
+            int numMovs = introduciendoNumMovimientos();
+            for (int j = 0; j < numMovs; j++) {
                 do {
                     try {
                         do {
@@ -173,6 +187,16 @@ public class Problema implements Serializable {
                             } else if (movimiento.length() == 5 && !(Juego.devolverColumna(movimiento.toUpperCase().charAt(0)) == 8) && !(Juego.devolverFila(movimiento.toUpperCase().charAt(1)) == 8) && !(Juego.devolverColumna(movimiento.toUpperCase().charAt(2)) == 8) && !(Juego.devolverFila(movimiento.toUpperCase().charAt(3)) == 8) && !(Juego.devolverPromocion(movimiento.toUpperCase().charAt(4)) == 'n')) {
                                 salir = true;
                             } else if (movimiento.equalsIgnoreCase("anular")) {
+                                if (tablero.anularUltimoMovimiento()) {
+                                    j--;
+                                    aux.remove(aux.size() - 1);
+                                }
+                                ventana.board.pintartablero(tablero);
+                                Juego.pintar(tablero.getTablero());
+                                ventana.actualizarpantalla();
+                                salir = false;
+                            } else {
+                                salir = false;
                             }
                         } while (!salir);
                         if (movimiento.length() == 4) {
@@ -191,11 +215,28 @@ public class Problema implements Serializable {
                 ventana.board.pintartablero(tablero);
                 Juego.pintar(tablero.getTablero());
                 ventana.actualizarpantalla();
+                if (j == numMovs - 1) {
+                    do {
+                        System.out.println("¿Desea anular el último movimiento de la variante, antes de pasar a otra?");
+                        anular = sc.nextLine();
+                    } while (!anular.equalsIgnoreCase("si") && !anular.equalsIgnoreCase("no") && !anular.equalsIgnoreCase("anular"));
+                    if (anular.equalsIgnoreCase("si") || anular.equalsIgnoreCase("anular")) {
+                        aux.remove(aux.size() - 1);
+                        tablero.anularUltimoMovimiento();
+                        j--;
+                        ventana.board.pintartablero(tablero);
+                        Juego.pintar(tablero.getTablero());
+                        ventana.actualizarpantalla();
+                    } else {
+                        listaSoluciones.add(aux);
+                    }
+                }
             }
         }
+        listaProblemas.put(definitivo, listaSoluciones);
     }
 
-    public static void moverProblema(Movimiento mov, Tablero tablero) throws MovIncorrectoException {
+    public void moverProblema(Movimiento mov, Tablero tablero) throws MovIncorrectoException {
         if (tablero.hayPieza(mov.getPosInicial()) == true && ((mov.getPosInicial().getFila() == 1 && tablero.DevuelvePieza(mov.getPosInicial()).getClass().getName().compareTo("ajedrez.Peon") == 0 && tablero.DevuelvePieza(mov.getPosInicial()).getColor() == true) || (mov.getPosInicial().getFila() == 6 && tablero.DevuelvePieza(mov.getPosInicial()).getClass().getName().compareTo("ajedrez.Peon") == 0 && tablero.DevuelvePieza(mov.getPosInicial()).getColor() == false))) {
             throw new MovIncorrectoException("Para promocionar el peon introduzca una letra mayúscula más indicando la pieza que quiere.");
         } else if (tablero.hayPieza(mov.getPosInicial()) == true && tablero.getTurno() == tablero.DevuelvePieza(mov.getPosInicial()).getColor() && (tablero.DevuelvePieza(mov.getPosFinal()) == null || (tablero.DevuelvePieza(mov.getPosFinal()) != null && tablero.DevuelvePieza(mov.getPosFinal()).getColor() != tablero.DevuelvePieza(mov.getPosInicial()).getColor())) && tablero.hayPiezasEntre(mov) == false) {
@@ -205,7 +246,7 @@ public class Problema implements Serializable {
         }
     }
 
-    public static Movimiento stringToMovimiento(String s) {
+    public Movimiento stringToMovimiento(String s) {
         Posicion posInicial = new Posicion(Juego.devolverFila(s.charAt(1)), Juego.devolverColumna(s.charAt(0)));
         Posicion posFinal = new Posicion(Juego.devolverFila(s.charAt(3)), Juego.devolverColumna(s.charAt(2)));
         return new Movimiento(0, posInicial, posFinal);

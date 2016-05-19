@@ -6,6 +6,7 @@
 package ajedrez;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -47,6 +48,46 @@ public class Ajedrez {
         } catch (ClassNotFoundException | IOException ex) {
         }
         return problema;
+    }
+
+    public static Tablero problemaAleatorio(Problema problema) {
+        boolean salir = false;
+        Tablero tablero = null;
+        ArrayList<Tablero> listaTableros = new ArrayList<>(problema.getListaProblemas().keySet());
+        for (int i = 0; i < listaTableros.size() && !salir; i++) {
+            if (problema.getIDsResueltos().size() > 0) {
+                for (int j = 0; j < problema.getIDsResueltos().size() && !salir; j++) {
+                    if (!listaTableros.get(i).getId().equalsIgnoreCase(problema.getIDsResueltos().get(j))) {
+                        tablero = listaTableros.get(i);
+                        salir = true;
+                    }
+                }
+            } else {
+                tablero = listaTableros.get(i);
+                salir = true;
+            }
+        }
+        return tablero;
+    }
+
+    public static boolean acertoJugada(int numJugada, String jugada, Tablero tablero, Problema problema) {
+        boolean acerto = false;
+        for (int i = 0; i < problema.getListaProblemas().get(tablero).size() && !acerto; i++) {
+            if (jugada.equalsIgnoreCase(problema.getListaProblemas().get(tablero).get(i).get(numJugada))) {
+                acerto = true;
+            }
+        }
+        return acerto;
+    }
+
+    public static void moverProblema(Ventana ventana, Problema problema, Tablero tablero, String jugada) {
+        try {
+            problema.moverProblema(problema.stringToMovimiento(jugada), tablero);
+        } catch (MovIncorrectoException ex) {
+            System.out.println(ex.getMessage());
+        }
+        ventana.board.pintartablero(tablero);
+        ventana.actualizarpantalla();
     }
 
     public static void main(String[] args) {
@@ -105,6 +146,36 @@ public class Ajedrez {
                 case 2:
                     switch (Menus.menuResolver()) {
                         case 1:
+                            if (problemaAleatorio(problema) != null) {
+                                Tablero tablero = problemaAleatorio(problema);
+                                Ventana ventana = new Ventana(tablero);
+                                ventana.setBounds(0, 0, 505, 530);
+                                ventana.setVisible(true);
+                                ventana.board.pintartablero(tablero);
+                                if (tablero.getTurno()) {
+                                    System.out.println("Mueven las blancas");
+                                } else {
+                                    System.out.println("Mueven las negras");
+                                }
+                                for (int i = 0; i > -1; i++) {
+                                    String jugada;
+                                    if (i == 0) {
+                                        System.out.println("Introduzca una jugada para empezar a resolver el Problema");
+                                        jugada = lc.nextLine();
+                                    } else {
+                                        System.out.println("Introduzca otra jugada");
+                                        jugada = lc.nextLine();
+                                    }
+                                    if (acertoJugada(i, jugada, tablero, problema)) {
+                                        System.out.println("Bien hecho");
+                                    } else {
+                                        System.out.println("Esa no era la jugada.");
+                                        i--;
+                                    }
+                                }
+                            } else {
+                                System.out.println("No hay problemas por resolver.");
+                            }
                             break;
                         default:
                     }
@@ -117,9 +188,9 @@ public class Ajedrez {
                             ventana.setBounds(0, 0, 505, 530);
                             ventana.setVisible(true);
                             ventana.board.pintartablero(tablero);
-                            Problema.introduciendoDatos(tablero, ventana);
-                            Problema.quienComienzaJugando(tablero);
-                            Problema.introduciendoJugadas(tablero, ventana);
+                            problema.introduciendoDatos(tablero, ventana);
+                            problema.quienComienzaJugando(tablero);
+                            problema.introduciendoJugadas(tablero, ventana);
                             break;
                         case 2:
                             break;

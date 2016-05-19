@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public class Juego implements Serializable {
 
-    ArrayList<Tablero> listaPartidas = new ArrayList<>();
+    protected ArrayList<Tablero> listaPartidas = new ArrayList<>();
 
     public ArrayList<Tablero> getListapartidas() {
         return listaPartidas;

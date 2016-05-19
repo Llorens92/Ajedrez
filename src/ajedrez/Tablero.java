@@ -224,7 +224,8 @@ public class Tablero implements Serializable {
                 }
                 //Si cuando aumenta el número de fila desciende el de columna o al revés:
             } else //Si la diagonal es de izquierda a derecha y ascendente:                
-             if (mov.getPosFinal().getColumna() > mov.getPosInicial().getColumna()) {
+            {
+                if (mov.getPosFinal().getColumna() > mov.getPosInicial().getColumna()) {
                     for (int i = mov.getPosInicial().getFila() - 1; i > mov.getPosFinal().getFila(); i--) {
                         columna++;
                         if (DevuelvePieza(i, columna) != null) {
@@ -239,6 +240,7 @@ public class Tablero implements Serializable {
                         }
                     }
                 }
+            }
         }
         return hayPiezasEntre;
     }
@@ -2713,9 +2715,11 @@ public class Tablero implements Serializable {
      * turno.
      *
      */
-    public void anularUltimoMovimiento() {
+    public boolean anularUltimoMovimiento() {
+        boolean sepuedeanular;
         ArrayList<Movimiento> arraymov = new ArrayList<>(hashmov.keySet());
         if (!arraymov.isEmpty()) {
+            sepuedeanular=true;
             if (comprobPromoPeon(arraymov)) {
                 numMovPromPeon.remove(numMovPromPeon.size() - 1);
                 if (DevuelvePieza(arraymov.get(arraymov.size() - 1).getPosFinal()).getColor() == true) {
@@ -2747,7 +2751,10 @@ public class Tablero implements Serializable {
             hashmov.remove(arraymov.get(arraymov.size() - 1));
             turno = turno == false;
             contadorjugadas--;
+        } else {
+            sepuedeanular = false;
         }
+        return sepuedeanular;
     }
 
     public void introducirMovenelMap(Movimiento mov) {
