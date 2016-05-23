@@ -20,7 +20,7 @@ import java.util.Set;
 public class Problema implements Serializable {
 
     protected HashMap<Tablero, ArrayList<ArrayList<String>>> listaProblemas = new HashMap<>();
-    protected ArrayList <String> IDsResueltos = new ArrayList<>();
+    protected ArrayList<String> IDsResueltos = new ArrayList<>();
 
     public HashMap<Tablero, ArrayList<ArrayList<String>>> getListaProblemas() {
         return listaProblemas;
@@ -29,9 +29,7 @@ public class Problema implements Serializable {
     public ArrayList<String> getIDsResueltos() {
         return IDsResueltos;
     }
-    
-    
-    
+
     public String fijandoIDProblema() {
         boolean distinto = false;
         String ID = "";
@@ -91,27 +89,31 @@ public class Problema implements Serializable {
         String nomPieza = " ";
         String color = " ";
         String posicion = " ";
-        boolean salir = false;
+        boolean salir;
         while (!nomPieza.equalsIgnoreCase("fin")) {
             do {
-                System.out.println("Introduzca el nombre de la pieza que quiere añadir al tablero o fin para terminar.\nPor ejemplo: Caballo");
+                System.out.println("Introduzca el nombre de la pieza que quiere añadir al tablero, quitar para vaciar una casilla o fin para terminar.\nPor ejemplo: Caballo");
                 nomPieza = sc.nextLine();
-            } while (!nomPieza.equalsIgnoreCase("caballo") && !nomPieza.equalsIgnoreCase("alfil") && !nomPieza.equalsIgnoreCase("peon") && !nomPieza.equalsIgnoreCase("dama") && !nomPieza.equalsIgnoreCase("rey") && !nomPieza.equalsIgnoreCase("torre") && !nomPieza.equalsIgnoreCase("fin"));
+            } while (!nomPieza.equalsIgnoreCase("quitar") && !nomPieza.equalsIgnoreCase("caballo") && !nomPieza.equalsIgnoreCase("alfil") && !nomPieza.equalsIgnoreCase("peon") && !nomPieza.equalsIgnoreCase("dama") && !nomPieza.equalsIgnoreCase("rey") && !nomPieza.equalsIgnoreCase("torre") && !nomPieza.equalsIgnoreCase("fin"));
             if (!nomPieza.equalsIgnoreCase("fin")) {
-                do {
-                    System.out.println("Introduzca el color de la pieza que quiere añadir al tablero.\nPor ejemplo: Blanco");
-                    color = sc.nextLine();
-                } while (!color.equalsIgnoreCase("blanco") && !color.equalsIgnoreCase("blanca") && !color.equalsIgnoreCase("negro") && !color.equalsIgnoreCase("negra"));
+                if (!nomPieza.equalsIgnoreCase("quitar")) {
+                    do {
+                        System.out.println("Introduzca el color de la pieza que quiere añadir al tablero.\nPor ejemplo: Blanco");
+                        color = sc.nextLine();
+                    } while (!color.equalsIgnoreCase("blanco") && !color.equalsIgnoreCase("blanca") && !color.equalsIgnoreCase("negro") && !color.equalsIgnoreCase("negra"));
+                }
                 do {
                     do {
-                        System.out.println("Introduzca la casilla de la pieza que quiere añadir al tablero.\nPor ejemplo: C5");
+                        System.out.println("Introduzca la casilla de la pieza que quiere añadir al tablero o la casilla que quiera vaciar.\nPor ejemplo: C5");
                         posicion = sc.nextLine();
                     } while (posicion.length() != 2);
-                    if (!(Juego.devolverColumna(posicion.toUpperCase().charAt(0)) == 8) && !(Juego.devolverFila(posicion.toUpperCase().charAt(1)) == 8)) {
-                        salir = true;
-                    }
+                    salir = !(Juego.devolverColumna(posicion.toUpperCase().charAt(0)) == 8) && !(Juego.devolverFila(posicion.toUpperCase().charAt(1)) == 8);
                 } while (!salir);
-                tablero.colocaPieza(introducirPieza(nomPieza.toUpperCase(), color, Juego.devolverFila(posicion.toUpperCase().charAt(1)), Juego.devolverColumna(posicion.toUpperCase().charAt(0))));
+                if (!nomPieza.equalsIgnoreCase("quitar")) {
+                    tablero.colocaPieza(introducirPieza(nomPieza.toUpperCase(), color, Juego.devolverFila(posicion.toUpperCase().charAt(1)), Juego.devolverColumna(posicion.toUpperCase().charAt(0))));
+                } else {
+                    tablero.quitaPieza(Juego.devolverFila(posicion.toUpperCase().charAt(1)), Juego.devolverColumna(posicion.toUpperCase().charAt(0)));
+                }
                 ventana.board.pintartablero(tablero);
                 Juego.pintar(tablero.getTablero());
                 ventana.actualizarpantalla();
@@ -164,15 +166,14 @@ public class Problema implements Serializable {
     }
 
     public void introduciendoJugadas(Tablero tablero, Ventana ventana) {
-        Tablero definitivo = tablero;
         String movimiento = " ", anular = " ";
         boolean salir, repetirMov;
         Scanner sc = new Scanner(System.in);
         ArrayList< ArrayList<String>> listaSoluciones = new ArrayList<>();
-        int numVariantes = introduciendoNumVariantes();
+        int numVariantes = introduciendoNumVariantes(), numMovs = 0;
         for (int i = 0; i < numVariantes; i++) {
             ArrayList<String> aux = new ArrayList<>();
-            int numMovs = introduciendoNumMovimientos();
+            numMovs = introduciendoNumMovimientos();
             for (int j = 0; j < numMovs; j++) {
                 do {
                     try {
@@ -192,7 +193,6 @@ public class Problema implements Serializable {
                                     aux.remove(aux.size() - 1);
                                 }
                                 ventana.board.pintartablero(tablero);
-                                Juego.pintar(tablero.getTablero());
                                 ventana.actualizarpantalla();
                                 salir = false;
                             } else {
@@ -225,15 +225,19 @@ public class Problema implements Serializable {
                         tablero.anularUltimoMovimiento();
                         j--;
                         ventana.board.pintartablero(tablero);
-                        Juego.pintar(tablero.getTablero());
                         ventana.actualizarpantalla();
                     } else {
+                        for (int k = 0; k < numMovs; k++) {
+                            tablero.anularUltimoMovimiento();
+                        }
+                        ventana.board.pintartablero(tablero);
+                        ventana.actualizarpantalla();
                         listaSoluciones.add(aux);
                     }
                 }
             }
         }
-        listaProblemas.put(definitivo, listaSoluciones);
+        listaProblemas.put(tablero, listaSoluciones);
     }
 
     public void moverProblema(Movimiento mov, Tablero tablero) throws MovIncorrectoException {
