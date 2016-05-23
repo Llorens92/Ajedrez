@@ -19,10 +19,10 @@ import java.util.Set;
  */
 public class Problema implements Serializable {
 
-    protected HashMap<Tablero, ArrayList<HashMap<ArrayList<Jugada>, ArrayList<Jugada>>>> listaProblemas = new HashMap<>();
+    protected HashMap<Tablero, ArrayList<ArrayList<String>>> listaProblemas = new HashMap<>();
     protected ArrayList<String> IDsResueltos = new ArrayList<>();
 
-    public HashMap<Tablero, ArrayList<HashMap<ArrayList<Jugada>, ArrayList<Jugada>>>> getListaProblemas() {
+    public HashMap<Tablero, ArrayList<ArrayList<String>>> getListaProblemas() {
         return listaProblemas;
     }
 
@@ -133,27 +133,27 @@ public class Problema implements Serializable {
         }
     }
 
-    public int introduciendoNumSoluciones() {
+    public int introduciendoNumVariantes() {
         Scanner sc = new Scanner(System.in);
-        int numSoluciones = 0;
-        while (numSoluciones < 1) {
-            System.out.println("Introduzca el numero de soluciones total que posee el problema");
+        int numVariantes = 0;
+        while (numVariantes < 1) {
+            System.out.println("Introduzca el numero de variantes total que posee el problema");
             try {
-                numSoluciones = sc.nextInt();
+                numVariantes = sc.nextInt();
                 sc.nextLine();
             } catch (InputMismatchException e) {
                 sc.next();
                 System.out.println("Por favor introduzca un número mayor de 0");
             }
         }
-        return numSoluciones;
+        return numVariantes;
     }
 
     public int introduciendoNumMovimientos() {
         Scanner sc = new Scanner(System.in);
         int numMovimientos = 0;
         while (numMovimientos < 1) {
-            System.out.println("Introduzca el numero de movimientos que componen la solucion");
+            System.out.println("Introduzca el numero de movimientos que componen la variante");
             try {
                 numMovimientos = sc.nextInt();
                 sc.nextLine();
@@ -165,105 +165,74 @@ public class Problema implements Serializable {
         return numMovimientos;
     }
 
-    public int introduciendoNumSubMovs() {
-        Scanner sc = new Scanner(System.in);
-        int numSubMovs = 0;
-        while (numSubMovs < 1) {
-            System.out.println("Introduzca el numero de variantes que puede haber en este movimiento");
-            try {
-                numSubMovs = sc.nextInt();
-                sc.nextLine();
-            } catch (InputMismatchException e) {
-                sc.next();
-                System.out.println("Por favor introduzca un número mayor de 0");
-            }
-        }
-        return numSubMovs;
-    }
-
     public void introduciendoJugadas(Tablero tablero, Ventana ventana) {
         String movimiento = " ", anular = " ";
         boolean salir, repetirMov;
         Scanner sc = new Scanner(System.in);
-        ArrayList<HashMap<ArrayList<Jugada>, ArrayList<Jugada>>> listaSoluciones = new ArrayList<>();
-        int numSoluciones = introduciendoNumSoluciones(), numMovs = 0, numSubMovs = 0;
-        for (int i = 0; i < numSoluciones; i++) {
+        ArrayList< ArrayList<String>> listaSoluciones = new ArrayList<>();
+        int numVariantes = introduciendoNumVariantes(), numMovs = 0;
+        for (int i = 0; i < numVariantes; i++) {
+            ArrayList<String> aux = new ArrayList<>();
             numMovs = introduciendoNumMovimientos();
             for (int j = 0; j < numMovs; j++) {
-                HashMap<ArrayList<Jugada>, ArrayList<Jugada>> listamovimientos = new HashMap<>();
-                numSubMovs = introduciendoNumSubMovs();
-                listamovimientos.re
-                for (int l = 0; l < numSubMovs; l++) {
-                    do {
-                        try {
-                            do {
-                                do {
-                                    System.out.println("Introduzca el submovimiento correspondiente añadiéndo la letra pertinente si es promoción del peón. Por ejemplo: E2E4 o D7D8D");
-                                    System.out.println("Si desea anular el movimiento anterior escriba anular");
-                                    movimiento = sc.nextLine();
-                                } while (movimiento.length() != 4 && movimiento.length() != 5 && !movimiento.equalsIgnoreCase("anular"));
-                                if (movimiento.length() == 4 && !(Juego.devolverColumna(movimiento.toUpperCase().charAt(0)) == 8) && !(Juego.devolverFila(movimiento.toUpperCase().charAt(1)) == 8) && !(Juego.devolverColumna(movimiento.toUpperCase().charAt(2)) == 8) && !(Juego.devolverFila(movimiento.toUpperCase().charAt(3)) == 8)) {
-                                    salir = true;
-                                } else if (movimiento.length() == 5 && !(Juego.devolverColumna(movimiento.toUpperCase().charAt(0)) == 8) && !(Juego.devolverFila(movimiento.toUpperCase().charAt(1)) == 8) && !(Juego.devolverColumna(movimiento.toUpperCase().charAt(2)) == 8) && !(Juego.devolverFila(movimiento.toUpperCase().charAt(3)) == 8) && !(Juego.devolverPromocion(movimiento.toUpperCase().charAt(4)) == 'n')) {
-                                    salir = true;
-                                } else if (movimiento.equalsIgnoreCase("anular")) {
-                                    if (l==0) { 
-                                        tablero.anularUltimoMovimiento();
-                                        if (numMovs % 2 == 0) {
-                                            aux.remove(aux.size() - 1);
-                                        } else {
-                                            aux2.remove(aux2.size() - 1);
-                                        }
-                                    }
-                                    ventana.board.pintartablero(tablero);
-                                    ventana.actualizarpantalla();
-                                    salir = false;
-                                } else {
-                                    salir = false;
-                                }
-                            } while (!salir);
-                            if (movimiento.length() == 4) {
-                                moverProblema(stringToMovimiento(movimiento.toUpperCase()), tablero);
-                                repetirMov = false;
-                            } else {
-                                tablero.promociondelPeon(stringToMovimiento(movimiento.toUpperCase()), movimiento.toUpperCase().charAt(4));
-                                repetirMov = false;
-                            }
-                        } catch (MovIncorrectoException ex) {
-                            repetirMov = true;
-                            System.out.println(ex.getMessage());
-                        }
-                    } while (repetirMov);
-                    if (numMovs % 2 == 0) {
-                        aux.add(new Jugada(numMovs, movimiento));
-                    } else {
-                        aux2.add(new Jugada(numMovs, movimiento));
-                    }
-                    ventana.board.pintartablero(tablero);
-                    ventana.actualizarpantalla();
-                    if (j == numMovs - 1) {
+                do {
+                    try {
                         do {
-                            System.out.println("¿Desea anular el último movimiento de la variante, antes de pasar a otra?");
-                            anular = sc.nextLine();
-                        } while (!anular.equalsIgnoreCase("si") && !anular.equalsIgnoreCase("no") && !anular.equalsIgnoreCase("anular"));
-                        if (anular.equalsIgnoreCase("si") || anular.equalsIgnoreCase("anular")) {
-                            if (numMovs % 2 == 0) {
-                                aux.remove(aux.size() - 1);
+                            do {
+                                System.out.println("Introduzca el movimiento correspondiente añadiéndo la letra pertinente si es promoción del peón. Por ejemplo: E2E4 o D7D8D");
+                                System.out.println("Si desea anular el movimiento anterior escriba anular");
+                                movimiento = sc.nextLine();
+                            } while (movimiento.length() != 4 && movimiento.length() != 5 && !movimiento.equalsIgnoreCase("anular"));
+                            if (movimiento.length() == 4 && !(Juego.devolverColumna(movimiento.toUpperCase().charAt(0)) == 8) && !(Juego.devolverFila(movimiento.toUpperCase().charAt(1)) == 8) && !(Juego.devolverColumna(movimiento.toUpperCase().charAt(2)) == 8) && !(Juego.devolverFila(movimiento.toUpperCase().charAt(3)) == 8)) {
+                                salir = true;
+                            } else if (movimiento.length() == 5 && !(Juego.devolverColumna(movimiento.toUpperCase().charAt(0)) == 8) && !(Juego.devolverFila(movimiento.toUpperCase().charAt(1)) == 8) && !(Juego.devolverColumna(movimiento.toUpperCase().charAt(2)) == 8) && !(Juego.devolverFila(movimiento.toUpperCase().charAt(3)) == 8) && !(Juego.devolverPromocion(movimiento.toUpperCase().charAt(4)) == 'n')) {
+                                salir = true;
+                            } else if (movimiento.equalsIgnoreCase("anular")) {
+                                if (tablero.anularUltimoMovimiento()) {
+                                    j--;
+                                    aux.remove(aux.size() - 1);
+                                }
+                                ventana.board.pintartablero(tablero);
+                                ventana.actualizarpantalla();
+                                salir = false;
                             } else {
-                                aux2.remove(aux2.size() - 1);
+                                salir = false;
                             }
-                            tablero.anularUltimoMovimiento();
-                            j--;
-                            ventana.board.pintartablero(tablero);
-                            ventana.actualizarpantalla();
+                        } while (!salir);
+                        if (movimiento.length() == 4) {
+                            moverProblema(stringToMovimiento(movimiento.toUpperCase()), tablero);
+                            repetirMov = false;
                         } else {
-                            for (int k = 0; k < numMovs; k++) {
-                                tablero.anularUltimoMovimiento();
-                            }
-                            ventana.board.pintartablero(tablero);
-                            ventana.actualizarpantalla();
-                            listaSoluciones.put(aux, aux2);
+                            tablero.promociondelPeon(stringToMovimiento(movimiento.toUpperCase()), movimiento.toUpperCase().charAt(4));
+                            repetirMov = false;
                         }
+                    } catch (MovIncorrectoException ex) {
+                        repetirMov = true;
+                        System.out.println(ex.getMessage());
+                    }
+                } while (repetirMov);
+                aux.add(movimiento);
+                ventana.board.pintartablero(tablero);
+                Juego.pintar(tablero.getTablero());
+                ventana.actualizarpantalla();
+                if (j == numMovs - 1) {
+                    do {
+                        System.out.println("¿Desea anular el último movimiento de la variante, antes de pasar a otra?");
+                        anular = sc.nextLine();
+                    } while (!anular.equalsIgnoreCase("si") && !anular.equalsIgnoreCase("no") && !anular.equalsIgnoreCase("anular"));
+                    if (anular.equalsIgnoreCase("si") || anular.equalsIgnoreCase("anular")) {
+                        aux.remove(aux.size() - 1);
+                        tablero.anularUltimoMovimiento();
+                        j--;
+                        ventana.board.pintartablero(tablero);
+                        ventana.actualizarpantalla();
+                    } else {
+                        for (int k = 0; k < numMovs; k++) {
+                            tablero.anularUltimoMovimiento();
+                        }
+                        ventana.board.pintartablero(tablero);
+                        ventana.actualizarpantalla();
+                        listaSoluciones.add(aux);
                     }
                 }
             }
