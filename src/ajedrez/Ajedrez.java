@@ -7,16 +7,90 @@ package ajedrez;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author dam1
  */
 public class Ajedrez {
-
+    
+        public static int menuPrincipal() {
+        int opcion = 0;
+        Scanner lc = new Scanner(System.in);
+        while (opcion != 1 && opcion != 2 && opcion != 3 && opcion != 4) {
+            System.out.println("Escoja entre estas opciones:");
+            System.out.println("1- Jugar Partida");
+            System.out.println("2- Resolver Problema");
+            System.out.println("3- Administrar sistema");
+            System.out.println("4- Salir");
+            try {
+                opcion = lc.nextInt();
+            } catch (InputMismatchException e) {
+                lc.next();
+                System.out.println("Por favor, introduzca un número entre 1 y 4");
+                opcion = 0;
+            }
+        }
+        return opcion;
+    }
+    
+    public static int menuJugar() {
+        int opcion = 0;
+        Scanner lc = new Scanner(System.in);
+        while (opcion != 1 && opcion != 2) {
+            System.out.println("Escoja entre estas opciones:");
+            System.out.println("1- Nueva Partida");
+            System.out.println("2- Cargar Partida");
+            try {
+                opcion = lc.nextInt();
+            } catch (InputMismatchException e) {
+                lc.next();
+                System.out.println("Por favor, introduzca un número entre 1 y 2");
+                opcion = 0;
+            }
+        }
+        return opcion;
+    }
+    
+    public static int menuResolver() {
+        int opcion = 0;
+        Scanner lc = new Scanner(System.in);
+        while (opcion != 1 && opcion != 2) {
+            System.out.println("Escoja entre estas opciones:");
+            System.out.println("1- Resolver Nuevo");
+            System.out.println("2- Ver Resueltos");
+            try {
+                opcion = lc.nextInt();
+            } catch (InputMismatchException e) {
+                lc.next();
+                System.out.println("Por favor, introduzca un número entre 1 y 2");
+                opcion = 0;
+            }
+        }
+        return opcion;
+    }
+    
+    public static int menuAdministrar() {
+        int opcion = 0;
+        Scanner lc = new Scanner(System.in);
+        while (opcion != 1 && opcion != 2 && opcion != 3) {
+            System.out.println("Escoja entre estas opciones:");
+            System.out.println("1- Crear Problema");
+            System.out.println("2- Borrar Problema");
+            System.out.println("3- Borrar Partida");
+            try {
+                opcion = lc.nextInt();
+            } catch (InputMismatchException e) {
+                lc.next();
+                System.out.println("Por favor, introduzca un número entre 1 y 3");
+                opcion = 0;
+            }
+        }
+        return opcion;
+    }
+    
     public static void guardarysalir(Juego partida, Problema problema) {
         try {
             ObjectOutputStream writer = new ObjectOutputStream(new FileOutputStream(new File("partidas.dat")));
@@ -146,9 +220,9 @@ public class Ajedrez {
             problema = new Problema();
         }
         while (!salir) {
-            switch (Menus.menuPrincipal()) {
+            switch (menuPrincipal()) {
                 case 1:
-                    switch (Menus.menuJugar()) {
+                    switch (menuJugar()) {
                         case 1:
                             Tablero tablero = new Tablero(partida.fijandoIDPartida());
                             partida.inicializar(tablero.getTablero());
@@ -180,7 +254,7 @@ public class Ajedrez {
                     }
                     break;
                 case 2:
-                    switch (Menus.menuResolver()) {
+                    switch (menuResolver()) {
                         case 1:
                             if (problemaAleatorio(problema) != null) {
                                 resolverProblema(problema);
@@ -193,7 +267,7 @@ public class Ajedrez {
                     }
                     break;
                 case 3:
-                    switch (Menus.menuAdministrar()) {
+                    switch (menuAdministrar()) {
                         case 1:
                             Tablero tablero = new Tablero(problema.fijandoIDProblema());
                             Ventana ventana = new Ventana(tablero);
