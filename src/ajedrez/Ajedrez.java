@@ -15,8 +15,16 @@ import java.util.Scanner;
  * @author dam1
  */
 public class Ajedrez {
-    
-        public static int menuPrincipal() {
+
+    public static void esperar(int segundos) {
+        try {
+            Thread.sleep(segundos * 1000);
+        } catch (Exception e) {
+            System.out.println("No se pudo esperar");
+        }
+    }
+
+    public static int menuPrincipal() {
         int opcion = 0;
         Scanner lc = new Scanner(System.in);
         while (opcion != 1 && opcion != 2 && opcion != 3 && opcion != 4) {
@@ -35,7 +43,7 @@ public class Ajedrez {
         }
         return opcion;
     }
-    
+
     public static int menuJugar() {
         int opcion = 0;
         Scanner lc = new Scanner(System.in);
@@ -53,7 +61,7 @@ public class Ajedrez {
         }
         return opcion;
     }
-    
+
     public static int menuResolver() {
         int opcion = 0;
         Scanner lc = new Scanner(System.in);
@@ -71,7 +79,7 @@ public class Ajedrez {
         }
         return opcion;
     }
-    
+
     public static int menuAdministrar() {
         int opcion = 0;
         Scanner lc = new Scanner(System.in);
@@ -90,7 +98,7 @@ public class Ajedrez {
         }
         return opcion;
     }
-    
+
     public static void guardarysalir(Juego partida, Problema problema) {
         try {
             ObjectOutputStream writer = new ObjectOutputStream(new FileOutputStream(new File("partidas.dat")));
@@ -157,7 +165,8 @@ public class Ajedrez {
     }
 
     public static void resolverProblema(Problema problema) {
-        Scanner lc = new Scanner (System.in);
+        Scanner lc = new Scanner(System.in);
+        IA ia = new IA();
         Tablero tablero = problemaAleatorio(problema);
         Ventana ventana = new Ventana(tablero);
         ventana.setBounds(0, 0, 505, 530);
@@ -169,36 +178,64 @@ public class Ajedrez {
         } else {
             System.out.println("Mueven las negras");
         }
-        for (int i = 0; i > -1; i++) {
+        int numjugada=0;
+        int numVariantes = problema.getListaProblemas().get(tablero).size();
+        for (int i = 0; i < numVariantes; i++) {
+            boolean inicio=true;
             String jugada;
+            int jugadasaRetroceder = 0;
             if (i == 0) {
                 System.out.println("Introduzca una jugada para empezar a resolver el Problema");
                 jugada = lc.nextLine();
             } else {
-                System.out.println("Introduzca otra jugada");
+                System.out.println("Introduzca una jugada para comenzar a resolver la siguiente variante");
                 jugada = lc.nextLine();
             }
-            try {
-                if (acertoJugada(i, jugada, tablero, problema)) {
-                    try {
-                        if (jugada.length() == 4) {
-                            problema.moverProblema(problema.stringToMovimiento(jugada.toUpperCase()), tablero);
-                        } else {
-                            tablero.promociondelPeon(problema.stringToMovimiento(jugada.toUpperCase()), jugada.toUpperCase().charAt(4));
-                        }
-                    } catch (MovIncorrectoException ex) {
-                    }
-                    System.out.println("Bien hecho, pulse intro solamente si cree haber llegado al final del problema.");
-                    ventana.board.pintartablero(tablero);
-                    ventana.actualizarpantalla();
-                } else {
-                    System.out.println("Esa no era la jugada.");
-                    i--;
+            for (int j = numjugada; j > -1; j = j + 2) {
+                if (!inicio) {
+                    System.out.println("Introduzca otra jugada");
+                    jugada = lc.nextLine();
                 }
-            } catch (IndexOutOfBoundsException ex) {
-                System.out.println("Enhorabuena, ha resuelto el problema.\n");
+                try {
+                    if (acertoJugada(j, jugada, tablero, problema)) {
+                        try {
+                            if (jugada.length() == 4) {
+                                problema.moverProblema(problema.stringToMovimiento(jugada.toUpperCase()), tablero);
+                                ventana.board.pintartablero(tablero);
+                                ventana.actualizarpantalla();
+                                System.out.println("Bien hecho.");
+                                esperar(3);
+                                if (ia.moverMáquina(problema, tablero, ventana, j, jugada) != null) {
+                                    jugadasaRetroceder = jugadasaRetroceder + 2;
+                                }
+                            } else {
+                                tablero.promociondelPeon(problema.stringToMovimiento(jugada.toUpperCase()), jugada.toUpperCase().charAt(4));
+                                ventana.board.pintartablero(tablero);
+                                ventana.actualizarpantalla();
+                                System.out.println("Bien hecho.");
+                                esperar(3);
+                                if (ia.moverMáquina(problema, tablero, ventana, j, jugada) != null) {
+                                    jugadasaRetroceder = jugadasaRetroceder + 2;
+                                }
+                            }
+                        } catch (MovIncorrectoException ex) {
+                        }
+                    } else {
+                        System.out.println("Esa no era la jugada.");
+                        j = j - 2;
+                        inicio=false;
+                    }
+                } catch (IndexOutOfBoundsException ex) {
+                    System.out.println("Enhorabuena, ha resuelto una variante del problema.\n");
+                    numjugada=j-jugadasaRetroceder+2;
+                    j = -3;
+                }
+            }
+            if (i == numVariantes - 1) {
+                System.out.println("Felicidades ha resuelto el Problema al completo.\n");
                 problema.getIDsResueltos().add(tablero.id);
-                i = -2;
+            } else {
+                ia.cambiarVariante(jugadasaRetroceder, problema, tablero, ventana);
             }
         }
     }
@@ -277,6 +314,7 @@ public class Ajedrez {
                             problema.introduciendoDatos(tablero, ventana);
                             problema.quienComienzaJugando(tablero);
                             problema.introduciendoJugadas(tablero, ventana);
+                            problema.introduciendoDescripción(tablero);
                             break;
                         case 2:
                             break;

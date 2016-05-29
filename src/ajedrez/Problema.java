@@ -240,6 +240,14 @@ public class Problema implements Serializable {
         listaProblemas.put(tablero, listaSoluciones);
     }
 
+    public void introduciendoDescripción(Tablero tablero) {
+        Scanner lc = new Scanner(System.in);
+        System.out.println("Introduzca una descripción para identificar el problema guardado.");
+        System.out.println("Procure dar alguna pista sobre el mismo, por ejemplo: \"Mate en 3\".");
+        String descripcion = lc.nextLine();
+        tablero.setDescripcion(descripcion);
+    }
+
     public void moverProblema(Movimiento mov, Tablero tablero) throws MovIncorrectoException {
         if (tablero.hayPieza(mov.getPosInicial()) == true && ((mov.getPosInicial().getFila() == 1 && tablero.DevuelvePieza(mov.getPosInicial()).getClass().getName().compareTo("ajedrez.Peon") == 0 && tablero.DevuelvePieza(mov.getPosInicial()).getColor() == true) || (mov.getPosInicial().getFila() == 6 && tablero.DevuelvePieza(mov.getPosInicial()).getClass().getName().compareTo("ajedrez.Peon") == 0 && tablero.DevuelvePieza(mov.getPosInicial()).getColor() == false))) {
             throw new MovIncorrectoException("Para promocionar el peon introduzca una letra mayúscula más indicando la pieza que quiere.");

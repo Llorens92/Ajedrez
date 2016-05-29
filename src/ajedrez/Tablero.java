@@ -15,8 +15,20 @@ import java.util.LinkedHashMap;
  */
 public class Tablero implements Serializable {
 
+    /**
+     * Registro único que identifica cada tablero
+     */
     protected String id;
+    /**
+     * String que describe el tablero en función de si es de una partida o de un problema
+     */
+    protected String descripcion = "El tablero no tiene asociada ninguna descripción";
 
+    /**
+     * Constructor que inicializa el id del tablero
+     *
+     * @param id String que identifica de manera única a cada tablero
+     */
     Tablero(String id) {
         this.id = id;
     }
@@ -77,9 +89,21 @@ public class Tablero implements Serializable {
      * Booleano que controla si se ha movido o no la torre negra de H
      */
     private boolean movtorrenegraH = false;
-
+    
+    /**
+     * Método que devuelve el Id del tablero
+     * @return String ID del tablero
+     */
     public String getId() {
         return id;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     public void colocaPieza(Pieza figura) {
@@ -224,8 +248,7 @@ public class Tablero implements Serializable {
                 }
                 //Si cuando aumenta el número de fila desciende el de columna o al revés:
             } else //Si la diagonal es de izquierda a derecha y ascendente:                
-            {
-                if (mov.getPosFinal().getColumna() > mov.getPosInicial().getColumna()) {
+             if (mov.getPosFinal().getColumna() > mov.getPosInicial().getColumna()) {
                     for (int i = mov.getPosInicial().getFila() - 1; i > mov.getPosFinal().getFila(); i--) {
                         columna++;
                         if (DevuelvePieza(i, columna) != null) {
@@ -240,7 +263,6 @@ public class Tablero implements Serializable {
                         }
                     }
                 }
-            }
         }
         return hayPiezasEntre;
     }
@@ -2714,12 +2736,13 @@ public class Tablero implements Serializable {
      * pieza a su posición inicial, borra el movimiento del map y rectifica el
      * turno.
      *
+     * @return Un booleano que indica si se ha podido anular el movimiento o no.
      */
     public boolean anularUltimoMovimiento() {
         boolean sepuedeanular;
         ArrayList<Movimiento> arraymov = new ArrayList<>(hashmov.keySet());
         if (!arraymov.isEmpty()) {
-            sepuedeanular=true;
+            sepuedeanular = true;
             if (comprobPromoPeon(arraymov)) {
                 numMovPromPeon.remove(numMovPromPeon.size() - 1);
                 if (DevuelvePieza(arraymov.get(arraymov.size() - 1).getPosFinal()).getColor() == true) {
@@ -2877,5 +2900,10 @@ public class Tablero implements Serializable {
             enroquesValidos = 14;
         }
         return enroquesValidos;
+    }
+
+    @Override
+    public String toString() {
+        return descripcion;
     }
 }

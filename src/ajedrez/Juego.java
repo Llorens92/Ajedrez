@@ -7,6 +7,7 @@ package ajedrez;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  *
@@ -48,7 +49,12 @@ public class Juego implements Serializable {
     }
 
     public void guardarPartida(Tablero tablero) {
+        Scanner lc = new Scanner (System.in);
+        System.out.println("Introduzca una descripción para identificar la partida guardada posteriormente.");
+        String descripcion = lc.nextLine();
+        tablero.setDescripcion(descripcion);
         listaPartidas.add(tablero);
+        System.out.println("Partida guardada");
     }
 
     public static char devolverPromocion(char caracter) {
