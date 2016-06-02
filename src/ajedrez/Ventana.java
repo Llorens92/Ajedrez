@@ -23,9 +23,9 @@ public class Ventana extends JFrame {
 
     /**
      * Constructor que inicializa el board, le cambia el layout a un grid de 8x8
-     * y lo añade a la ventana
+     * y lo añade a la ventana.
      *
-     * @param tablero
+     * @param tablero Tablero a pintar en el Board.
      */
     public Ventana(Tablero tablero) {
         ImageIcon icon = new ImageIcon(getClass().getResource("Imagenes/tablero.jpg"));

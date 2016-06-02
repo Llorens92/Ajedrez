@@ -22,7 +22,7 @@ public class Tablero implements Serializable {
     /**
      * String que describe el tablero en función de si es de una partida o de un problema
      */
-    protected String descripcion = "El tablero no tiene asociada ninguna descripción";
+    protected String descripcion = "El tablero no tiene asociada ninguna descripcion";
 
     /**
      * Constructor que inicializa el id del tablero
@@ -97,15 +97,19 @@ public class Tablero implements Serializable {
     public String getId() {
         return id;
     }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
+    /**
+     * Este método modifica la descripción correspondiente al tablero.
+     *
+     * @param descripcion Nueva descripción.
+     */
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-
+    /**
+     * Este método coloca una pieza en el array de items.
+     *
+     * @param figura Pieza a colocar.
+     */
     public void colocaPieza(Pieza figura) {
         tablero[figura.getPos().getFila()][figura.getPos().getColumna()] = figura;
     }
@@ -2444,6 +2448,7 @@ public class Tablero implements Serializable {
      * Este Método te dice si puedes comer al paso o no en función de los dos
      * últimos movimientos cargados en el array.
      *
+     * @param mov Posible movimiento de comer al Paso
      * @return Un booleano según si se puede o no
      */
     public boolean comerAlPaso(Movimiento mov) {
@@ -2559,7 +2564,7 @@ public class Tablero implements Serializable {
      * no.
      * @param nuevaPieza Caracter que indica cual es la pieza en que se va a
      * transformar el peon.
-     * @throws MovIncorrectoException
+     * @throws MovIncorrectoException Excepcion que notifica que un movimiento fue mal.
      */
     public void promociondelPeon(Movimiento mov, char nuevaPieza) throws MovIncorrectoException {
         if (DevuelvePieza(mov.getPosInicial()) != null) {
@@ -2710,7 +2715,12 @@ public class Tablero implements Serializable {
     public Pieza DevuelvePieza(Posicion pos) {
         return tablero[pos.getFila()][pos.getColumna()];
     }
-
+    
+    /**
+     * Este método comprueba si hay un movimiento de comer al paso dentro de la lista de movimientos efectuados.  
+     * @param arraymov Lista de movimientos en la que comprobar.
+     * @return Booleano en función de si comió al paso o no.
+     */
     public boolean comprobComeralPaso(ArrayList<Movimiento> arraymov) {
         boolean comioalpaso = false;
         for (int i = numMovComeralPaso.size() - 1; i > -1 && !comioalpaso; i--) {
@@ -2720,7 +2730,11 @@ public class Tablero implements Serializable {
         }
         return comioalpaso;
     }
-
+    /**
+     * Este método comprueba si hay un movimiento de promoción de peón dentro de la lista de movimientos efectuados.  
+     * @param arraymov Lista de movimientos en la que comprobar.
+     * @return Booleano en función de si hubo promoción de peón o no..
+     */
     public boolean comprobPromoPeon(ArrayList<Movimiento> arraymov) {
         boolean promovioPeon = false;
         for (int i = numMovPromPeon.size() - 1; i > -1 && !promovioPeon; i--) {
@@ -2779,7 +2793,11 @@ public class Tablero implements Serializable {
         }
         return sepuedeanular;
     }
-
+    /**
+     * Este método introduce el movimiento previamente validado en el HashMap de movimientos.
+     *
+     * @param mov Movimiento validado
+     */
     public void introducirMovenelMap(Movimiento mov) {
         contadorjugadas++;
         mov.setNumMovimiento(contadorjugadas);
@@ -2800,7 +2818,7 @@ public class Tablero implements Serializable {
      * @return Entero que indica las combinaciones de enroques que se pueden
      * realizar en función de las combinaciones de movimientos de reyes y torres
      * que se hayan producido
-     * @throws MovIncorrectoException
+     * @throws MovIncorrectoException Excepcion que notifica que un movimiento fue mal.
      */
     public int Mover(Movimiento mov) throws MovIncorrectoException {
         int enroquesValidos = 0;

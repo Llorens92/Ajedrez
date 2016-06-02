@@ -15,12 +15,25 @@ import java.util.Scanner;
  */
 public class Juego implements Serializable {
 
+    /**
+     * Colección que contiene las partidas guardadas.
+     */
     protected ArrayList<Tablero> listaPartidas = new ArrayList<>();
 
+    /**
+     * Este método devuelve la lista de partidas guardadas
+     *
+     * @return Lista de partidas guardadas.
+     */
     public ArrayList<Tablero> getListapartidas() {
         return listaPartidas;
     }
 
+    /**
+     * Este método permite inicializar el ID de cada partida.
+     *
+     * @return String con el ID de la partida.
+     */
     public String fijandoIDPartida() {
         boolean distinto = false;
         String ID = "";
@@ -37,6 +50,107 @@ public class Juego implements Serializable {
         return ID;
     }
 
+    /**
+     * Este método es el que interactúa con el jugador durante las partidas,
+     * solicitando que introduzca los movimientos y efectuándolos en el tablero
+     * y ventana correspondiente.
+     *
+     * @param ventana Ventana donde se está jugando la partida.
+     * @param tablero Tablero donde se está jugando la partida.
+     */
+    public void jugarPartida(Tablero tablero, Ventana ventana) {
+        Scanner lc = new Scanner(System.in);
+        for (int j = 1; j > 0; j++) {
+            System.out.println("Introduzca una jugada valida (A-H,1-8,A-H,1-8)");
+            System.out.println("Para guardar y salir escriba Guardar. Si desea rendirse escriba Fin durante su turno.");
+            System.out.println("Si desea anular el último movimiento escriba anular.");
+            String jugada = lc.nextLine();
+            if (jugada.equalsIgnoreCase("anular")) {
+                tablero.anularUltimoMovimiento();
+                ventana.board.pintartablero(tablero);
+                ventana.actualizarpantalla();
+            } else if (!finPartida(jugada, tablero)) {
+                jugada(jugada.toUpperCase(), tablero);
+                ventana.board.pintartablero(tablero);
+                ventana.actualizarpantalla();
+            } else {
+                j = -1;
+                System.out.println("Espero que hayan disfrutado de la partida.");
+                System.out.println("Hasta Pronto");
+            }
+        }
+    }
+
+    /**
+     * Este método encuentra la partida (si la hay), que corresponde al ID
+     * introducido como parámtero, devolviendo el tablero que corresponde.
+     *
+     * @param posibleID ID a comprobar.
+     * @return Instancia de la clase Tablero corresponidente al ID introducido o
+     * null si no hay ninguna coincidencia
+     */
+    public Tablero encontrarPartida(String posibleID) {
+        boolean salir = false;
+        Tablero tablero = null;
+        for (int i = 0; i < listaPartidas.size() && !salir; i++) {
+            if (posibleID.equalsIgnoreCase(listaPartidas.get(i).getId())) {
+                tablero = listaPartidas.get(i);
+                salir = true;
+            }
+        }
+        return tablero;
+    }
+
+    /**
+     * Este método pinta la lista de partidas guardadas permitiendo luego
+     * recuperar y volver a jugar con una de ellas, pues acaba llamando al
+     * método jugarPartida.
+     */
+    public void pintarPartidas() {
+        Scanner lc = new Scanner(System.in);
+        String id;
+        for (Tablero tablero1 : listaPartidas) {
+            System.out.println(tablero1.getId().concat("-->").concat(tablero1.toString()));
+        }
+        do {
+            System.out.println("Introduzca el ID de la partida que quiere recuperar.");
+            id = lc.nextLine();
+        } while (encontrarPartida(id) == null);
+        Tablero tablero = encontrarPartida(id);
+        Ventana ventana = new Ventana(tablero);
+        ventana.setBounds(0, 0, 505, 530);
+        ventana.setVisible(true);
+        ventana.board.pintartablero(tablero);
+        jugarPartida(tablero, ventana);
+    }
+
+    /**
+     * Este método muestra los IDs dy las descripciones de las partidas y luego
+     * borra la partida cuyo ID se solicita en la ejecución del mismo.
+     */
+    public void borrarPartidas() {
+        Scanner lc = new Scanner(System.in);
+        String id;
+        for (Tablero tablero1 : listaPartidas) {
+            System.out.println(tablero1.getId().concat("-->").concat(tablero1.toString()));
+        }
+        do {
+            System.out.println("Introduzca el ID de la partida que quiere borrar.");
+            id = lc.nextLine();
+        } while (encontrarPartida(id) == null);
+        listaPartidas.remove(encontrarPartida(id));
+        System.out.println("Partida borrada");
+    }
+
+    /**
+     * Este método permite poner fin a una partida ya sea guardandola o
+     * saliéndose sin más, mediante el String que recibe.
+     *
+     * @param mensaje String que de corresponderse con fin o guardar para poner
+     * fin a una partida.
+     * @param tablero Tablero donde se está jugando la partida.
+     * @return Booleano que indica si se acabo la partida.
+     */
     public boolean finPartida(String mensaje, Tablero tablero) {
         boolean salir = false;
         if (mensaje.equalsIgnoreCase("guardar")) {
@@ -48,15 +162,28 @@ public class Juego implements Serializable {
         return salir;
     }
 
+    /**
+     * Este método permite guardar el estado de una partida.
+     *
+     * @param tablero Tablero donde se está jugando la partida.
+     */
     public void guardarPartida(Tablero tablero) {
-        Scanner lc = new Scanner (System.in);
-        System.out.println("Introduzca una descripción para identificar la partida guardada posteriormente.");
-        String descripcion = lc.nextLine();
-        tablero.setDescripcion(descripcion);
+        Scanner lc = new Scanner(System.in);
+        if (tablero.toString().equalsIgnoreCase("El tablero no tiene asociada ninguna descripcion")) {
+            System.out.println("Introduzca una descripción para identificar la partida guardada posteriormente.");
+            tablero.setDescripcion(lc.nextLine());
+        }
         listaPartidas.add(tablero);
         System.out.println("Partida guardada");
     }
 
+    /**
+     * Este método permite cribar el caracter que recibe para que se corresponda
+     * solo con los válidos para promocionar el peón.
+     *
+     * @param caracter Caracter a cribar
+     * @return Caracter cribado
+     */
     public static char devolverPromocion(char caracter) {
         char nuevaPieza;
         switch (caracter) {
@@ -79,6 +206,14 @@ public class Juego implements Serializable {
         return nuevaPieza;
     }
 
+    /**
+     * Este método permite cribar el caracter que recibe para que se corresponda
+     * solo con los válidos correspondientes a una fila de un tablero de
+     * ajedrez.
+     *
+     * @param caracter Caracter a cribar
+     * @return Entero cribado
+     */
     public static int devolverFila(char caracter) {
         int fila;
         switch (caracter) {
@@ -113,6 +248,14 @@ public class Juego implements Serializable {
         return fila;
     }
 
+    /**
+     * Este método permite cribar el caracter que recibe para que se corresponda
+     * solo con los válidos correspondientes a una columna de un tablero de
+     * ajedrez.
+     *
+     * @param caracter Caracter a cribar
+     * @return Entero cribado
+     */
     public static int devolverColumna(char caracter) {
         int columna;
         switch (caracter) {
@@ -259,7 +402,7 @@ public class Juego implements Serializable {
             } else {
                 Posicion PosInicial = new Posicion(devolverFila(jugada.charAt(1)), devolverColumna(jugada.charAt(0)));
                 Posicion PosFinal = new Posicion(devolverFila(jugada.charAt(3)), devolverColumna(jugada.charAt(2)));
-                Movimiento mov = new Movimiento(0,PosInicial, PosFinal);
+                Movimiento mov = new Movimiento(0, PosInicial, PosFinal);
                 try {
                     moverJuego(mov, tablero);
                 } catch (MovIncorrectoException ex) {
@@ -269,12 +412,12 @@ public class Juego implements Serializable {
         } else if (jugada.length() == 5) {
             Posicion PosInicial = new Posicion(devolverFila(jugada.charAt(1)), devolverColumna(jugada.charAt(0)));
             Posicion PosFinal = new Posicion(devolverFila(jugada.charAt(3)), devolverColumna(jugada.charAt(2)));
-            Movimiento mov = new Movimiento(0,PosInicial, PosFinal);
+            Movimiento mov = new Movimiento(0, PosInicial, PosFinal);
             try {
-            tablero.promociondelPeon(mov, devolverPromocion(jugada.charAt(4)));
+                tablero.promociondelPeon(mov, devolverPromocion(jugada.charAt(4)));
             } catch (MovIncorrectoException ex) {
                 System.out.println(ex.getMessage());
-            }            
+            }
         } else {
             System.out.println("Movimiento invalido-JUGADA");
         }
@@ -288,7 +431,7 @@ public class Juego implements Serializable {
      * @param mov Es el objeto de clase Movimiento creado a partir del String
      * que recibe el método jugada.
      * @param tablero Es el mismo objeto de clase Tablero utilizado en jugada.
-     * @throws MovIncorrectoException
+     * @throws MovIncorrectoException Excepción que notifica si un movimiento n ose pudo efectuar.
      */
     public void moverJuego(Movimiento mov, Tablero tablero) throws MovIncorrectoException {
         if (tablero.hayPieza(mov.getPosInicial()) == true && ((mov.getPosInicial().getFila() == 1 && tablero.DevuelvePieza(mov.getPosInicial()).getClass().getName().compareTo("ajedrez.Peon") == 0 && tablero.DevuelvePieza(mov.getPosInicial()).getColor() == true) || (mov.getPosInicial().getFila() == 6 && tablero.DevuelvePieza(mov.getPosInicial()).getClass().getName().compareTo("ajedrez.Peon") == 0 && tablero.DevuelvePieza(mov.getPosInicial()).getColor() == false))) {

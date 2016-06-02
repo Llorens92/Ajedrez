@@ -37,8 +37,8 @@ public class Board extends JPanel {
     /**
      * Constructor que inicializa la imagen de fondo, inicializa el arraytablero para que en cada "casilla" haya un JPanel,
      * inicializa el arrayiconos con las distintas imágenes posibles y las reescala para que ocupen el tamaño deseado.
-     * @param img
-     * @param tablero
+     * @param img Imagen de fondo del tablero.
+     * @param tablero Instancia de la clase Tableor a partir de la cual se pinta el mismo gráficamente.
      */
     public Board(Image img, Tablero tablero) {
         this.img = img;

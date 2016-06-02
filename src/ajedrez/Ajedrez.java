@@ -6,7 +6,6 @@
 package ajedrez;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -134,117 +133,12 @@ public class Ajedrez {
         return problema;
     }
 
-    public static Tablero problemaAleatorio(Problema problema) {
-        boolean salir = false;
-        Tablero tablero = null;
-        ArrayList<Tablero> listaTableros = new ArrayList<>(problema.getListaProblemas().keySet());
-        for (int i = 0; i < listaTableros.size() && !salir; i++) {
-            if (problema.getIDsResueltos().size() > 0) {
-                for (int j = 0; j < problema.getIDsResueltos().size() && !salir; j++) {
-                    if (!listaTableros.get(i).getId().equalsIgnoreCase(problema.getIDsResueltos().get(j))) {
-                        tablero = listaTableros.get(i);
-                        salir = true;
-                    }
-                }
-            } else {
-                tablero = listaTableros.get(i);
-                salir = true;
-            }
-        }
-        return tablero;
-    }
-
-    public static boolean acertoJugada(int numJugada, String jugada, Tablero tablero, Problema problema) throws IndexOutOfBoundsException {
-        boolean acerto = false;
-        for (int i = 0; i < problema.getListaProblemas().get(tablero).size() && !acerto; i++) {
-            if (jugada.equalsIgnoreCase(problema.getListaProblemas().get(tablero).get(i).get(numJugada))) {
-                acerto = true;
-            }
-        }
-        return acerto;
-    }
-
-    public static void resolverProblema(Problema problema) {
-        Scanner lc = new Scanner(System.in);
-        IA ia = new IA();
-        Tablero tablero = problemaAleatorio(problema);
-        Ventana ventana = new Ventana(tablero);
-        ventana.setBounds(0, 0, 505, 530);
-        ventana.setVisible(true);
-        ventana.board.pintartablero(tablero);
-        ventana.actualizarpantalla();
-        if (tablero.getTurno()) {
-            System.out.println("Mueven las blancas");
-        } else {
-            System.out.println("Mueven las negras");
-        }
-        int numjugada=0;
-        int numVariantes = problema.getListaProblemas().get(tablero).size();
-        for (int i = 0; i < numVariantes; i++) {
-            boolean inicio=true;
-            String jugada;
-            int jugadasaRetroceder = 0;
-            if (i == 0) {
-                System.out.println("Introduzca una jugada para empezar a resolver el Problema");
-                jugada = lc.nextLine();
-            } else {
-                System.out.println("Introduzca una jugada para comenzar a resolver la siguiente variante");
-                jugada = lc.nextLine();
-            }
-            for (int j = numjugada; j > -1; j = j + 2) {
-                if (!inicio) {
-                    System.out.println("Introduzca otra jugada");
-                    jugada = lc.nextLine();
-                }
-                try {
-                    if (acertoJugada(j, jugada, tablero, problema)) {
-                        try {
-                            if (jugada.length() == 4) {
-                                problema.moverProblema(problema.stringToMovimiento(jugada.toUpperCase()), tablero);
-                                ventana.board.pintartablero(tablero);
-                                ventana.actualizarpantalla();
-                                System.out.println("Bien hecho.");
-                                esperar(3);
-                                if (ia.moverMáquina(problema, tablero, ventana, j, jugada) != null) {
-                                    jugadasaRetroceder = jugadasaRetroceder + 2;
-                                }
-                            } else {
-                                tablero.promociondelPeon(problema.stringToMovimiento(jugada.toUpperCase()), jugada.toUpperCase().charAt(4));
-                                ventana.board.pintartablero(tablero);
-                                ventana.actualizarpantalla();
-                                System.out.println("Bien hecho.");
-                                esperar(3);
-                                if (ia.moverMáquina(problema, tablero, ventana, j, jugada) != null) {
-                                    jugadasaRetroceder = jugadasaRetroceder + 2;
-                                }
-                            }
-                        } catch (MovIncorrectoException ex) {
-                        }
-                    } else {
-                        System.out.println("Esa no era la jugada.");
-                        j = j - 2;
-                        inicio=false;
-                    }
-                } catch (IndexOutOfBoundsException ex) {
-                    System.out.println("Enhorabuena, ha resuelto una variante del problema.\n");
-                    numjugada=j-jugadasaRetroceder+2;
-                    j = -3;
-                }
-            }
-            if (i == numVariantes - 1) {
-                System.out.println("Felicidades ha resuelto el Problema al completo.\n");
-                problema.getIDsResueltos().add(tablero.id);
-            } else {
-                ia.cambiarVariante(jugadasaRetroceder, problema, tablero, ventana);
-            }
-        }
-    }
-
     public static void main(String[] args) {
+        Scanner lc = new Scanner(System.in);
         boolean salir = false;
+        String contraseña;
         Juego partida;
         Problema problema;
-        Scanner lc = new Scanner(System.in);
         System.out.println("Bienvenido al Ajedrez de Llorenç Pagès: ");
         if (cargarPartidas() != null) {
             partida = cargarPartidas();
@@ -267,58 +161,66 @@ public class Ajedrez {
                             ventana.setBounds(0, 0, 505, 530);
                             ventana.setVisible(true);
                             ventana.board.pintartablero(tablero);
-                            for (int j = 1; j > 0; j++) {
-                                System.out.println("Introduzca una jugada valida (A-H,1-8,A-H,1-8)");
-                                System.out.println("Para guardar y salir escriba Guardar. Si desea rendirse escriba Fin durante su turno.");
-                                System.out.println("Si desea anular el último movimiento escriba anular.");
-                                String jugada = lc.nextLine();
-                                if (jugada.equalsIgnoreCase("anular")) {
-                                    tablero.anularUltimoMovimiento();
-                                    ventana.board.pintartablero(tablero);
-                                    ventana.actualizarpantalla();
-                                } else if (!partida.finPartida(jugada, tablero)) {
-                                    partida.jugada(jugada.toUpperCase(), tablero);
-                                    ventana.board.pintartablero(tablero);
-                                    ventana.actualizarpantalla();
-                                } else {
-                                    j = -1;
-                                    System.out.println("Espero que hayan disfrutado de la partida.");
-                                    System.out.println("Hasta Pronto");
-                                }
-                            }
+                            partida.jugarPartida(tablero, ventana);
                             break;
                         default:
+                            if (!partida.getListapartidas().isEmpty()) {
+                                partida.pintarPartidas();
+                            } else {
+                                System.out.println("No hay partidas guardadas.");
+                            }
                     }
                     break;
                 case 2:
                     switch (menuResolver()) {
                         case 1:
-                            if (problemaAleatorio(problema) != null) {
-                                resolverProblema(problema);
+                            if (problema.problemaAleatorio() != null) {
+                                IA.resolverProblema(problema);
                             } else {
                                 System.out.println("No hay problemas por resolver.");
                             }
                             break;
 
                         default:
+                            if (!problema.getIDsResueltos().isEmpty()) {
+                                problema.pintarProblemasResueltos();
+                            } else {
+                                System.out.println("No hay problemas resueltos.");
+                            }
                     }
                     break;
                 case 3:
-                    switch (menuAdministrar()) {
-                        case 1:
-                            Tablero tablero = new Tablero(problema.fijandoIDProblema());
-                            Ventana ventana = new Ventana(tablero);
-                            ventana.setBounds(0, 0, 505, 530);
-                            ventana.setVisible(true);
-                            ventana.board.pintartablero(tablero);
-                            problema.introduciendoDatos(tablero, ventana);
-                            problema.quienComienzaJugando(tablero);
-                            problema.introduciendoJugadas(tablero, ventana);
-                            problema.introduciendoDescripción(tablero);
-                            break;
-                        case 2:
-                            break;
-                        default:
+                    do {
+                        System.out.println("Introduzca la contraseña o salir para volver al menu: ");
+                        contraseña = lc.nextLine();
+                    } while (!contraseña.equals("1234qwer") && !contraseña.equals("salir"));
+                    if (!contraseña.equalsIgnoreCase("salir")) {
+                        switch (menuAdministrar()) {
+                            case 1:
+                                Tablero tablero = new Tablero(problema.fijandoIDProblema());
+                                Ventana ventana = new Ventana(tablero);
+                                ventana.setBounds(0, 0, 505, 530);
+                                ventana.setVisible(true);
+                                ventana.board.pintartablero(tablero);
+                                problema.introduciendoDatos(tablero, ventana);
+                                problema.quienComienzaJugando(tablero);
+                                problema.introduciendoJugadas(tablero, ventana);
+                                problema.introduciendoDescripción(tablero);
+                                break;
+                            case 2:
+                                if (!problema.getListaProblemas().isEmpty()) {
+                                    problema.borrarProblemas();
+                                } else {
+                                    System.out.println("No hay problemas que borrar.");
+                                }
+                                break;
+                            default:
+                                if (!partida.getListapartidas().isEmpty()) {
+                                    partida.borrarPartidas();
+                                } else {
+                                    System.out.println("No hay partidas que borrar.");
+                                }
+                        }
                     }
                     break;
                 default:

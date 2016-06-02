@@ -5,6 +5,7 @@
  */
 package ajedrez;
 
+import static ajedrez.Ajedrez.esperar;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,17 +20,39 @@ import java.util.Set;
  */
 public class Problema implements Serializable {
 
+    /**
+     * Hashmap con los tableros de cada problema y las correspondientes
+     * soluciones.
+     */
     protected HashMap<Tablero, ArrayList<ArrayList<String>>> listaProblemas = new HashMap<>();
+    /**
+     * ArrayList con los IDs de los problemas resueltos.
+     */
     protected ArrayList<String> IDsResueltos = new ArrayList<>();
 
+    /**
+     * Método que devuelve el HashMap con los problemas.
+     *
+     * @return HashMap de tableros y soluciones
+     */
     public HashMap<Tablero, ArrayList<ArrayList<String>>> getListaProblemas() {
         return listaProblemas;
     }
 
+    /**
+     * Método que devuelve el ArrayList con los IDs de los problemas resueltos.
+     *
+     * @return ArrayList con los IDs de los problemas resueltos.
+     */
     public ArrayList<String> getIDsResueltos() {
         return IDsResueltos;
     }
 
+    /**
+     * Este método permite inicializar el ID de cada problema.
+     *
+     * @return String con el ID del problema.
+     */
     public String fijandoIDProblema() {
         boolean distinto = false;
         String ID = "";
@@ -48,6 +71,142 @@ public class Problema implements Serializable {
         return ID;
     }
 
+    /**
+     * Este método encuentra el problema (si lo hay), que corresponde al ID
+     * introducido como parámtero, devolviendo el tablero que corresponde.
+     *
+     * @param posibleID ID a comprobar.
+     * @return Instancia de la clase Tablero corresponidente al ID introducido o
+     * null si no hay ninguna coincidencia
+     */
+    public Tablero encontrarProblema(String posibleID) {
+        boolean salir = false;
+        Tablero tablero = null;
+        Iterator<Tablero> it = listaProblemas.keySet().iterator();
+        while (it.hasNext() && !salir) {
+            Tablero t = it.next();
+            if (posibleID.equalsIgnoreCase(t.getId())) {
+                tablero = t;
+                salir = true;
+            }
+        }
+        return tablero;
+    }
+
+    /**
+     * Este método pinta la lista de problemas resueltos permitiendo luego
+     * recuperar y volver a visualizar uno de ellos, pues acaba llamando al
+     * método verProblemaResuelto.
+     */
+    public void pintarProblemasResueltos() {
+        Scanner lc = new Scanner(System.in);
+        String id;
+        Iterator<Tablero> it = listaProblemas.keySet().iterator();
+        while (it.hasNext()) {
+            Tablero t = it.next();
+            for (String s : IDsResueltos) {
+                if (s.equalsIgnoreCase(t.getId())) {
+                    System.out.println(t.getId().concat("-->").concat(t.toString()));
+                }
+            }
+        }
+        do {
+            System.out.println("Introduzca el ID del problema que quiere ver resuelto.");
+            id = lc.nextLine();
+        } while (encontrarProblema(id) == null);
+        Tablero tablero = encontrarProblema(id);
+        Ventana ventana = new Ventana(tablero);
+        ventana.setBounds(0, 0, 505, 530);
+        ventana.setVisible(true);
+        ventana.board.pintartablero(tablero);
+        esperar(3);
+        try {
+            verProblemaResuelto(ventana, tablero, listaProblemas.get(tablero));
+        } catch (MovIncorrectoException ex) {
+            System.out.println("No se pudo visualizar el problema");
+        }
+    }
+
+    /**
+     * Este método muestra una lista con los IDs y las descripciones de cada
+     * problema y luego borra el problema cuyo ID se solicita en la ejecución
+     * del mismo.
+     */
+    public void borrarProblemas() {
+        Scanner lc = new Scanner(System.in);
+        String id;
+        Iterator<Tablero> it = listaProblemas.keySet().iterator();
+        while (it.hasNext()) {
+            Tablero t = it.next();
+            System.out.println(t.getId().concat("-->").concat(t.toString()));
+        }
+        do {
+            System.out.println("Introduzca el ID del problema que quiere borrar.");
+            id = lc.nextLine();
+        } while (encontrarProblema(id) == null);
+        Tablero t = encontrarProblema(id);
+        listaProblemas.remove(t);
+        System.out.println("Problema Borrado");
+    }
+
+    /**
+     * Este método devuelve un Tablero de un problema.
+     *
+     * @return Tablero de un problema.
+     */
+    public Tablero problemaAleatorio() {
+        boolean salir = false;
+        Tablero tablero = null;
+        ArrayList<Tablero> listaTableros = new ArrayList<>(listaProblemas.keySet());
+        for (int i = 0; i < listaTableros.size() && !salir; i++) {
+            if (IDsResueltos.size() > 0) {
+                for (int j = 0; j < IDsResueltos.size() && !salir; j++) {
+                    if (!listaTableros.get(i).getId().equalsIgnoreCase(IDsResueltos.get(j))) {
+                        tablero = listaTableros.get(i);
+                        salir = true;
+                    }
+                }
+            } else {
+                tablero = listaTableros.get(i);
+                salir = true;
+            }
+        }
+        return tablero;
+    }
+
+    /**
+     * Este método permite ver la solución de un determinado problema viendo
+     * cada movimiento con intervalos de 3 segundos.
+     *
+     * @param ventana Ventana en que se visualiza el problema.
+     * @param tablero Tablero en que se producen los movimientos.
+     * @param solucion Conjunto de movimientos que forman el problema.
+     * @throws MovIncorrectoException Excepción que notifica si algo ha ido mal
+     * al realizar un movimiento y porque.
+     */
+    public void verProblemaResuelto(Ventana ventana, Tablero tablero, ArrayList<ArrayList<String>> solucion) throws MovIncorrectoException {
+        for (int i = 0; i < solucion.size(); i++) {
+            for (int j = 0; j < solucion.get(i).size(); j++) {
+                moverProblema(stringToMovimiento(solucion.get(i).get(j).toUpperCase()), tablero);
+                ventana.board.pintartablero(tablero);
+                ventana.actualizarpantalla();
+                esperar(3);
+            }
+            for (int j = 0; j < solucion.get(i).size(); j++) {
+                tablero.anularUltimoMovimiento();
+            }
+        }
+    }
+
+    /**
+     * Este método permite introducir una pieza en el tablero.
+     *
+     * @param nomPieza Nombre de la pieza.
+     * @param color Color de la pieza.
+     * @param fila Fila donde irá colocada la pieza.
+     * @param columna Columna donde irá colocada la pieza.
+     * @return Pieza a colocar.
+     */
     public Pieza introducirPieza(String nomPieza, String color, int fila, int columna) {
         boolean colour = false;
         Pieza pieza;
@@ -84,6 +243,13 @@ public class Problema implements Serializable {
         return pieza;
     }
 
+    /**
+     * Este método interactua con el Administrador solicitandole los datos para
+     * poder introducir las piezas en el tablero.
+     *
+     * @param tablero Tablero donde irán las piezas
+     * @param ventana Ventana donde se visualizará el tablero.
+     */
     public void introduciendoDatos(Tablero tablero, Ventana ventana) {
         Scanner sc = new Scanner(System.in);
         String nomPieza = " ";
@@ -121,6 +287,12 @@ public class Problema implements Serializable {
         }
     }
 
+    /**
+     * Este método solicita al Administrador el color del bando que empezará
+     * jugando en el problema.
+     *
+     * @param tablero Tablero donde se localizará el problema.
+     */
     public void quienComienzaJugando(Tablero tablero) {
         Scanner sc = new Scanner(System.in);
         String color;
@@ -133,6 +305,12 @@ public class Problema implements Serializable {
         }
     }
 
+    /**
+     * Este método solicita al Administrador la cantidad de variantes de los que
+     * consta el problema y la devuelve.
+     *
+     * @return Entero devolviendo el valor introducido por el Administrador.
+     */
     public int introduciendoNumVariantes() {
         Scanner sc = new Scanner(System.in);
         int numVariantes = 0;
@@ -149,6 +327,12 @@ public class Problema implements Serializable {
         return numVariantes;
     }
 
+    /**
+     * Este método solicita al Administrador la cantidad de movimientos de los
+     * que consta una determinada variante y los devuelve.
+     *
+     * @return Entero devolviendo el valor introducido por el Administrador.
+     */
     public int introduciendoNumMovimientos() {
         Scanner sc = new Scanner(System.in);
         int numMovimientos = 0;
@@ -165,12 +349,19 @@ public class Problema implements Serializable {
         return numMovimientos;
     }
 
+    /**
+     * Este método interactua con el Administrador solicitandole las jugadas que
+     * compondrán el problema.
+     *
+     * @param tablero Tablero donde se van ejecutando esas jugadas.
+     * @param ventana Ventana donde se visualizará el tablero.
+     */
     public void introduciendoJugadas(Tablero tablero, Ventana ventana) {
         String movimiento = " ", anular = " ";
         boolean salir, repetirMov;
         Scanner sc = new Scanner(System.in);
         ArrayList< ArrayList<String>> listaSoluciones = new ArrayList<>();
-        int numVariantes = introduciendoNumVariantes(), numMovs = 0;
+        int numVariantes = introduciendoNumVariantes(), numMovs;
         for (int i = 0; i < numVariantes; i++) {
             ArrayList<String> aux = new ArrayList<>();
             numMovs = introduciendoNumMovimientos();
@@ -240,6 +431,12 @@ public class Problema implements Serializable {
         listaProblemas.put(tablero, listaSoluciones);
     }
 
+    /**
+     * Este método interactua con el Administrador solicitandole los datos para
+     * poder introducir las piezas en el tablero.
+     *
+     * @param tablero Tablero del Problema.
+     */
     public void introduciendoDescripción(Tablero tablero) {
         Scanner lc = new Scanner(System.in);
         System.out.println("Introduzca una descripción para identificar el problema guardado.");
@@ -247,7 +444,13 @@ public class Problema implements Serializable {
         String descripcion = lc.nextLine();
         tablero.setDescripcion(descripcion);
     }
-
+    /**
+     * Este método realiza la funcion de mover las piezas en el tablero llamando así mismo a otros métodos de otras clases.
+     *
+     * @param mov Movimiento candidato a ser realizado.
+     * @param tablero Tablero donde irán las piezas     
+     * @throws MovIncorrectoException  Excepción que notifica de los posibles errores al intentar ejecutar un movimiento.   
+     */
     public void moverProblema(Movimiento mov, Tablero tablero) throws MovIncorrectoException {
         if (tablero.hayPieza(mov.getPosInicial()) == true && ((mov.getPosInicial().getFila() == 1 && tablero.DevuelvePieza(mov.getPosInicial()).getClass().getName().compareTo("ajedrez.Peon") == 0 && tablero.DevuelvePieza(mov.getPosInicial()).getColor() == true) || (mov.getPosInicial().getFila() == 6 && tablero.DevuelvePieza(mov.getPosInicial()).getClass().getName().compareTo("ajedrez.Peon") == 0 && tablero.DevuelvePieza(mov.getPosInicial()).getColor() == false))) {
             throw new MovIncorrectoException("Para promocionar el peon introduzca una letra mayúscula más indicando la pieza que quiere.");
@@ -257,7 +460,12 @@ public class Problema implements Serializable {
             throw new MovIncorrectoException("Movimiento invalido-Problema");
         }
     }
-
+    /**
+     * Este método convierte los Strings previamente cribados a movimientos.
+     *
+     * @param s String de tamaño 4.
+     * @return Movimiento correspondiente a dicho String.
+     */
     public Movimiento stringToMovimiento(String s) {
         Posicion posInicial = new Posicion(Juego.devolverFila(s.charAt(1)), Juego.devolverColumna(s.charAt(0)));
         Posicion posFinal = new Posicion(Juego.devolverFila(s.charAt(3)), Juego.devolverColumna(s.charAt(2)));

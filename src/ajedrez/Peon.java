@@ -31,7 +31,7 @@ public class Peon extends Pieza {
      * come.
      *
      * @param mov Movimiento a validar
-     * @return
+     * @return Booleano en función de si se pudo comer o no.
      */
     public boolean comerValido(Movimiento mov) {
         boolean comerValido = false;
